@@ -38,10 +38,10 @@ export default function Header() {
   ]
 
   return (
-    <header className="p-4">
+    <header className="fixed w-full p-4 bg-white">
       <div className="flex justify-between">
         <Image
-          src="/logo.svg"
+          src="/home/logo.svg"
           alt="Netron Logo"
           className="dark:invert"
           width={160}

@@ -1,4 +1,4 @@
-import { MenuList } from '@/lib/definitions'
+import { MenuList as MenuListType } from '@/lib/definitions'
 import Link from 'next/link'
 import clsx from 'clsx'
 import {
@@ -10,7 +10,7 @@ import {
 
 
 type Props = {
-  menuList: MenuList
+  menuList: MenuListType
   isChild?: boolean
 }
 

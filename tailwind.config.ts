@@ -71,10 +71,35 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "bounce-netron": {
+          "0%": {
+            transform: "translateY(-7%)",
+          },
+          "50%": {
+            transform: "translateY(0)",
+          },
+          "100%": {
+            transform: "translateY(-7%)",
+
+          },
+        },
+        "scale-netron-shadow": {
+          "0%": {
+            transform: "scale(0.9) translateY(0)",
+          },
+          "50%": {
+            transform: "scale(1.05) translateY(20%)",
+          },
+          "100%": {
+            transform: "scale(0.9) translateY(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "bounce-netron": "bounce-netron 3.4s infinite alternate",
+        "scale-netron-shadow": "scale-netron-shadow 3.4s infinite alternate"
       },
     },
   },
