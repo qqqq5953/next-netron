@@ -8,8 +8,10 @@ import {
 } from "@/components/ui/sheet"
 import MenuList from "./menu-list";
 import { FaGlobe } from "react-icons/fa";
+import { FiMenu } from "react-icons/fi";
+import Link from "next/link";
 
-export default function Header() {
+export default function TopNav() {
   const menuNavs = [
     { name: "關於我們", path: "/about" },
     {
@@ -38,23 +40,27 @@ export default function Header() {
   ]
 
   return (
-    <header className="fixed w-full p-4 bg-white">
+    <nav className="fixed z-10 w-full p-4 bg-white/80 backdrop-blur-md">
       <div className="flex justify-between">
-        <Image
-          src="/home/logo.svg"
-          alt="Netron Logo"
-          className="dark:invert"
-          width={160}
-          height={44}
-          priority
-        />
+        <Link href="/">
+          <Image
+            src="/home/logo.svg"
+            alt="Netron Logo"
+            className="dark:invert"
+            width={160}
+            height={44}
+            priority
+          />
+        </Link>
         <Sheet>
-          <SheetTrigger className="border rounded-lg p-2">Menu</SheetTrigger>
+          <SheetTrigger className="border rounded-lg p-2 size-10 grid place-items-center">
+            <FiMenu />
+          </SheetTrigger>
           <SheetContent>
             <MenuList menuList={menuNavs} />
           </SheetContent>
         </Sheet>
       </div>
-    </header>
+    </nav>
   )
 }
