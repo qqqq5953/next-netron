@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
 import "@/styles/globals.css";
-import TopNav from "@/components/(public)/global/top-nav";
-import Footer from "@/components/(public)/global/footer";
-import BottomNav from "@/components/(public)/global/bottom-nav";
 
 const fontSans = FontSans({
   subsets: ["latin"],

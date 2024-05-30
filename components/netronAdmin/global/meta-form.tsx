@@ -30,7 +30,7 @@ export default function MetaForm() {
               <FormControl className='grow'>
                 <Input
                   className="focus-visible:outline-blue-200"
-                  placeholder="Please enter username"
+                  placeholder="請輸入 META 標題"
                   {...field}
                 />
               </FormControl>
@@ -51,7 +51,7 @@ export default function MetaForm() {
               <FormControl className='grow'>
                 <Input
                   className="focus-visible:outline-blue-200"
-                  placeholder="Please enter password"
+                  placeholder="請輸入 META 關鍵字"
                   {...field} />
               </FormControl>
               <FormMessage className='mt-1.5' />
@@ -71,7 +71,7 @@ export default function MetaForm() {
               <FormControl className='grow'>
                 <Textarea
                   className="focus-visible:outline-blue-200"
-                  placeholder="Please enter password"
+                  placeholder="請輸入 META 描述"
                   {...field} />
               </FormControl>
               <FormMessage className='mt-1.5' />
@@ -91,7 +91,7 @@ export default function MetaForm() {
               <FormControl className='grow'>
                 <Input
                   className="focus-visible:outline-blue-200"
-                  placeholder="Please enter password"
+                  placeholder="請輸入連結客製化文字"
                   {...field} />
               </FormControl>
               <FormMessage className='mt-1.5' />

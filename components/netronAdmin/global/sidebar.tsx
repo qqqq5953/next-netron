@@ -42,7 +42,7 @@ export default function Sidebar() {
   ]
 
   return (
-    <nav className="w-52 p-4 bg-neutral-50">
+    <nav className="shrink-0 w-52 p-4 bg-neutral-50">
       <Image
         src="/home/logo.svg"
         alt="Netron Logo"

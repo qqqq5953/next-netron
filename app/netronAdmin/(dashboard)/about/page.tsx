@@ -1,9 +1,7 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -14,6 +12,13 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import MetaForm from '@/components/netronAdmin/global/meta-form'
 import { Button } from '@/components/ui/button'
+import React from 'react';
+import dynamic from 'next/dynamic';
+import Loader from "@/components/loader"
+
+const CustomEditor = dynamic(() => {
+  return import('@/components/custom-editor');
+}, { ssr: false, loading: () => <Loader size={24} />, });
 
 export const formSchema = z.object({
   metaTitle: z.string().min(1, {
@@ -55,33 +60,30 @@ export default function AboutPage() {
           <Form {...loginForm}>
             <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-4">
               <MetaForm />
+
               {/* 內容 */}
               <FormField
                 control={loginForm.control}
                 name="content"
-                render={({ field }) => (
+                render={() => (
                   <FormItem className='flex items-center gap-2'>
                     <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">內容*</FormLabel>
                     <div className='grow'>
-                      <FormControl >
-                        <Input
-                          className="focus-visible:outline-blue-200"
-                          placeholder="Please enter username"
-                          {...field}
-                        />
-                      </FormControl>
+                      <CustomEditor form={loginForm} />
                       <FormMessage className='mt-1.5' />
                     </div>
                   </FormItem>
                 )}
               />
 
-              <Button
-                type="submit"
-                className="bg-sky-600 hover:bg-sky-600/80 rounded-sm"
-              >
-                Submit
-              </Button>
+              <div className="text-right">
+                <Button
+                  type="submit"
+                  className="bg-sky-600 hover:bg-sky-600/80 rounded-sm"
+                >
+                  儲存
+                </Button>
+              </div>
             </form>
           </Form>
         </FormProvider>
