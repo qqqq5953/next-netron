@@ -37,6 +37,7 @@ export default function TopNav() {
         { name: "English", path: "/en" },
       ]
     },
+    { name: "登入", path: "/netronAdmin/login" },
   ]
 
   return (

@@ -1,15 +1,8 @@
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google"
-import { cn } from "@/lib/utils"
 import "@/styles/globals.css";
 import TopNav from "@/components/(public)/global/top-nav";
 import Footer from "@/components/(public)/global/footer";
 import BottomNav from "@/components/(public)/global/bottom-nav";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
 
 export const metadata: Metadata = {
   title: "Netron",
@@ -22,13 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn(
-        "min-h-screen bg-background font-sans antialiased",
-        fontSans.variable
-      )}>
-        {children}
-      </body>
-    </html>
+    <>
+      <TopNav />
+      {children}
+      <Footer />
+      <BottomNav />
+    </>
   );
 }

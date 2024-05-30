@@ -1,4 +1,4 @@
-import CountUpNumber from "@/components/about/count-up";
+import CountUpNumber from "@/components/(public)/about/count-up";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
