@@ -10,7 +10,7 @@ import {
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import MetaForm from '@/components/netronAdmin/global/meta-form'
+import MetaForm, { formSchema } from '@/components/netronAdmin/global/meta-form'
 import { Button } from '@/components/ui/button'
 import React from 'react';
 import dynamic from 'next/dynamic';
@@ -19,22 +19,6 @@ import Loader from "@/components/loader"
 const CustomEditor = dynamic(() => {
   return import('@/components/custom-editor');
 }, { ssr: false, loading: () => <Loader size={24} />, });
-
-export const formSchema = z.object({
-  metaTitle: z.string().min(1, {
-    message: "META 標題不得空白",
-  }),
-  metaKeyword: z.string().min(1, {
-    message: "META 關鍵字不得空白",
-  }),
-  metaDescription: z.string().min(1, {
-    message: "META 描述不得空白",
-  }),
-  customizedDescription: z.string(),
-  content: z.string().min(1, {
-    message: "內容不得空白",
-  }),
-})
 
 export default function AboutPage() {
   const loginForm = useForm<z.infer<typeof formSchema>>({

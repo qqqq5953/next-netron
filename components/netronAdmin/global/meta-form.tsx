@@ -10,7 +10,22 @@ import {
 } from "@/components/ui/form"
 import { useFormContext } from 'react-hook-form'
 import { z } from "zod"
-import { formSchema } from '@/app/netronAdmin/(dashboard)/about/page'
+
+export const formSchema = z.object({
+  metaTitle: z.string().min(1, {
+    message: "META 標題不得空白",
+  }),
+  metaKeyword: z.string().min(1, {
+    message: "META 關鍵字不得空白",
+  }),
+  metaDescription: z.string().min(1, {
+    message: "META 描述不得空白",
+  }),
+  customizedDescription: z.string(),
+  content: z.string().min(1, {
+    message: "內容不得空白",
+  }),
+})
 
 type MetaFormFields = Omit<z.infer<typeof formSchema>, "content">
 
