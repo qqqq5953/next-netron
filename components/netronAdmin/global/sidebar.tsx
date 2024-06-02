@@ -8,12 +8,7 @@ export default function Sidebar() {
       name: "最新消息", path: "", children: [
         { name: "分類管理", path: "/netronAdmin/category/news" },
         {
-          name: "消息清單", path: "", children: [
-            { name: "所有資訊", path: "/netronAdmin/news" },
-            { name: "雲端活動", path: "/netronAdmin/news/2" },
-            { name: "雲端新聞", path: "/netronAdmin/news/5" },
-            { name: "雲端技能學習", path: "/netronAdmin/news/9" },
-          ]
+          name: "消息清單", path: "/netronAdmin/news",
         },
         { name: "Meta 資訊", path: "/netronAdmin/meta/news" },
       ]

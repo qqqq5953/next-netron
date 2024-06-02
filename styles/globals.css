@@ -89,7 +89,16 @@
 }
 
 /* editor content */
+.ck.ck-editor__main>.ck-content.ck-editor__editable {
+  min-height: 320px
+}
+
 .ck.ck-editor__main>.ck-content.ck-editor__editable:not(.ck-focused) {
   border-radius: 0 0 6px 6px;
   border-color: hsl(0 0% 89.8%);
+}
+
+.ck.ck-editor__main>.ck-content.ck-editor__editable.ck-focused {
+  border-radius: 0 0 6px 6px;
+  border-color: #6366f1;
 }

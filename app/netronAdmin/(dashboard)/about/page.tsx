@@ -10,15 +10,21 @@ import {
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import MetaForm, { formSchema } from '@/components/netronAdmin/global/meta-form'
+import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
 import { Button } from '@/components/ui/button'
-import React from 'react';
 import dynamic from 'next/dynamic';
 import Loader from "@/components/loader"
 
 const CustomEditor = dynamic(() => {
   return import('@/components/custom-editor');
 }, { ssr: false, loading: () => <Loader size={24} />, });
+
+const formSchema = z.object({
+  ...metaSchema,
+  content: z.string().min(1, {
+    message: "內容不得空白",
+  }),
+})
 
 export default function AboutPage() {
   const loginForm = useForm<z.infer<typeof formSchema>>({
@@ -43,14 +49,14 @@ export default function AboutPage() {
         <FormProvider {...loginForm}>
           <Form {...loginForm}>
             <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-4">
-              <MetaForm />
+              <FormMetaSection />
 
               {/* 內容 */}
               <FormField
                 control={loginForm.control}
                 name="content"
                 render={() => (
-                  <FormItem className='flex items-center gap-2'>
+                  <FormItem>
                     <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">內容*</FormLabel>
                     <div className='grow'>
                       <CustomEditor form={loginForm} />

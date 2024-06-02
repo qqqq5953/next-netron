@@ -4,7 +4,6 @@ import { useState } from 'react'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -15,20 +14,26 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog"
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-
 export default function CategoryNewsPage() {
   const [isOpen, setIsOpen] = useState(false)
 
-  const data = [
+  const initialData = [
     { category: "最新消息", order: "1" },
     { category: "雲端活動", order: "2" },
     { category: "雲端技能學習", order: "3" }
   ]
+
+  const [data, setData] = useState(initialData);
+
+  function handleOrderChange(index: number, newOrder: string) {
+    const updatedData = [...data];
+    updatedData[index].order = newOrder;
+    setData(updatedData);
+  };
 
   return (
     <div className='flex flex-col gap-8'>
@@ -40,7 +45,7 @@ export default function CategoryNewsPage() {
           </DialogTrigger>
           <DialogContent>
             <Label htmlFor='news'>分類名稱</Label>
-            <Input id='news' className="focus-visible:outline-blue-200" placeholder="請輸入分類名稱" />
+            <Input id='news' className="focus-visible:outline-indigo-300" placeholder="請輸入分類名稱" />
             <div className='flex items-center justify-end gap-2'>
               <Button size="sm" variant='ghost' onClick={() => setIsOpen(false)}>取消</Button>
               <Button size="sm" className='bg-blue-600 hover:bg-blue-600/90'>儲存</Button>
@@ -59,7 +64,7 @@ export default function CategoryNewsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map(item => {
+            {data.map((item, index) => {
               return <TableRow key={item.category}>
                 <TableCell className="font-medium">
                   <div className='flex gap-2'>
@@ -69,7 +74,11 @@ export default function CategoryNewsPage() {
                 </TableCell>
                 <TableCell>{item.category}</TableCell>
                 <TableCell>
-                  <Input value={item.order} />
+                  <Input
+                    type="number"
+                    value={item.order}
+                    onChange={(e) => handleOrderChange(index, e.target.value)}
+                  />
                 </TableCell>
               </TableRow>
             })}

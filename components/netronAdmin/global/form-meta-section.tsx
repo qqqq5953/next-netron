@@ -11,7 +11,7 @@ import {
 import { useFormContext } from 'react-hook-form'
 import { z } from "zod"
 
-export const formSchema = z.object({
+export const metaSchema = {
   metaTitle: z.string().min(1, {
     message: "META 標題不得空白",
   }),
@@ -21,30 +21,29 @@ export const formSchema = z.object({
   metaDescription: z.string().min(1, {
     message: "META 描述不得空白",
   }),
-  customizedDescription: z.string(),
-  content: z.string().min(1, {
-    message: "內容不得空白",
-  }),
-})
+  customizedDescription: z.string()
+}
+
+const formSchema = z.object(metaSchema)
 
 type MetaFormFields = Omit<z.infer<typeof formSchema>, "content">
 
-export default function MetaForm() {
+export default function FormMetaSection() {
   const { control } = useFormContext<MetaFormFields>();
 
   return (
-    <>
+    <div className='flex flex-col gap-4'>
       {/* META 標題 */}
       <FormField
         control={control}
         name="metaTitle"
         render={({ field }) => (
-          <FormItem className='flex items-center gap-2'>
+          <FormItem>
             <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">META 標題</FormLabel>
             <div className='grow'>
-              <FormControl className='grow'>
+              <FormControl>
                 <Input
-                  className="focus-visible:outline-blue-200"
+                  className="focus-visible:outline-indigo-300"
                   placeholder="請輸入 META 標題"
                   {...field}
                 />
@@ -60,12 +59,12 @@ export default function MetaForm() {
         control={control}
         name="metaKeyword"
         render={({ field }) => (
-          <FormItem className='flex items-center gap-2'>
+          <FormItem>
             <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">META 關鍵字</FormLabel>
             <div className='grow'>
-              <FormControl className='grow'>
+              <FormControl>
                 <Input
-                  className="focus-visible:outline-blue-200"
+                  className="focus-visible:outline-indigo-300"
                   placeholder="請輸入 META 關鍵字"
                   {...field} />
               </FormControl>
@@ -80,12 +79,12 @@ export default function MetaForm() {
         control={control}
         name="metaDescription"
         render={({ field }) => (
-          <FormItem className='flex items-center gap-2'>
+          <FormItem>
             <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">META 描述</FormLabel>
             <div className='grow'>
-              <FormControl className='grow'>
+              <FormControl>
                 <Textarea
-                  className="focus-visible:outline-blue-200"
+                  className="focus-visible:outline-indigo-300"
                   placeholder="請輸入 META 描述"
                   {...field} />
               </FormControl>
@@ -100,12 +99,12 @@ export default function MetaForm() {
         control={control}
         name="customizedDescription"
         render={({ field }) => (
-          <FormItem className='flex items-center gap-2'>
+          <FormItem>
             <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">連結客製化文字</FormLabel>
             <div className='grow'>
-              <FormControl className='grow'>
+              <FormControl>
                 <Input
-                  className="focus-visible:outline-blue-200"
+                  className="focus-visible:outline-indigo-300"
                   placeholder="請輸入連結客製化文字"
                   {...field} />
               </FormControl>
@@ -114,6 +113,6 @@ export default function MetaForm() {
           </FormItem>
         )}
       />
-    </>
+    </div>
   )
 }
