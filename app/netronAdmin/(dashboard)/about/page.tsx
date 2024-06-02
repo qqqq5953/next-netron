@@ -43,7 +43,7 @@ export default function AboutPage() {
   }
 
   return (
-    <div className='flex flex-col gap-8'>
+    <>
       <h2 className='text-3xl font-medium'>關於我們</h2>
       <section>
         <FormProvider {...loginForm}>
@@ -78,6 +78,6 @@ export default function AboutPage() {
           </Form>
         </FormProvider>
       </section>
-    </div>
+    </>
   )
 }

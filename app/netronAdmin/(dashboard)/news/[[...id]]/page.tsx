@@ -19,9 +19,8 @@ export default function NewsPage() {
   console.log('pathname', pathname);
   console.log('params', params);
 
-
   return (
-    <div className='flex flex-col gap-8'>
+    <>
       <div className='flex items-center'>
         <h2 className='text-3xl font-medium'>消息清單</h2>
         <FormAddNews />
@@ -43,6 +42,6 @@ export default function NewsPage() {
       <section>
         <TableNews />
       </section>
-    </div>
+    </>
   )
 }

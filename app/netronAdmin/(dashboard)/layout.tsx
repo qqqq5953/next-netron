@@ -1,3 +1,4 @@
+import Breadcrumb from "@/components/netronAdmin/global/breadcrumb"
 import Footer from "@/components/netronAdmin/global/footer"
 import Sidebar from "@/components/netronAdmin/global/sidebar"
 
@@ -15,7 +16,12 @@ export default function DashboardLayout({
     <div className="flex h-screen">
       <Sidebar />
       <div className="flex flex-col grow">
-        <main className="grow p-8">{children}</main>
+        <main className="grow p-8 flex flex-col">
+          <Breadcrumb />
+          <div className='flex flex-col gap-8 pt-2.5'>
+            {children}
+          </div>
+        </main>
         <Footer />
       </div>
     </div>
