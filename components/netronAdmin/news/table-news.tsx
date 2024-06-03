@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/netronAdmin/global/button'
 import { Input } from '@/components/ui/input'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useParams, usePathname } from 'next/navigation'
@@ -81,9 +81,9 @@ export default function TableNews() {
           return <TableRow key={item.title}>
             <TableCell className="font-medium">
               <div className='flex gap-2'>
-                <Button variant="outline" size="sm" className='text-indigo-500 border-current'>編輯</Button>
-                <Button variant="outline" size="sm" className='text-rose-500 border-current'>刪除</Button>
-                <Button variant="outline" size="sm" className='text-neutral-500 border-current'>預覽</Button>
+                <Button variant="outline" size="sm">編輯</Button>
+                <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
+                <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
               </div>
             </TableCell>
             <TableCell>{item.title}</TableCell>
@@ -101,7 +101,7 @@ export default function TableNews() {
             <TableCell>
               <Input
                 type="number"
-                className="focus-visible:outline-indigo-300"
+                className="primary-input-focus"
                 value={item.order}
                 onChange={(e) => handleOrderChange(index, e.target.value)}
               />

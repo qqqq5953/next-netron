@@ -66,7 +66,7 @@ export default function FormArticleSection(props: Props) {
             <FormLabel className="font-normal text-base text-neutral-800">分類</FormLabel>
             <FormControl>
               <Input
-                className="focus-visible:outline-indigo-300"
+                className="primary-input-focus"
                 placeholder="請輸入分類"
                 {...field} />
             </FormControl>
@@ -84,7 +84,7 @@ export default function FormArticleSection(props: Props) {
             <FormLabel className="font-normal text-base text-neutral-800">標題</FormLabel>
             <FormControl>
               <Input
-                className="focus-visible:outline-indigo-300"
+                className="primary-input-focus"
                 placeholder="請輸入標題"
                 {...field} />
             </FormControl>

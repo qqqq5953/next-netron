@@ -9,7 +9,7 @@ import FormEventSection, { eventSchema } from './form-event-section'
 import FormArticleSection, { articleSchema } from './form-article-section'
 import { CustomEditorField, contentSchema } from '@/components/custom-editor'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/netronAdmin/global/button'
 import { Form } from "@/components/ui/form"
 import {
   Sheet,
@@ -62,7 +62,7 @@ export default function FormAddNews() {
   return (
     <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <SheetTrigger asChild>
-        <Button size="sm" className='ml-auto bg-indigo-600 hover:bg-indigo-600/90'>新增</Button>
+        <Button size="sm" className='ml-auto'>新增</Button>
       </SheetTrigger>
       <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
         <Form {...form}>
@@ -84,12 +84,7 @@ export default function FormAddNews() {
             </div>
 
             <div className="text-right">
-              <Button
-                type="submit"
-                className="bg-indigo-600 hover:bg-sky-600/80 rounded-sm"
-              >
-                儲存
-              </Button>
+              <Button type="submit">儲存</Button>
             </div>
           </form>
         </Form>

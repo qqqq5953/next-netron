@@ -88,7 +88,7 @@ export default function FormEventSection(props: Props) {
             <div className='grow'>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="focus-visible:outline-indigo-300">
+                  <SelectTrigger className="primary-input-focus">
                     <SelectValue placeholder="請選擇活動類型" />
                   </SelectTrigger>
                   <SelectContent>
@@ -114,7 +114,7 @@ export default function FormEventSection(props: Props) {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="請輸入主講人"
                   {...field} />
               </FormControl>
@@ -134,7 +134,7 @@ export default function FormEventSection(props: Props) {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="2024-01-31T13:00"
                   {...field} />
               </FormControl>
@@ -154,7 +154,7 @@ export default function FormEventSection(props: Props) {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="2024-01-31T17:00"
                   {...field} />
               </FormControl>
@@ -173,7 +173,7 @@ export default function FormEventSection(props: Props) {
             <FormLabel className="font-normal text-base text-neutral-800">活動費用</FormLabel>
             <FormControl>
               <Input
-                className="focus-visible:outline-indigo-300"
+                className="primary-input-focus"
                 placeholder="請輸入金額"
                 {...field} />
             </FormControl>
@@ -188,7 +188,7 @@ export default function FormEventSection(props: Props) {
           <FormItem>
             <FormControl>
               <Input
-                className="focus-visible:outline-indigo-300"
+                className="primary-input-focus"
                 placeholder="請輸入幣別：TWD、USD、..."
                 {...field} />
             </FormControl>
@@ -207,7 +207,7 @@ export default function FormEventSection(props: Props) {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="2024-01-31T17:00"
                   {...field} />
               </FormControl>
@@ -227,7 +227,7 @@ export default function FormEventSection(props: Props) {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="請輸入活動網站"
                   {...field} />
               </FormControl>
@@ -247,7 +247,7 @@ export default function FormEventSection(props: Props) {
               <FormLabel className="font-normal text-base text-neutral-800">活動舉辦商資訊</FormLabel>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="公司名稱"
                   {...field} />
               </FormControl>
@@ -262,7 +262,7 @@ export default function FormEventSection(props: Props) {
             <FormItem>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="公司官網"
                   {...field} />
               </FormControl>

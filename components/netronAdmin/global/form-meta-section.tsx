@@ -43,7 +43,7 @@ export default function FormMetaSection() {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className='primary-input-focus'
                   placeholder="請輸入 META 標題"
                   {...field}
                 />
@@ -64,7 +64,7 @@ export default function FormMetaSection() {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className='primary-input-focus'
                   placeholder="請輸入 META 關鍵字"
                   {...field} />
               </FormControl>
@@ -84,7 +84,7 @@ export default function FormMetaSection() {
             <div className='grow'>
               <FormControl>
                 <Textarea
-                  className="focus-visible:outline-indigo-300"
+                  className="primary-input-focus"
                   placeholder="請輸入 META 描述"
                   {...field} />
               </FormControl>
@@ -104,7 +104,7 @@ export default function FormMetaSection() {
             <div className='grow'>
               <FormControl>
                 <Input
-                  className="focus-visible:outline-indigo-300"
+                  className='primary-input-focus'
                   placeholder="請輸入連結客製化文字"
                   {...field} />
               </FormControl>

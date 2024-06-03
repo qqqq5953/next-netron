@@ -11,7 +11,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/netronAdmin/global/button'
 import dynamic from 'next/dynamic';
 import Loader from "@/components/loader"
 
@@ -67,12 +67,7 @@ export default function AboutPage() {
               />
 
               <div className="text-right">
-                <Button
-                  type="submit"
-                  className="bg-sky-600 hover:bg-sky-600/80 rounded-sm"
-                >
-                  儲存
-                </Button>
+                <Button type="submit">儲存</Button>
               </div>
             </form>
           </Form>

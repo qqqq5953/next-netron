@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/netronAdmin/global/button'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import FormAddNews from '@/components/netronAdmin/news/form-add-news'
@@ -32,7 +32,7 @@ export default function NewsPage() {
             key={tab.name}
             size="sm"
             variant="secondary"
-            className={`${pathname === tab.path ? 'text-indigo-500' : 'font-normal'}`}
+            className={`${pathname === tab.path ? 'text-sky-500' : 'font-normal'}`}
           >
             <Link href={tab.path}>{tab.name}</Link>
           </Button>

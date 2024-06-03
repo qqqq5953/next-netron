@@ -76,16 +76,18 @@
   }
 }
 
-/* editor toolbar */
-.ck.ck-editor__top .ck.ck-sticky-panel .ck.ck-sticky-panel__content {
-  border-radius: 6px 6px 0px 0px;
-  border-color: hsl(0 0% 89.8%);
+@layer components {
+
+  textarea.primary-input-focus,
+  input.primary-input-focus {
+    @apply focus-visible:outline-blue-200
+  }
 }
 
+/* editor toolbar */
+.ck.ck-editor__top .ck.ck-sticky-panel .ck.ck-sticky-panel__content,
 .ck.ck-editor__top .ck.ck-sticky-panel .ck.ck-sticky-panel__content .ck-toolbar {
-  border-radius: 6px 6px 0px 0px;
-  border-color: hsl(0 0% 89.8%);
-  background-color: #fafafa;
+  @apply border-neutral-200 rounded-tl-md rounded-tr-md bg-neutral-50
 }
 
 /* editor content */
@@ -94,11 +96,9 @@
 }
 
 .ck.ck-editor__main>.ck-content.ck-editor__editable:not(.ck-focused) {
-  border-radius: 0 0 6px 6px;
-  border-color: hsl(0 0% 89.8%);
+  @apply border-neutral-200 rounded-bl-md rounded-br-md
 }
 
 .ck.ck-editor__main>.ck-content.ck-editor__editable.ck-focused {
-  border-radius: 0 0 6px 6px;
-  border-color: #6366f1;
+  @apply border-blue-300 rounded-bl-md rounded-br-md
 }
