@@ -16,9 +16,11 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import FormCustomLink, { customLinkSchema } from '../global/form-custom-link'
 
 const formSchema = z.object({
   ...metaSchema,
+  ...customLinkSchema,
   ...eventSchema,
   ...articleSchema,
   ...contentSchema,
@@ -67,9 +69,12 @@ export default function FormAddNews() {
       <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12">
-            <div>
+            <div className=''>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>META</h3>
-              <FormMetaSection />
+              <FormMetaSection form={form} />
+              <div className='pt-4'>
+                <FormCustomLink form={form} />
+              </div>
             </div>
 
             <div>

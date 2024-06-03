@@ -14,6 +14,7 @@ import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/for
 import { Button } from '@/components/netronAdmin/global/button'
 import dynamic from 'next/dynamic';
 import Loader from "@/components/loader"
+import FormCustomLink, { customLinkSchema } from "@/components/netronAdmin/global/form-custom-link"
 
 const CustomEditor = dynamic(() => {
   return import('@/components/custom-editor');
@@ -21,13 +22,14 @@ const CustomEditor = dynamic(() => {
 
 const formSchema = z.object({
   ...metaSchema,
+  ...customLinkSchema,
   content: z.string().min(1, {
     message: "內容不得空白",
   }),
 })
 
 export default function AboutPage() {
-  const loginForm = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       metaTitle: "",
@@ -46,20 +48,21 @@ export default function AboutPage() {
     <>
       <h2 className='text-3xl font-medium'>關於我們</h2>
       <section>
-        <FormProvider {...loginForm}>
-          <Form {...loginForm}>
-            <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-4">
-              <FormMetaSection />
+        <FormProvider {...form}>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormMetaSection form={form} />
+              <FormCustomLink form={form} />
 
               {/* 內容 */}
               <FormField
-                control={loginForm.control}
+                control={form.control}
                 name="content"
                 render={() => (
                   <FormItem>
                     <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">內容*</FormLabel>
                     <div className='grow'>
-                      <CustomEditor form={loginForm} />
+                      <CustomEditor form={form} />
                       <FormMessage className='mt-1.5' />
                     </div>
                   </FormItem>
