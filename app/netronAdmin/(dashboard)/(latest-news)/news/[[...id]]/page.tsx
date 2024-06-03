@@ -3,8 +3,8 @@
 import { Button } from '@/components/netronAdmin/global/button'
 import Link from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
-import FormAddNews from '@/components/netronAdmin/latest-news/form-add-news'
-import TableNews from '@/components/netronAdmin/latest-news/table-news'
+import FormAddNews from '@/components/netronAdmin/latest-news/FormAddNews'
+import TableNews from '@/components/netronAdmin/latest-news/TableNews'
 
 const tabs = [
   { name: "所有資訊", path: "/netronAdmin/news" },

@@ -5,9 +5,10 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
-import FormEventSection, { eventSchema } from './form-event-section'
-import FormArticleSection, { articleSchema } from './form-article-section'
-import { CustomEditorField, contentSchema } from '@/components/custom-editor'
+import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/form-custom-link'
+import CustomEditorField, { contentSchema } from '@/components/netronAdmin/global/CustomEditorField'
+import FormEventSection, { eventSchema } from '@/components/netronAdmin/latest-news/FormEventSection'
+import FormArticleSection, { articleSchema } from '@/components/netronAdmin/latest-news/FormArticleSection'
 
 import { Button } from '@/components/netronAdmin/global/button'
 import { Form } from "@/components/ui/form"
@@ -16,7 +17,6 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import FormCustomLink, { customLinkSchema } from '../global/form-custom-link'
 
 const formSchema = z.object({
   ...metaSchema,

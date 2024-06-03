@@ -6,10 +6,6 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
-import FormArticleSection from '@/components/netronAdmin/latest-news/form-article-section'
-import { CustomEditorField, contentSchema } from '@/components/custom-editor'
-
 import { Button } from '@/components/netronAdmin/global/button'
 import { Form } from "@/components/ui/form"
 import {
@@ -17,8 +13,10 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
 import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/form-custom-link'
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
+import CustomEditorField, { contentSchema } from '../global/CustomEditorField'
 
 const formSchema = z.object({
   ...metaSchema,
