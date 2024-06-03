@@ -11,6 +11,7 @@ import {
 import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
 import { DatePickerField } from '../global/date-picker'
+import FormTitleField, { titleSchema } from '../global/FormTitleField'
 
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [
@@ -36,9 +37,7 @@ export const articleSchema = {
   category: z.string().min(1, {
     message: "分類不得空白",
   }),
-  title: z.string().min(1, {
-    message: "標題不得空白",
-  }),
+  ...titleSchema,
   coverImage: z.any()
     .refine((file: File) => !!file, "File is required")
     .refine((file: File) => file?.size < MAX_FILE_SIZE, "Max size is 5MB.")
@@ -49,7 +48,7 @@ type Props = {
   form: UseFormReturn<any, any, undefined>
 };
 
-export default function FormArticleSection(props: Props) {
+function FormArticleSection(props: Props) {
   const [preview, setPreview] = useState("")
 
   return (
@@ -76,22 +75,7 @@ export default function FormArticleSection(props: Props) {
       />
 
       {/* 標題 */}
-      <FormField
-        control={props.form.control}
-        name="title"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel className="font-normal text-base text-neutral-800">標題</FormLabel>
-            <FormControl>
-              <Input
-                className="primary-input-focus"
-                placeholder="請輸入標題"
-                {...field} />
-            </FormControl>
-            <FormMessage className='mt-1.5' />
-          </FormItem>
-        )}
-      />
+      <FormTitleField form={props.form} />
 
       {/* 封面照 */}
       <FormField
@@ -118,3 +102,5 @@ export default function FormArticleSection(props: Props) {
     </div>
   )
 }
+
+export default FormArticleSection
