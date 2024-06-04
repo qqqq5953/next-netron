@@ -1,10 +1,7 @@
 import FormAddBrand from '@/components/netronAdmin/cloud/FormAddBrand'
 import TableBrand from '@/components/netronAdmin/cloud/TableBrand'
-import React from 'react'
 
 export default function BrandPage() {
-
-
   return (
     <>
       <div className='flex items-center'>

@@ -12,7 +12,7 @@ import { z } from "zod"
 
 export const titleSchema = {
   title: z.string().min(1, {
-    message: "標題不得空白",
+    message: "必填欄位",
   })
 }
 

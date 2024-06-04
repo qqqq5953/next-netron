@@ -13,13 +13,13 @@ import { z } from "zod"
 
 export const metaSchema = {
   metaTitle: z.string().min(1, {
-    message: "META 標題不得空白",
+    message: "必填欄位",
   }),
   metaKeyword: z.string().min(1, {
-    message: "META 關鍵字不得空白",
+    message: "必填欄位",
   }),
   metaDescription: z.string().min(1, {
-    message: "META 描述不得空白",
+    message: "必填欄位",
   }),
 }
 
@@ -36,7 +36,7 @@ export default function FormMetaSection(props: Props) {
         name="metaTitle"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">META 標題</FormLabel>
+            <FormLabel className="font-normal text-base text-neutral-800">META 標題</FormLabel>
             <div className='grow'>
               <FormControl>
                 <Input
@@ -57,7 +57,7 @@ export default function FormMetaSection(props: Props) {
         name="metaKeyword"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">META 關鍵字</FormLabel>
+            <FormLabel className="font-normal text-base text-neutral-800">META 關鍵字</FormLabel>
             <div className='grow'>
               <FormControl>
                 <Input
@@ -77,7 +77,7 @@ export default function FormMetaSection(props: Props) {
         name="metaDescription"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">META 描述</FormLabel>
+            <FormLabel className="font-normal text-base text-neutral-800">META 描述</FormLabel>
             <div className='grow'>
               <FormControl>
                 <Textarea

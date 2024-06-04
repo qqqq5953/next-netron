@@ -12,22 +12,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
 import { DatePickerField } from '../global/date-picker'
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
-
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpg",
-  "image/jpeg",
-  "image/png"
-]
-
-function checkFileType(file: File) {
-  if (file?.name) {
-    if (ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      return true;
-    }
-  }
-  return false;
-}
+import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 
 export const articleSchema = {
   articleDate: z.date({
@@ -39,9 +24,9 @@ export const articleSchema = {
   }),
   ...titleSchema,
   coverImage: z.any()
-    .refine((file: File) => !!file, "File is required")
-    .refine((file: File) => file?.size < MAX_FILE_SIZE, "Max size is 5MB.")
-    .refine((file: File) => checkFileType(file), "Only .jpg, .jpeg, .png formats are supported.").optional(),
+    .refine((file: File) => !!file, "請上傳圖片")
+    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
+    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
 }
 
 type Props = {

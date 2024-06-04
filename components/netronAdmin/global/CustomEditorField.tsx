@@ -12,7 +12,7 @@ const CustomEditor = dynamic(() => {
 
 export const contentSchema = {
   content: z.string().min(1, {
-    message: "內容不得空白",
+    message: "必填欄位",
   }),
 }
 
