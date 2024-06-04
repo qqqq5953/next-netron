@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Form } from "@/components/ui/form"
 import { Button } from '@/components/netronAdmin/global/button'
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
-import FormCustomLink, { customLinkSchema } from "@/components/netronAdmin/global/form-custom-link"
+import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from "@/components/netronAdmin/global/FormCustomLink"
 import CustomEditorField, { contentSchema } from "@/components/netronAdmin/global/CustomEditorField"
 
 const formSchema = z.object({

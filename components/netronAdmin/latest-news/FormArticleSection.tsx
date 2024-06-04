@@ -10,7 +10,7 @@ import {
 
 import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
-import { DatePickerField } from '../global/date-picker'
+import { DatePickerField } from '../global/DatePicker'
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 

@@ -6,7 +6,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import MenuList from "./menu-list";
+import MenuList from "./MenuList";
 import { FaGlobe } from "react-icons/fa";
 import { FiMenu } from "react-icons/fi";
 import Link from "next/link";

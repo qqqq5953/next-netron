@@ -1,4 +1,4 @@
-import MenuList from "./menu-list";
+import MenuList from "./MenuList";
 import Image from "next/image";
 
 export const menuNavs = [

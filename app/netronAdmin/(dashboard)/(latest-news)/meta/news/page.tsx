@@ -6,7 +6,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
+import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
 import { Button } from '@/components/netronAdmin/global/button'
 
 const formSchema = z.object(metaSchema)

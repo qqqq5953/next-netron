@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/form-meta-section'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/form-custom-link'
+import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLink'
 import CustomEditorField, { contentSchema } from '@/components/netronAdmin/global/CustomEditorField'
 import FormEventSection, { eventSchema } from '@/components/netronAdmin/latest-news/FormEventSection'
 import FormArticleSection, { articleSchema } from '@/components/netronAdmin/latest-news/FormArticleSection'
