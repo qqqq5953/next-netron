@@ -16,10 +16,11 @@ const ButtonCustom = forwardRef<HTMLButtonElement, Props>((props, _ref) => {
     return (
       <Button
         {...props}
+        type={props.type ?? 'button'}
         size={props.size}
         onClick={props.onClick}
         className={cn(
-          "bg-sky-500 hover:bg-sky-500/90",
+          "tracking-wide bg-sky-500 hover:bg-sky-500/90",
           props.className
         )}
       >
@@ -30,11 +31,12 @@ const ButtonCustom = forwardRef<HTMLButtonElement, Props>((props, _ref) => {
     return (
       <Button
         {...props}
+        type={props.type ?? 'button'}
         variant="outline"
         size={props.size}
         onClick={props.onClick}
         className={cn(
-          "text-sky-500 border-current hover:text-sky-500/90 hover:border-current",
+          "tracking-wide text-sky-500 border-current hover:text-sky-500/90 hover:border-current",
           props.className
         )}
       >
@@ -45,10 +47,14 @@ const ButtonCustom = forwardRef<HTMLButtonElement, Props>((props, _ref) => {
     return (
       <Button
         {...props}
+        type={props.type ?? 'button'}
         variant={props.variant}
         size={props.size}
         onClick={props.onClick}
-        className={props.className}
+        className={cn(
+          "tracking-wide",
+          props.className
+        )}
       >
         {props.children}
       </Button>

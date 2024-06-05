@@ -49,9 +49,6 @@ export default function FormBrandSection(props: Props) {
     name: "brandItems",
   });
 
-  console.log('fieldArray.fields', fieldArray.fields);
-
-
   function handleAddItem() {
     fieldArray.append({ id: crypto.randomUUID(), name: "項目", isActivated: false })
   }
@@ -66,7 +63,7 @@ export default function FormBrandSection(props: Props) {
           className='my-4 text-sky-500 hover:text-sky-500/90'
           onClick={handleAddItem}
         >
-          <IoIosAdd size={20} /> 新增產品項目
+          <IoIosAdd size={20} /> 新增品牌項目
         </Button>
       </div>
       <div className={`grid rounded-md ${fieldArray.fields.length !== 0 ? 'border' : ''}`}>

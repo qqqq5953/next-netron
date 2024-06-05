@@ -25,6 +25,7 @@ import DialogAlert from '@/components/DialogAlert';
 import { z } from 'zod';
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils';
 import { IoIosAdd } from "react-icons/io";
+import { LuImagePlus } from "react-icons/lu";
 import { BrandItem } from './FormBrandSection';
 
 const contentItemSchema = z.object({
@@ -66,21 +67,22 @@ type Props = {
 };
 
 export default function FormProductSection(props: Props) {
-  const [titles, setTitles] = useState<string[]>([]);
-  const [open, setOpen] = useState(false)
-  const deletedItemIndex = useRef(-1)
-
   const fieldArray = useFieldArray({
     control: props.form.control,
     name: "contentItems",
   });
+
+  const [previews, setPreviews] = useState<string[]>(fieldArray.fields.map(field => field.image))
+  const [titles, setTitles] = useState<string[]>(fieldArray.fields.map(field => field.title));
+  const [open, setOpen] = useState(false)
+  const deletedItemIndex = useRef(-1)
 
   function handleAddItem() {
     fieldArray.append({ title: "", description: "", link: "", image: "" })
     setTitles(prev => [...prev, `項目${prev.length + 1}`])
   }
 
-  function handleInputChange(
+  function handleTitleChange(
     field: ControllerRenderProps<any, `contentItems.${number}.title`>,
     index: number,
     event: ChangeEvent<HTMLInputElement>
@@ -92,9 +94,24 @@ export default function FormProductSection(props: Props) {
     setTitles(newTitles);
   };
 
+  function handleImageChange(
+    field: ControllerRenderProps<any, `contentItems.${number}.image`>,
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ) {
+    field.onChange(event.target.files![0])
+
+    const newPreviews = [...previews];
+    newPreviews[index] = URL.createObjectURL(event.target.files![0])
+    setPreviews(newPreviews);
+  }
+
   function handleRemoveItem(closeLoading: () => void) {
     fieldArray.remove(deletedItemIndex.current)
+
     setTitles(titles.filter((_, index) => index !== deletedItemIndex.current));
+    setPreviews(previews.filter((_, index) => index !== deletedItemIndex.current));
+
     closeLoading()
     setOpen(false)
   }
@@ -104,7 +121,6 @@ export default function FormProductSection(props: Props) {
       <div className='flex items-center gap-4'>
         <Button
           size="sm"
-          type='button'
           variant="secondary"
           className='my-4 text-sky-500 hover:text-sky-500/90'
           onClick={handleAddItem}
@@ -114,10 +130,11 @@ export default function FormProductSection(props: Props) {
       </div>
       <div className='grid grid-cols-3 gap-4'>
         {fieldArray.fields.map((fieldItem, index) => (
-          <Card key={fieldItem.id}>
+          <Card key={fieldItem.id} className='shadow-lg'>
             <CardHeader>
-              <CardTitle>{titles[index] || ''}</CardTitle>
+              <CardTitle className='truncate py-1'>{titles[index] || ''}</CardTitle>
             </CardHeader>
+
             <CardContent className="flex flex-col gap-4">
               {/* 產品名稱 */}
               <FormField
@@ -131,7 +148,7 @@ export default function FormProductSection(props: Props) {
                         {...field}
                         className='primary-input-focus'
                         placeholder="Enter link here"
-                        onChange={(e) => handleInputChange(field, index, e)}
+                        onChange={(e) => handleTitleChange(field, index, e)}
                       />
                     </FormControl>
                     <FormMessage className='mt-1.5' />
@@ -149,6 +166,7 @@ export default function FormProductSection(props: Props) {
                     <FormControl>
                       <Textarea
                         {...field}
+                        rows={5}
                         className='primary-input-focus'
                         placeholder="Enter link here"
                       />
@@ -182,24 +200,42 @@ export default function FormProductSection(props: Props) {
                 control={props.form.control}
                 name={`contentItems.${index}.image`}
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-normal text-base text-neutral-800">圖片</FormLabel>
+                  <FormItem className='flex flex-col gap-2'>
+                    <div className='text-neutral-800'>圖片</div>
+                    {previews.length !== 0 && previews[index] && <div className='grid place-items-center'>
+                      <img
+                        src={previews[index]}
+                        alt="preview"
+                        className="object-top object-cover rounded-lg aspect-square"
+                      />
+                    </div>
+                    }
+                    <Button size="sm"
+                      variant="secondary"
+                      className='w-full text-sky-500 hover:text-sky-500/90' asChild
+                    >
+                      <FormLabel className='cursor-pointer gap-2'>
+                        <LuImagePlus /> 新增圖片
+                      </FormLabel>
+                    </Button>
                     <FormControl>
                       <Input
-                        {...field}
                         type="file"
                         accept='.jpg,.jpeg,.png,image/jpg,image/jpeg,image/png'
-                        onChange={(event) => field.onChange(event.target.files![0])}
+                        onChange={(e) => handleImageChange(field, index, e)}
+                        className='hidden'
                       />
                     </FormControl>
                     <FormMessage className='mt-1.5' />
                   </FormItem>
                 )}
               />
+
+
             </CardContent>
+
             <CardFooter>
               <Button
-                type='button'
                 variant="secondary"
                 className='w-full text-rose-500 hover:text-rose-500/90'
                 onClick={() => {
@@ -218,18 +254,18 @@ export default function FormProductSection(props: Props) {
                 刪除
               </Button>
             </CardFooter>
-            {/* ${} */}
-            <DialogAlert
-              title={<div className='leading-8'>
-                <span>產品項目</span>
-                <span className="rounded bg-neutral-100 px-1.5 py-0.5 ml-1">{titles[deletedItemIndex.current]}</span>
-              </div>}
-              open={open}
-              onConfirm={handleRemoveItem}
-              onClose={() => setOpen(false)}
-            />
           </Card>
         ))}
+
+        <DialogAlert
+          title={<div className='leading-8'>
+            <span>產品項目</span>
+            <span className="rounded bg-neutral-100 px-1.5 py-0.5 ml-1">{titles[deletedItemIndex.current]}</span>
+          </div>}
+          open={open}
+          onConfirm={handleRemoveItem}
+          onClose={() => setOpen(false)}
+        />
       </div>
 
     </>

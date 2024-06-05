@@ -39,7 +39,10 @@ export default function FormAddProduct() {
       metaDescription: "",
       customizedDescription: "",
       title: "",
-      contentItems: [],
+      contentItems: [
+        { title: "雲端運算 Cloud Computing", description: "網創資訊提供多雲政策、企業節費、雲端儲存、代管、AI / Big Data 等企業雲端服務，有了雲端就不需要購買並維護硬體設備，即使需要大量運算也能快速部署，遇到突發狀況也有資料備份、災難復原等機制，不怕資料一去不回。我們擁有專業的整合技術團隊，可以協助您快速上雲，並讓您更專注於產品及業務的開發。", link: "", image: "" },
+        { title: "資安防護 Cyber Security", description: "網創資訊為亞太區最大 Anti-DDoS 供應商，除了提供 DDoS 防護服務，也可為企業導入 WAF、機器人偵測等資安解決方案，豐富的防禦經驗保護您的機敏資料不外洩。", link: "https://www.netron.asia/tw/brand/security", image: "" }
+      ],
       brandItems: [
         { id: crypto.randomUUID(), name: "brand1", isActivated: true },
         { id: crypto.randomUUID(), name: "brand2", isActivated: false }
