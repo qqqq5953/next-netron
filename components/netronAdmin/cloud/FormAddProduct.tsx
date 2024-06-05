@@ -18,15 +18,17 @@ import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/For
 import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLink'
 import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
 import FormProductSection, { contentItemsSchema } from '@/components/netronAdmin/cloud/FormProductSection'
+import FormBrandSection, { brandItemsSchema } from '@/components/netronAdmin/cloud/FormBrandSection'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
   ...titleSchema,
-  ...contentItemsSchema
+  ...contentItemsSchema,
+  ...brandItemsSchema
 });
 
-export default function FormAddBrand() {
+export default function FormAddProduct() {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,11 +40,15 @@ export default function FormAddBrand() {
       customizedDescription: "",
       title: "",
       contentItems: [],
+      brandItems: [
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false }
+      ],
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    console.log('onSubmit', values);
   }
 
   return (
@@ -62,9 +68,13 @@ export default function FormAddBrand() {
             </div>
 
             <div>
-              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>產品</h3>
+              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>產品項目</h3>
               <FormTitleField form={form} />
               <FormProductSection form={form} />
+            </div>
+            <div>
+              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>品牌項目</h3>
+              <FormBrandSection form={form} />
             </div>
 
             <div className="text-right">

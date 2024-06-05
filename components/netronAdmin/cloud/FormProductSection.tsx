@@ -25,7 +25,7 @@ import DialogAlert from '@/components/DialogAlert';
 import { z } from 'zod';
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils';
 import { IoIosAdd } from "react-icons/io";
-import { Label } from '@/components/ui/label';
+import { BrandItem } from './FormBrandSection';
 
 const contentItemSchema = z.object({
   title: z.string().min(1, {
@@ -51,10 +51,11 @@ export const contentItemsSchema = {
   }),
 }
 
-type ContentItem = z.infer<typeof contentItemSchema>;
+export type ContentItem = z.infer<typeof contentItemSchema>;
 
 type Props = {
   form: UseFormReturn<{
+    brandItems: BrandItem[];
     contentItems: ContentItem[];
     title: string;
     customizedDescription: string;
@@ -101,7 +102,6 @@ export default function FormProductSection(props: Props) {
   return (
     <>
       <div className='flex items-center gap-4'>
-        <Label className="font-normal text-base text-neutral-800">產品項目</Label>
         <Button
           size="sm"
           type='button'
@@ -109,7 +109,7 @@ export default function FormProductSection(props: Props) {
           className='my-4 text-sky-500 hover:text-sky-500/90'
           onClick={handleAddItem}
         >
-          <IoIosAdd size={20} /> 新增產品項目
+          <IoIosAdd size={20} /> 新增品牌項目
         </Button>
       </div>
       <div className='grid grid-cols-3 gap-4'>

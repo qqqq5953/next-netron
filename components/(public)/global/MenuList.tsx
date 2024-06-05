@@ -1,12 +1,12 @@
 import { MenuList as MenuListType } from '@/lib/definitions'
 import Link from 'next/link'
-import clsx from 'clsx'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { cn } from '@/lib/utils'
 
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 export default function MenuList(props: Props) {
   return (
     <ul
-      className={clsx(
+      className={cn(
         'flex flex-col gap-4',
         props.isChild ? 'font-normal text-base' : 'font-medium text-lg pt-8'
       )}>
