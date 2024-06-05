@@ -27,6 +27,7 @@ import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils';
 import { IoIosAdd } from "react-icons/io";
 import { LuImagePlus } from "react-icons/lu";
 import { BrandItem } from './FormBrandSection';
+import { newsItem } from './FormNewsSection';
 
 const contentItemSchema = z.object({
   title: z.string().min(1, {
@@ -56,6 +57,7 @@ export type ContentItem = z.infer<typeof contentItemSchema>;
 
 type Props = {
   form: UseFormReturn<{
+    newsItems: newsItem[];
     brandItems: BrandItem[];
     contentItems: ContentItem[];
     title: string;

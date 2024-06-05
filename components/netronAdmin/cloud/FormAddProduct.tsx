@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from '@/components/netronAdmin/global/button'
 import { Form } from "@/components/ui/form"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Sheet,
   SheetContent,
@@ -19,13 +20,15 @@ import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/globa
 import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
 import FormProductSection, { contentItemsSchema } from '@/components/netronAdmin/cloud/FormProductSection'
 import FormBrandSection, { brandItemsSchema } from '@/components/netronAdmin/cloud/FormBrandSection'
+import FormNewsSection, { newsItemsSchema } from './FormNewsSection'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
   ...titleSchema,
   ...contentItemsSchema,
-  ...brandItemsSchema
+  ...brandItemsSchema,
+  ...newsItemsSchema
 });
 
 export default function FormAddProduct() {
@@ -45,7 +48,47 @@ export default function FormAddProduct() {
       ],
       brandItems: [
         { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false }
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+      ],
+      newsItems: [
+        { id: crypto.randomUUID(), name: "news1", isActivated: true },
+        { id: crypto.randomUUID(), name: "news2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
+        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
+        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
       ],
     },
   });
@@ -75,9 +118,19 @@ export default function FormAddProduct() {
               <FormTitleField form={form} />
               <FormProductSection form={form} />
             </div>
+
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>品牌項目</h3>
-              <FormBrandSection form={form} />
+              <ScrollArea className='border h-[342px] rounded-md'>
+                <FormBrandSection form={form} />
+              </ScrollArea>
+            </div>
+
+            <div>
+              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>最新消息</h3>
+              <ScrollArea className='border h-[342px] rounded-md'>
+                <FormNewsSection form={form} />
+              </ScrollArea>
             </div>
 
             <div className="text-right">

@@ -13,19 +13,19 @@ import { Checkbox } from "@/components/ui/checkbox"
 
 import { z } from 'zod';
 import { ContentItem } from './FormProductSection';
-import { newsItem } from './FormNewsSection';
+import { BrandItem } from './FormBrandSection';
 
-const brandItemSchema = z.object({
+const newsItemSchema = z.object({
   id: z.string(),
   name: z.string(),
   isActivated: z.boolean()
 });
 
-export const brandItemsSchema = {
-  brandItems: z.array(brandItemSchema),
+export const newsItemsSchema = {
+  newsItems: z.array(newsItemSchema),
 }
 
-export type BrandItem = z.infer<typeof brandItemSchema>;
+export type newsItem = z.infer<typeof newsItemSchema>;
 
 type Props = {
   form: UseFormReturn<{
@@ -40,10 +40,10 @@ type Props = {
   }, any, undefined>
 };
 
-export default function FormBrandSection(props: Props) {
+export default function FormNewsSection(props: Props) {
   const fieldArray = useFieldArray({
     control: props.form.control,
-    name: "brandItems",
+    name: "newsItems",
   });
 
   return (
@@ -52,7 +52,7 @@ export default function FormBrandSection(props: Props) {
         <FormField
           key={fieldItem.id}
           control={props.form.control}
-          name={`brandItems.${index}.isActivated`}
+          name={`newsItems.${index}.isActivated`}
           render={({ field }) => (
             <FormItem className='p-4 border-b last:border-none'>
               <FormLabel className="flex items-center gap-4 font-normal text-base text-neutral-800">
@@ -69,6 +69,10 @@ export default function FormBrandSection(props: Props) {
           )}
         />
       ))}
+
+      {fieldArray.fields.length <= 5 && <div className='p-4 text-center text-neutral-400'>
+        ...
+      </div>}
     </div>
   );
 
