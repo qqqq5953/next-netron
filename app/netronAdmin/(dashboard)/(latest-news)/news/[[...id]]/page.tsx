@@ -1,10 +1,6 @@
-'use client'
-
-import { Button } from '@/components/netronAdmin/global/button'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import FormAddNews from '@/components/netronAdmin/latest-news/FormAddNews'
 import TableNews from '@/components/netronAdmin/latest-news/TableNews'
+import TabsNav from '@/components/TabsNav'
 
 const tabs = [
   { name: "所有資訊", path: "/netronAdmin/news" },
@@ -14,8 +10,6 @@ const tabs = [
 ]
 
 export default function NewsPage() {
-  const pathname = usePathname()
-
   return (
     <>
       <div className='flex items-center'>
@@ -23,18 +17,7 @@ export default function NewsPage() {
         <FormAddNews />
       </div>
 
-      <div className='flex gap-2'>
-        {tabs.map(tab => {
-          return <Button
-            key={tab.name}
-            size="sm"
-            variant="secondary"
-            className={`${pathname === tab.path ? 'text-sky-500' : 'font-normal'}`}
-          >
-            <Link href={tab.path}>{tab.name}</Link>
-          </Button>
-        })}
-      </div>
+      <TabsNav tabs={tabs} />
 
       <section>
         <TableNews />

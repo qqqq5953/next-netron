@@ -1,10 +1,6 @@
-'use client'
-
-import { Button } from '@/components/netronAdmin/global/button'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import TableCase from '@/components/netronAdmin/successful-case/TableCase'
 import FormAddCase from '@/components/netronAdmin/successful-case/FormAddCase'
+import TabsNav from '@/components/TabsNav'
 
 const tabs = [
   { name: "全部", path: "/netronAdmin/case" },
@@ -13,8 +9,6 @@ const tabs = [
 ]
 
 export default function CasePage() {
-  const pathname = usePathname()
-
   return (
     <>
       <div className='flex items-center'>
@@ -22,18 +16,7 @@ export default function CasePage() {
         <FormAddCase />
       </div>
 
-      <div className='flex gap-2'>
-        {tabs.map(tab => {
-          return <Button
-            key={tab.name}
-            size="sm"
-            variant="secondary"
-            className={`${pathname === tab.path ? 'text-sky-500' : 'font-normal'}`}
-          >
-            <Link href={tab.path}>{tab.name}</Link>
-          </Button>
-        })}
-      </div>
+      <TabsNav tabs={tabs} />
 
       <section>
         <TableCase />
