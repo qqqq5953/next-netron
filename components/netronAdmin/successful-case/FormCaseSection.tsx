@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-import { Input } from '@/components/ui/input'
 import {
   FormControl,
   FormField,
@@ -20,6 +18,7 @@ import { z } from "zod"
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
+import FormCoverImageField from '../global/FormCoverImageField'
 
 export const caseSchema = {
   category: z.string().min(1, {
@@ -30,7 +29,7 @@ export const caseSchema = {
   coverImage: z.any()
     .refine((file: File) => !!file, "請上傳圖片")
     .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
-    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
+    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG")
 }
 
 type Props = {
@@ -38,8 +37,6 @@ type Props = {
 };
 
 function FormCaseSection(props: Props) {
-  const [preview, setPreview] = useState("")
-
   return (
     <div className='flex flex-col gap-4'>
       {/* 分類 */}
@@ -88,27 +85,7 @@ function FormCaseSection(props: Props) {
       />
 
       {/* 封面照 */}
-      <FormField
-        control={props.form.control}
-        name="coverImage"
-        render={({ field }) => {
-          return <FormItem>
-            <FormLabel className="font-normal text-base text-neutral-800">封面照</FormLabel>
-            <FormControl>
-              <Input
-                type="file"
-                accept='.jpg,.jpeg,.png,image/jpg,image/jpeg,image/png'
-                onChange={(event) => {
-                  setPreview(URL.createObjectURL(event.target.files![0]))
-                  field.onChange(event.target.files![0])
-                }}
-              />
-            </FormControl>
-            <FormMessage className='mt-1.5' />
-          </FormItem>
-        }}
-      />
-      {preview && <img src={preview} alt="preview" className="object-cover rounded-lg size-40" />}
+      <FormCoverImageField form={props.form} />
     </div>
   )
 }

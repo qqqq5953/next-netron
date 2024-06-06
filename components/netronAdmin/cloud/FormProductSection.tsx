@@ -74,7 +74,14 @@ export default function FormProductSection(props: Props) {
     name: "contentItems",
   });
 
-  const [previews, setPreviews] = useState<string[]>(fieldArray.fields.map(field => field.image))
+  const [previews, setPreviews] = useState<string[]>(fieldArray.fields.map(field => {
+    if (typeof field.image === 'object') {
+      return URL.createObjectURL(field.image)
+    } else {
+      return field.image
+    }
+  }))
+
   const [titles, setTitles] = useState<string[]>(fieldArray.fields.map(field => field.title));
   const [open, setOpen] = useState(false)
   const deletedItemIndex = useRef(-1)
@@ -101,6 +108,10 @@ export default function FormProductSection(props: Props) {
     index: number,
     event: ChangeEvent<HTMLInputElement>
   ) {
+    if (event.target.files?.length === 0) return
+
+    console.log('event.target.files', event.target.files);
+
     field.onChange(event.target.files![0])
 
     const newPreviews = [...previews];
@@ -127,7 +138,7 @@ export default function FormProductSection(props: Props) {
           className='my-4 text-sky-500 hover:text-sky-500/90'
           onClick={handleAddItem}
         >
-          <IoIosAdd size={20} /> 新增品牌項目
+          <IoIosAdd size={20} /> 新增產品項目
         </Button>
       </div>
       <div className='grid grid-cols-3 gap-4'>

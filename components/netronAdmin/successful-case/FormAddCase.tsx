@@ -32,16 +32,16 @@ export default function FormAddCase() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
+      metaTitle: "123",
+      metaKeyword: "234",
+      metaDescription: "wer",
       customizedDescription: "",
 
-      category: "",
-      title: "",
-      caseDescription: "",
+      category: "case",
+      title: "wer",
+      caseDescription: "123",
       coverImage: undefined,
-      content: "",
+      content: "123",
     },
   })
 
@@ -73,7 +73,10 @@ export default function FormAddCase() {
               <Button
                 type="button"
                 variant="ghost"
-                onClick={() => form.reset()}
+                onClick={() => {
+                  form.reset()
+                  form.setValue("coverImage", "")
+                }}
               >重置</Button>
               <Button type="submit">儲存</Button>
             </div>

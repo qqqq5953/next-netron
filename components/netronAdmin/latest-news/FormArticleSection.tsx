@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-import { Input } from '@/components/ui/input'
 import {
   FormControl,
   FormField,
@@ -20,6 +18,7 @@ import { z } from "zod"
 import { DatePickerField } from '../global/DatePicker'
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
+import FormCoverImageField from '../global/FormCoverImageField'
 
 export const articleSchema = {
   articleDate: z.date({
@@ -41,8 +40,6 @@ type Props = {
 };
 
 function FormArticleSection(props: Props) {
-  const [preview, setPreview] = useState("")
-
   return (
     <div className='flex flex-col gap-4'>
       {/* 文章日期 */}
@@ -76,27 +73,7 @@ function FormArticleSection(props: Props) {
       <FormTitleField form={props.form} />
 
       {/* 封面照 */}
-      <FormField
-        control={props.form.control}
-        name="coverImage"
-        render={({ field }) => {
-          return <FormItem>
-            <FormLabel className="font-normal text-base text-neutral-800">封面照</FormLabel>
-            <FormControl>
-              <Input
-                type="file"
-                accept='.jpg,.jpeg,.png,image/jpg,image/jpeg,image/png'
-                onChange={(event) => {
-                  setPreview(URL.createObjectURL(event.target.files![0]))
-                  field.onChange(event.target.files![0])
-                }}
-              />
-            </FormControl>
-            <FormMessage className='mt-1.5' />
-          </FormItem>
-        }}
-      />
-      {preview && <img src={preview} alt="preview" className="object-cover rounded-lg size-40" />}
+      <FormCoverImageField form={props.form} />
     </div>
   )
 }
