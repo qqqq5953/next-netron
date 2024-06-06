@@ -10,12 +10,7 @@ import {
   BreadcrumbPage
 } from '@/components/ui/breadcrumb'
 import { menuNavs } from './sidebar';
-
-type Route = {
-  name: string;
-  path: string;
-  children?: Route[];
-};
+import { MenuItem } from '@/lib/definitions';
 
 const redirectPathMap: Record<string, string> = {
   "/netronAdmin/news/2": "/netronAdmin/news",
@@ -48,7 +43,7 @@ export default function BreadcrumbCustom() {
     }
   })
 
-  function convertToMenuObj(navs: Route[], parentBreadcrumb: string[] = []) {
+  function convertToMenuObj(navs: MenuItem[], parentBreadcrumb: string[] = []) {
     return navs.reduce((menuObj, nav) => {
       const currentBreadcrumb = [...parentBreadcrumb, nav.name];
 
@@ -64,7 +59,7 @@ export default function BreadcrumbCustom() {
       }
 
       return menuObj;
-    }, {} as Record<Route['path'], Route['name'][]>);
+    }, {} as Record<MenuItem['path'], MenuItem['name'][]>);
   };
 
   return <>

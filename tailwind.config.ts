@@ -64,6 +64,14 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        "sidebar-expand": {
+          from: { width: "80px" },
+          to: { width: "208px" },
+        },
+        "sidebar-close": {
+          from: { width: "208px" },
+          to: { width: "80px" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -97,6 +105,8 @@ const config = {
         },
       },
       animation: {
+        "sidebar-expand": "sidebar-expand 0.2s ease-out",
+        "sidebar-close": "sidebar-close 0.2s ease-out",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "bounce-netron": "bounce-netron 3.4s infinite alternate",
