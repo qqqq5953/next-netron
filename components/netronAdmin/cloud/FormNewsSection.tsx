@@ -14,6 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { z } from 'zod';
 import { ContentItem } from './FormProductSection';
 import { BrandItem } from './FormBrandSection';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const newsItemSchema = z.object({
   id: z.string(),
@@ -47,7 +48,7 @@ export default function FormNewsSection(props: Props) {
   });
 
   return (
-    <div className={`grid rounded-md`}>
+    <ScrollArea className={`grid rounded-md border ${fieldArray.fields.length > 6 ? 'h-[342px]' : 'h-auto'}`}>
       {fieldArray.fields.map((fieldItem, index) => (
         <FormField
           key={fieldItem.id}
@@ -69,11 +70,7 @@ export default function FormNewsSection(props: Props) {
           )}
         />
       ))}
-
-      {fieldArray.fields.length <= 5 && <div className='p-4 text-center text-neutral-400'>
-        ...
-      </div>}
-    </div>
+    </ScrollArea>
   );
 
 }

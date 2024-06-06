@@ -49,46 +49,10 @@ export default function FormAddProduct() {
       brandItems: [
         { id: crypto.randomUUID(), name: "brand1", isActivated: true },
         { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
       ],
       newsItems: [
         { id: crypto.randomUUID(), name: "news1", isActivated: true },
         { id: crypto.randomUUID(), name: "news2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-        // { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        // { id: crypto.randomUUID(), name: "brand2", isActivated: false },
       ],
     },
   });
@@ -104,7 +68,7 @@ export default function FormAddProduct() {
       </SheetTrigger>
       <SheetContent className='w-[80vw] sm:max-w-4xl overflow-auto px-12'>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12 h-full">
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>META</h3>
               <FormMetaSection form={form} />
@@ -121,19 +85,22 @@ export default function FormAddProduct() {
 
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>品牌項目</h3>
-              <ScrollArea className='border h-[342px] rounded-md'>
-                <FormBrandSection form={form} />
-              </ScrollArea>
+              <FormBrandSection form={form} />
             </div>
 
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>最新消息</h3>
-              <ScrollArea className='border h-[342px] rounded-md'>
-                <FormNewsSection form={form} />
-              </ScrollArea>
+              <FormNewsSection form={form} />
             </div>
 
-            <div className="text-right">
+            <div className="space-x-2 text-right pb-12">
+              <Button
+                variant="ghost"
+                type="button"
+                onClick={() => setOpen(false)}
+              >
+                取消
+              </Button>
               <Button type="submit">儲存</Button>
             </div>
           </form>
