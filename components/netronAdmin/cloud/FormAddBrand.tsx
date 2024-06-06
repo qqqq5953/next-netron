@@ -14,7 +14,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLink'
+import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLinkField'
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
 import CustomEditorField, { contentSchema } from '../global/CustomEditorField'
 
@@ -53,16 +53,14 @@ export default function FormAddBrand() {
       <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12">
-            <div className=''>
-              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>META</h3>
+            <div className='flex flex-col gap-4'>
+              <h3 className='text-2xl text-neutral-700 font-semibold'>META</h3>
               <FormMetaSection form={form} />
-              <div className='pt-4'>
-                <FormCustomLink form={form} />
-              </div>
+              <FormCustomLink form={form} />
             </div>
 
-            <div>
-              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>文章</h3>
+            <div className='flex flex-col gap-4'>
+              <h3 className='text-2xl text-neutral-700 font-semibold'>文章</h3>
               <FormTitleField form={form} />
               <CustomEditorField form={form} />
             </div>

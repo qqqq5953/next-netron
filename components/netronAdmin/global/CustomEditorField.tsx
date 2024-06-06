@@ -25,7 +25,7 @@ export default function CustomEditorField(props: Props) {
     control={props.form.control}
     name="content"
     render={() => (
-      <FormItem className='pt-4'>
+      <FormItem>
         <FormLabel className="font-normal text-base text-neutral-800">內容*</FormLabel>
         <CustomEditor form={props.form} />
         <FormMessage className='mt-1.5' />

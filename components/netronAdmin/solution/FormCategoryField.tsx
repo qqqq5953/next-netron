@@ -10,28 +10,31 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
-export const customLinkSchema = {
-  customizedDescription: z.string()
+export const categorySchema = {
+  category: z.string().min(1, {
+    message: "必填欄位",
+  })
 }
 
 type Props = {
   form: UseFormReturn<any, any, undefined>
 };
 
-export default function FormCustomLink(props: Props) {
+export default function FormCategoryField(props: Props) {
   return (
     <FormField
       control={props.form.control}
-      name="customizedDescription"
+      name="category"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="basis-32 shrink-0 font-normal text-base text-neutral-800">連結客製化文字</FormLabel>
+          <FormLabel className="font-normal text-base text-neutral-800">類別</FormLabel>
           <div className='grow'>
             <FormControl>
               <Input
+                {...field}
                 className='primary-input-focus'
-                placeholder="請輸入連結客製化文字"
-                {...field} />
+                placeholder="請輸入類別"
+              />
             </FormControl>
             <FormMessage className='mt-1.5' />
           </div>

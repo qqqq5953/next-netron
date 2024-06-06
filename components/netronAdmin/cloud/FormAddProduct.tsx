@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sheet"
 
 import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLink'
+import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLinkField'
 import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
 import FormProductSection, { contentItemsSchema } from '@/components/netronAdmin/cloud/FormProductSection'
 import FormBrandSection, { brandItemsSchema } from '@/components/netronAdmin/cloud/FormBrandSection'
