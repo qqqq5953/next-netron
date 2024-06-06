@@ -17,10 +17,17 @@ type Route = {
   children?: Route[];
 };
 
+const redirectPathMap: Record<string, string> = {
+  "/netronAdmin/news/2": "/netronAdmin/news",
+  "/netronAdmin/news/5": "/netronAdmin/news",
+  "/netronAdmin/news/9": "/netronAdmin/news",
+}
+
 export default function BreadcrumbCustom() {
   const pathname = usePathname()
   const menuObj = convertToMenuObj(menuNavs)
-  const breadcrumbs = menuObj[pathname]
+  const redirectPath = redirectPathMap[pathname]
+  const breadcrumbs = redirectPath ? menuObj[redirectPath] : menuObj[pathname]
 
   const breadcrumbItems = breadcrumbs.map((breadcrumb, index) => {
     const isLastItem = breadcrumbs.length - 1 === index
