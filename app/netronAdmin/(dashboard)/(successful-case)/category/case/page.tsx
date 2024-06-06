@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/netronAdmin/global/button'
 
-export default function CategoryNewsPage() {
+export default function CategoryCasePage() {
   const [isOpen, setIsOpen] = useState(false)
 
   const initialData = [

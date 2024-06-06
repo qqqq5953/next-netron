@@ -21,6 +21,8 @@ const redirectPathMap: Record<string, string> = {
   "/netronAdmin/news/2": "/netronAdmin/news",
   "/netronAdmin/news/5": "/netronAdmin/news",
   "/netronAdmin/news/9": "/netronAdmin/news",
+  "/netronAdmin/case/3": "/netronAdmin/case",
+  "/netronAdmin/case/14": "/netronAdmin/case",
 }
 
 export default function BreadcrumbCustom() {

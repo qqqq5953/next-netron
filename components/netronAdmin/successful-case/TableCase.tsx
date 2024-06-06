@@ -17,40 +17,33 @@ import { useParams } from 'next/navigation'
 type InitialData = Record<string, {
   title: string;
   isActive: CheckedState;
-  isAddToHome: CheckedState;
   order: string;
 }[]>
 
 const initialData: InitialData = {
   "all": [
-    { title: "2024 Netron x AWS Philippines event", isActive: false, isAddToHome: false, order: "1" },
-    { title: "【雲端活動】雲服務技術優化工作坊", isActive: false, isAddToHome: false, order: "2" },
-    { title: "【雲端活動】SRE CONFERENCE 2024", isActive: false, isAddToHome: false, order: "3" }
+    { title: "UGG", isActive: false, order: "1" },
+    { title: "【MAYO 鼎恒數位科技", isActive: false, order: "3" },
+    { title: "藥華醫藥", isActive: false, order: "2" }
   ],
-  "2": [
-    { title: "【媒體報導】網創資訊執行長李尚修主打快速 發揚雲端服務", isActive: false, isAddToHome: false, order: "2" },
-    { title: "【雲端活動】雲服務技術優化工作坊", isActive: false, isAddToHome: false, order: "1" },
-    { title: "【雲端活動】SRE CONFERENCE 2024", isActive: false, isAddToHome: false, order: "3" }
+  "3": [
+    { title: "【MAYO 鼎恒數位科技", isActive: false, order: "3" },
+    { title: "藥華醫藥", isActive: false, order: "2" },
+    { title: "UGG", isActive: false, order: "1" },
   ],
-  "5": [
-    { title: "【媒體報導】網創資訊執行長李尚修主打快速 發揚雲端服務", isActive: false, isAddToHome: false, order: "3" },
-    { title: "【最新消息】Netron 網創資訊榮獲騰訊雲二項夥伴大獎 銷售業績位居全球前三", isActive: false, isAddToHome: false, order: "2" },
-    { title: "【媒體報導】Netron網創資訊挾MSP、MSSP與Migration三大認證打造差異化能力，助攻企業迎接雲端轉型浪潮", isActive: false, isAddToHome: false, order: "1" }
+  "14": [
+    { title: "藥華醫藥", isActive: false, order: "2" },
+    { title: "UGG", isActive: false, order: "1" },
+    { title: "【MAYO 鼎恒數位科技", isActive: false, order: "3" }
   ],
-  "9": [
-    { title: "【雲端技能學習】安全標準全面更新：深入解析ISO/IEC 27001與27002的最新變革	", isActive: false, isAddToHome: false, order: "1" },
-    { title: "【雲端技能學習】AWS 推出Amazon Q 企業專屬的生成式 AI 助理服務", isActive: false, isAddToHome: false, order: "3" },
-    { title: "【雲端技能學習】專為 AWS 打造的 SentinelOne Singularity Cloud Workload Security", isActive: false, isAddToHome: false, order: "2" }
-  ],
-
 }
 
-export default function TableNews() {
+export default function TableCase() {
   const params = useParams<{ id: string }>()
 
   const [data, setData] = useState(params?.id ? initialData[params.id] : initialData['all']);
 
-  function toggleCheckbox(index: number, isChecked: CheckedState, type: 'isActive' | 'isAddToHome') {
+  function toggleCheckbox(index: number, isChecked: CheckedState, type: 'isActive') {
     const updatedData = [...data];
     updatedData[index][type] = isChecked;
     setData(updatedData);
@@ -69,7 +62,6 @@ export default function TableNews() {
           <TableHead className="w-[100px]">動作</TableHead>
           <TableHead>標題</TableHead>
           <TableHead>上下架</TableHead>
-          <TableHead>首頁</TableHead>
           <TableHead>排序</TableHead>
         </TableRow>
       </TableHeader>
@@ -87,12 +79,6 @@ export default function TableNews() {
             <TableCell>
               <Checkbox
                 checked={item.isActive} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'isActive')}
-              />
-            </TableCell>
-            <TableCell>
-              <Checkbox
-                checked={item.isAddToHome}
-                onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'isAddToHome')}
               />
             </TableCell>
             <TableCell>

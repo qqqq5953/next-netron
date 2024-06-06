@@ -6,9 +6,7 @@ export const menuNavs = [
   {
     name: "最新消息", path: "", children: [
       { name: "分類管理", path: "/netronAdmin/category/news" },
-      {
-        name: "消息清單", path: "/netronAdmin/news",
-      },
+      { name: "消息清單", path: "/netronAdmin/news" },
       { name: "Meta 資訊", path: "/netronAdmin/meta/news" },
     ]
   },
@@ -22,13 +20,7 @@ export const menuNavs = [
   {
     name: "成功案例", path: "", children: [
       { name: "分類管理", path: "/netronAdmin/category/case" },
-      {
-        name: "案例清單", path: "", children: [
-          { name: "全部", path: "/netronAdmin/case" },
-          { name: "雲端活動", path: "/netronAdmin/case/3" },
-          { name: "MSP 新世代雲端託管", path: "/netronAdmin/case/14" },
-        ]
-      },
+      { name: "案例清單", path: "/netronAdmin/case" },
       { name: "Meta 資訊", path: "/netronAdmin/meta/success" },
     ]
   },

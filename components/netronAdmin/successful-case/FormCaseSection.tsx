@@ -17,19 +17,16 @@ import {
 
 import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
-import { DatePickerField } from '../global/DatePicker'
 import FormTitleField, { titleSchema } from '../global/FormTitleField'
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
+import { Textarea } from '@/components/ui/textarea'
 
-export const articleSchema = {
-  articleDate: z.date({
-    required_error: "日期不得空白",
-    invalid_type_error: "日期格式錯誤",
-  }),
+export const caseSchema = {
   category: z.string().min(1, {
     message: "必選欄位",
   }),
   ...titleSchema,
+  caseDescription: z.string(),
   coverImage: z.any()
     .refine((file: File) => !!file, "請上傳圖片")
     .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
@@ -40,14 +37,11 @@ type Props = {
   form: UseFormReturn<any, any, undefined>
 };
 
-function FormArticleSection(props: Props) {
+function FormCaseSection(props: Props) {
   const [preview, setPreview] = useState("")
 
   return (
     <div className='flex flex-col gap-4'>
-      {/* 文章日期 */}
-      <DatePickerField form={props.form} />
-
       {/* 分類 */}
       <FormField
         control={props.form.control}
@@ -61,9 +55,8 @@ function FormArticleSection(props: Props) {
                   <SelectValue placeholder="請選擇活動分類" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="latest-news">最新消息</SelectItem>
-                  <SelectItem value="cloud-event">雲端活動</SelectItem>
-                  <SelectItem value="cloud-skills">雲端學習技能</SelectItem>
+                  <SelectItem value="case">成功案例</SelectItem>
+                  <SelectItem value="msp">MSP 新世代雲端託管</SelectItem>
                 </SelectContent>
               </Select>
             </FormControl>
@@ -74,6 +67,25 @@ function FormArticleSection(props: Props) {
 
       {/* 標題 */}
       <FormTitleField form={props.form} />
+
+      {/* 簡述 */}
+      <FormField
+        control={props.form.control}
+        name="caseDescription"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="font-normal text-base text-neutral-800">簡述</FormLabel>
+            <FormControl>
+              <Textarea
+                className="primary-input-focus"
+                placeholder="請輸入案例簡述"
+                {...field}
+              />
+            </FormControl>
+            <FormMessage className='mt-1.5' />
+          </FormItem>
+        )}
+      />
 
       {/* 封面照 */}
       <FormField
@@ -101,4 +113,4 @@ function FormArticleSection(props: Props) {
   )
 }
 
-export default FormArticleSection
+export default FormCaseSection

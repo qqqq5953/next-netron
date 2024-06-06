@@ -11,7 +11,7 @@ import { Button } from '@/components/netronAdmin/global/button'
 
 const formSchema = z.object(metaSchema)
 
-export default function MetaNewsPage() {
+export default function MetaCasePage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
