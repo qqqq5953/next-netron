@@ -19,17 +19,18 @@ import {
 } from "@/components/ui/card"
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/netronAdmin/global/button';
+
 import DialogAlert from '@/components/DialogAlert';
+import { Button } from '@/components/netronAdmin/global/button';
+import { coverImageSchema } from '@/components/netronAdmin/global/FormCoverImageField';
+import type { BrandItem } from '@/components/netronAdmin/cloud/FormBrandSection';
+import type { newsItem } from '@/components/netronAdmin/cloud/FormNewsSection';
 
 import { z } from 'zod';
-import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils';
 import { IoIosAdd } from "react-icons/io";
 import { LuImagePlus } from "react-icons/lu";
-import { BrandItem } from './FormBrandSection';
-import { newsItem } from './FormNewsSection';
 
-const contentItemSchema = z.object({
+const productSchema = z.object({
   title: z.string().min(1, {
     message: "必填欄位",
   }),
@@ -37,23 +38,18 @@ const contentItemSchema = z.object({
     message: "必填欄位",
   }),
   link: z.string().optional(),
-  image: z.any()
-    .refine((file: File) => !!file, "請上傳圖片")
-    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
-    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
+  ...coverImageSchema
 });
 
-export const contentItemsSchema = {
-  contentItems: z.array(contentItemSchema).refine(items => {
-    console.log('items', items);
-
+export const productsSchema = {
+  contentItems: z.array(productSchema).refine(items => {
     return items.length > 0, {
       message: "At least one content item is required",
     }
   }),
 }
 
-export type ContentItem = z.infer<typeof contentItemSchema>;
+export type ContentItem = z.infer<typeof productSchema>;
 
 type Props = {
   form: UseFormReturn<{
@@ -75,10 +71,10 @@ export default function FormProductSection(props: Props) {
   });
 
   const [previews, setPreviews] = useState<string[]>(fieldArray.fields.map(field => {
-    if (typeof field.image === 'object') {
-      return URL.createObjectURL(field.image)
+    if (typeof field.coverImage === 'object') {
+      return URL.createObjectURL(field.coverImage)
     } else {
-      return field.image
+      return field.coverImage
     }
   }))
 
@@ -87,7 +83,7 @@ export default function FormProductSection(props: Props) {
   const deletedItemIndex = useRef(-1)
 
   function handleAddItem() {
-    fieldArray.append({ title: "", description: "", link: "", image: "" })
+    fieldArray.append({ title: "", description: "", link: "", coverImage: "" })
     setTitles(prev => [...prev, `項目${prev.length + 1}`])
   }
 
@@ -104,13 +100,11 @@ export default function FormProductSection(props: Props) {
   };
 
   function handleImageChange(
-    field: ControllerRenderProps<any, `contentItems.${number}.image`>,
+    field: ControllerRenderProps<any, `contentItems.${number}.coverImage`>,
     index: number,
     event: ChangeEvent<HTMLInputElement>
   ) {
     if (event.target.files?.length === 0) return
-
-    console.log('event.target.files', event.target.files);
 
     field.onChange(event.target.files![0])
 
@@ -211,7 +205,7 @@ export default function FormProductSection(props: Props) {
               {/* 圖片 */}
               <FormField
                 control={props.form.control}
-                name={`contentItems.${index}.image`}
+                name={`contentItems.${index}.coverImage`}
                 render={({ field }) => (
                   <FormItem className='flex flex-col gap-2'>
                     <div className='text-neutral-800'>圖片</div>
@@ -254,9 +248,9 @@ export default function FormProductSection(props: Props) {
                 onClick={() => {
                   deletedItemIndex.current = index
 
-                  const { title, description, link, image } = props.form.getValues("contentItems")[deletedItemIndex.current]
+                  const { title, description, link, coverImage } = props.form.getValues("contentItems")[deletedItemIndex.current]
 
-                  if ([title, description, link, image].some(field => !!field)) {
+                  if ([title, description, link, coverImage].some(field => !!field)) {
                     setOpen(true)
                   } else {
                     fieldArray.remove(deletedItemIndex.current)

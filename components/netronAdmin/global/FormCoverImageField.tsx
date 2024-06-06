@@ -1,12 +1,21 @@
 'use client'
 
+import { z } from 'zod'
 import { ChangeEvent, useState } from 'react'
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form'
+import { LuImagePlus } from 'react-icons/lu'
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/netronAdmin/global/button'
-import { LuImagePlus } from 'react-icons/lu'
+import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
+
+export const coverImageSchema = {
+  coverImage: z.any()
+    .refine((file: File) => !!file, "請上傳圖片")
+    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
+    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
+}
 
 type Props = {
   form: UseFormReturn<any, any, undefined>

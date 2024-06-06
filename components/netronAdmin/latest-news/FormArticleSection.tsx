@@ -15,10 +15,9 @@ import {
 
 import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
-import { DatePickerField } from '../global/DatePicker'
-import FormTitleField, { titleSchema } from '../global/FormTitleField'
-import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
-import FormCoverImageField from '../global/FormCoverImageField'
+import { DatePickerField } from '@/components/netronAdmin/global/DatePicker'
+import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
+import FormCoverImageField, { coverImageSchema } from '@/components/netronAdmin/global/FormCoverImageField'
 
 export const articleSchema = {
   articleDate: z.date({
@@ -29,10 +28,7 @@ export const articleSchema = {
     message: "必選欄位",
   }),
   ...titleSchema,
-  coverImage: z.any()
-    .refine((file: File) => !!file, "請上傳圖片")
-    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
-    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
+  ...coverImageSchema
 }
 
 type Props = {

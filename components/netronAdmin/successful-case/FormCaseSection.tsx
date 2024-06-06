@@ -1,3 +1,6 @@
+import { z } from "zod"
+import { UseFormReturn } from 'react-hook-form'
+
 import {
   FormControl,
   FormField,
@@ -12,13 +15,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
-import { UseFormReturn } from 'react-hook-form'
-import { z } from "zod"
-import FormTitleField, { titleSchema } from '../global/FormTitleField'
-import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
-import FormCoverImageField from '../global/FormCoverImageField'
+
+import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
+import FormCoverImageField, { coverImageSchema } from '@/components/netronAdmin/global/FormCoverImageField'
 
 export const caseSchema = {
   category: z.string().min(1, {
@@ -26,10 +26,7 @@ export const caseSchema = {
   }),
   ...titleSchema,
   caseDescription: z.string(),
-  coverImage: z.any()
-    .refine((file: File) => !!file, "請上傳圖片")
-    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
-    .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG")
+  ...coverImageSchema
 }
 
 type Props = {
