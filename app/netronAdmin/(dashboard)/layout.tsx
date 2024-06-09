@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/netronAdmin/global/breadcrumb"
 import Footer from "@/components/netronAdmin/global/footer"
-import Sidebar from "@/components/netronAdmin/global/sidebar"
+import Sidebar from "@/components/netronAdmin/global/Drawer"
 
 export const metadata = {
   title: 'Next.js',

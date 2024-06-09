@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage
 } from '@/components/ui/breadcrumb'
-import { menuNavs } from './sidebar';
+import { menuNavs } from './Drawer';
 import { MenuItem } from '@/lib/definitions';
 
 const redirectPathMap: Record<string, string> = {
