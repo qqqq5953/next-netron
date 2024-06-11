@@ -1,10 +1,11 @@
-import { IconType } from "react-icons"
+import {
+  MenuItem,
+  MenuList,
+  Language
+} from '@/lib/types/admin-types'
 
-export type MenuItem = {
-  name: string,
-  path: string,
-  children?: MenuItem[],
-  icon?: IconType
+export type {
+  MenuItem,
+  MenuList,
+  Language
 }
-
-export type MenuList = MenuItem[]
