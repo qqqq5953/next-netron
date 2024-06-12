@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from '@/components/ui/textarea'
 
-import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
-import FormCoverImageField, { coverImageSchema } from '@/components/netronAdmin/global/FormCoverImageField'
+import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
+import FormCoverImageField, { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField'
 
 export const caseSchema = {
   category: z.string().min(1, {

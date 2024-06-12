@@ -1,5 +1,5 @@
-import FormAddBrand from '@/components/netronAdmin/cloud/FormAddBrand'
-import TableBrand from '@/components/netronAdmin/cloud/TableBrand'
+import FormAddBrand from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormAddBrand'
+import TableBrand from '@/app/netronAdmin/(dashboard)/(cloud)/_components/TableBrand'
 
 export default function BrandPage() {
   return (

@@ -21,10 +21,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 import DialogAlert from '@/components/DialogAlert';
-import { Button } from '@/components/netronAdmin/global/button';
-import { coverImageSchema } from '@/components/netronAdmin/global/FormCoverImageField';
-import type { BrandItem } from '@/components/netronAdmin/cloud/FormBrandSection';
-import type { newsItem } from '@/components/netronAdmin/cloud/FormNewsSection';
+import { Button } from '@/app/netronAdmin/_components/Button';
+import { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField';
+import type { BrandItem } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormBrandSection';
+import type { newsItem } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormNewsSection';
 
 import { z } from 'zod';
 import { IoIosAdd } from "react-icons/io";

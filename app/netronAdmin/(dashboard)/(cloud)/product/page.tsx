@@ -1,5 +1,5 @@
-import FormAddProduct from '@/components/netronAdmin/cloud/FormAddProduct'
-import TableProduct from '@/components/netronAdmin/cloud/TableProduct'
+import FormAddProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormAddProduct'
+import TableProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/TableProduct'
 
 export default function ProductPage() {
   return (

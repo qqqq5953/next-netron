@@ -7,7 +7,7 @@ import { LuImagePlus } from 'react-icons/lu'
 
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 
 export const coverImageSchema = {

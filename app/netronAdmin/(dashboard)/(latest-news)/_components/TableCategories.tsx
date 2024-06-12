@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import DialogCategory from './DialogCategory'
 
 type Props = {

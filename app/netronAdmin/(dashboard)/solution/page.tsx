@@ -1,5 +1,5 @@
-import FormAddSolution from '@/components/netronAdmin/solution/FormAddSolution'
-import TableSolution from '@/components/netronAdmin/solution/TableSolution'
+import FormAddSolution from '@/app/netronAdmin/(dashboard)/solution/_components/FormAddSolution'
+import TableSolution from '@/app/netronAdmin/(dashboard)/solution/_components/TableSolution'
 
 export default function SolutionPage() {
   return (

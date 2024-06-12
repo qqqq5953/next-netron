@@ -6,28 +6,26 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form } from "@/components/ui/form"
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLinkField'
-import FormTitleField, { titleSchema } from '../global/FormTitleField'
-import CustomEditorField, { contentSchema } from '../global/CustomEditorField'
-import FormCategoryField, { categorySchema } from './FormCategoryField'
+import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
+import FormTitleField, { titleSchema } from '../../../_components/FormTitleField'
+import CustomEditorField, { contentSchema } from '../../../_components/CustomEditorField'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
   ...titleSchema,
-  ...categorySchema,
   ...contentSchema,
 })
 
-export default function FormAddSolution() {
+export default function FormAddBrand() {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,7 +36,6 @@ export default function FormAddSolution() {
       metaDescription: "",
       customizedDescription: "",
       title: "",
-      category: "",
       content: "",
     },
   })
@@ -46,6 +43,7 @@ export default function FormAddSolution() {
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
   }
+
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
@@ -64,7 +62,6 @@ export default function FormAddSolution() {
             <div className='flex flex-col gap-4'>
               <h3 className='text-2xl text-neutral-700 font-semibold'>文章</h3>
               <FormTitleField form={form} />
-              <FormCategoryField form={form} />
               <CustomEditorField form={form} />
             </div>
 

@@ -6,42 +6,40 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLinkField'
-import CustomEditorField, { contentSchema } from '@/components/netronAdmin/global/CustomEditorField'
-
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form } from "@/components/ui/form"
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import FormCaseSection, { caseSchema } from './FormCaseSection'
+import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
+import FormTitleField, { titleSchema } from '../../../_components/FormTitleField'
+import CustomEditorField, { contentSchema } from '../../../_components/CustomEditorField'
+import FormCategoryField, { categorySchema } from './FormCategoryField'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
-  ...caseSchema,
+  ...titleSchema,
+  ...categorySchema,
   ...contentSchema,
 })
 
-export default function FormAddCase() {
+export default function FormAddSolution() {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: "123",
-      metaKeyword: "234",
-      metaDescription: "wer",
+      metaTitle: "",
+      metaKeyword: "",
+      metaDescription: "",
       customizedDescription: "",
-
-      category: "case",
-      title: "wer",
-      caseDescription: "123",
-      coverImage: undefined,
-      content: "123",
+      title: "",
+      category: "",
+      content: "",
     },
   })
 
@@ -64,20 +62,13 @@ export default function FormAddCase() {
             </div>
 
             <div className='flex flex-col gap-4'>
-              <h3 className='text-2xl text-neutral-700 font-semibold'>案例</h3>
-              <FormCaseSection form={form} />
+              <h3 className='text-2xl text-neutral-700 font-semibold'>文章</h3>
+              <FormTitleField form={form} />
+              <FormCategoryField form={form} />
               <CustomEditorField form={form} />
             </div>
 
-            <div className="text-right space-x-2">
-              <Button
-                type="button"
-                variant="ghost"
-                onClick={() => {
-                  form.reset()
-                  form.setValue("coverImage", "")
-                }}
-              >重置</Button>
+            <div className="text-right">
               <Button type="submit">儲存</Button>
             </div>
           </form>

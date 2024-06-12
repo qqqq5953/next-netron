@@ -6,62 +6,48 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLinkField'
-import CustomEditorField, { contentSchema } from '@/components/netronAdmin/global/CustomEditorField'
-import FormEventSection, { eventSchema } from '@/components/netronAdmin/latest-news/FormEventSection'
-import FormArticleSection, { articleSchema } from '@/components/netronAdmin/latest-news/FormArticleSection'
+import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
+import CustomEditorField, { contentSchema } from '@/app/netronAdmin/_components/CustomEditorField'
 
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form } from "@/components/ui/form"
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import FormCaseSection, { caseSchema } from './FormCaseSection'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
-  ...eventSchema,
-  ...articleSchema,
+  ...caseSchema,
   ...contentSchema,
 })
 
-export default function FormAddNews() {
+export default function FormAddCase() {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
+      metaTitle: "123",
+      metaKeyword: "234",
+      metaDescription: "wer",
       customizedDescription: "",
 
-      eventType: "",
-      speaker: "",
-      eventStartTime: "",
-      eventEndTime: "",
-      eventCost: "",
-      currency: "TWD",
-      ticketDeadline: "",
-      eventWebsite: "",
-      companyName: "",
-      companyWebsite: "",
-
-      articleDate: undefined,
-      category: "",
-      title: "",
+      category: "case",
+      title: "wer",
+      caseDescription: "123",
       coverImage: undefined,
-      content: "",
+      content: "123",
     },
   })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
   }
-
 
   return (
     <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
@@ -78,17 +64,20 @@ export default function FormAddNews() {
             </div>
 
             <div className='flex flex-col gap-4'>
-              <h3 className='text-2xl text-neutral-700 font-semibold'>活動</h3>
-              <FormEventSection form={form} />
-            </div>
-
-            <div className='flex flex-col gap-4'>
-              <h3 className='text-2xl text-neutral-700 font-semibold'>文章</h3>
-              <FormArticleSection form={form} />
+              <h3 className='text-2xl text-neutral-700 font-semibold'>案例</h3>
+              <FormCaseSection form={form} />
               <CustomEditorField form={form} />
             </div>
 
-            <div className="text-right">
+            <div className="text-right space-x-2">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  form.reset()
+                  form.setValue("coverImage", "")
+                }}
+              >重置</Button>
               <Button type="submit">儲存</Button>
             </div>
           </form>

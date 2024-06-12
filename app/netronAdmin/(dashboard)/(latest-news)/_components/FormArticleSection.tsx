@@ -15,9 +15,9 @@ import {
 
 import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
-import { DatePickerField } from '@/components/netronAdmin/global/DatePicker'
-import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
-import FormCoverImageField, { coverImageSchema } from '@/components/netronAdmin/global/FormCoverImageField'
+import { DatePickerField } from '@/app/netronAdmin/_components/DatePicker'
+import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
+import FormCoverImageField, { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField'
 
 export const articleSchema = {
   articleDate: z.date({

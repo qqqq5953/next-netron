@@ -1,6 +1,6 @@
 import { Language } from '@/lib/definitions'
-import TableCategories from '@/components/netronAdmin/latest-news/TableCategories'
-import DialogCategory from '@/components/netronAdmin/latest-news/DialogCategory'
+import TableCategories from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableCategories'
+import DialogCategory from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/DialogCategory'
 
 type Props = {
   searchParams: {

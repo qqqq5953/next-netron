@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { Input } from '@/components/ui/input'
 
 type InitialData = {
@@ -18,8 +18,9 @@ type InitialData = {
 }[]
 
 const initialData: InitialData = [
-  { title: "Cloud 雲端服務", order: "1" },
-  { title: "Brand 雲端品牌", order: "2" },
+  { title: "2024 Netron x AWS Philippines event", order: "1" },
+  { title: "【雲端活動】雲服務技術優化工作坊", order: "2" },
+  { title: "【雲端活動】SRE CONFERENCE 2024", order: "3" }
 ]
 
 export default function TableBrand() {

@@ -1,4 +1,4 @@
-import { Button } from "./button";
+import { Button } from "./Button";
 import { FaAnglesLeft } from "react-icons/fa6";
 
 type Props = {

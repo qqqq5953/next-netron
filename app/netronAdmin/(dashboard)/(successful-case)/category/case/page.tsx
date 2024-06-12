@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 
 export default function CategoryCasePage() {
   const [isOpen, setIsOpen] = useState(false)

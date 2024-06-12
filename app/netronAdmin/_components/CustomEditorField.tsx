@@ -7,7 +7,7 @@ import { FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/for
 import Loader from '@/components/loader';
 
 const CustomEditor = dynamic(() => {
-  return import('@/components/netronAdmin/global/CustomEditor');
+  return import('@/app/netronAdmin/_components/CustomEditor');
 }, { ssr: false, loading: () => <Loader size={24} />, });
 
 export const contentSchema = {

@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { Input } from '@/components/ui/input'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useParams } from 'next/navigation'

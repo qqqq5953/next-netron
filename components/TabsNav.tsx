@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from './netronAdmin/global/button'
+import { Button } from '../app/netronAdmin/_components/Button'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

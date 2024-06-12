@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Button } from '@/components/netronAdmin/global/button'
+import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form } from "@/components/ui/form"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -15,11 +15,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from '@/components/netronAdmin/global/FormCustomLinkField'
-import FormTitleField, { titleSchema } from '@/components/netronAdmin/global/FormTitleField'
-import FormProductSection, { productsSchema } from '@/components/netronAdmin/cloud/FormProductSection'
-import FormBrandSection, { brandItemsSchema } from '@/components/netronAdmin/cloud/FormBrandSection'
+import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
+import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
+import FormProductSection, { productsSchema } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProductSection'
+import FormBrandSection, { brandItemsSchema } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormBrandSection'
 import FormNewsSection, { newsItemsSchema } from './FormNewsSection'
 
 const formSchema = z.object({

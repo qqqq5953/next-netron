@@ -1,4 +1,4 @@
-import FormAbout from '@/components/netronAdmin/about/FormAbout'
+import FormAbout from '@/app/netronAdmin/(dashboard)/about/_components/FormAbout'
 import { Language } from '@/lib/definitions';
 
 type Props = {

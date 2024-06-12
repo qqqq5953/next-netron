@@ -1,5 +1,5 @@
-import FormAddNews from '@/components/netronAdmin/latest-news/FormAddNews'
-import TableNews from '@/components/netronAdmin/latest-news/TableNews'
+import FormAddNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/FormAddNews'
+import TableNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableNews'
 import TabsNav from '@/components/TabsNav'
 
 const tabs = [

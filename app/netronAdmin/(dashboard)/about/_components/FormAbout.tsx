@@ -6,10 +6,10 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Form } from "@/components/ui/form"
-import { Button } from '@/components/netronAdmin/global/button'
-import FormMetaSection, { metaSchema } from '@/components/netronAdmin/global/FormMetaSection'
-import FormCustomLink, { customLinkSchema } from "@/components/netronAdmin/global/FormCustomLinkField"
-import CustomEditorField, { contentSchema } from "@/components/netronAdmin/global/CustomEditorField"
+import { Button } from '@/app/netronAdmin/_components/Button'
+import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
+import FormCustomLink, { customLinkSchema } from "@/app/netronAdmin/_components/FormCustomLinkField"
+import CustomEditorField, { contentSchema } from "@/app/netronAdmin/_components/CustomEditorField"
 import { AboutForm } from '@/lib/types/admin-types'
 
 const formSchema = z.object({

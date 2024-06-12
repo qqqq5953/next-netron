@@ -1,5 +1,5 @@
-import TableCase from '@/components/netronAdmin/successful-case/TableCase'
-import FormAddCase from '@/components/netronAdmin/successful-case/FormAddCase'
+import TableCase from '@/app/netronAdmin/(dashboard)/(successful-case)/_components/TableCase'
+import FormAddCase from '@/app/netronAdmin/(dashboard)/(successful-case)/_components/FormAddCase'
 import TabsNav from '@/components/TabsNav'
 
 const tabs = [
