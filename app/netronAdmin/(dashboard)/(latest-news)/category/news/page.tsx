@@ -1,112 +1,34 @@
-'use client'
+import { Language } from '@/lib/definitions'
+import TableCategories from '@/components/netronAdmin/latest-news/TableCategories'
+import DialogCategory from '@/components/netronAdmin/latest-news/DialogCategory'
 
-import { useState } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/netronAdmin/global/button'
-
-export default function CategoryNewsPage() {
-  const [isOpen, setIsOpen] = useState(false)
-
-  const initialData = [
-    { category: "最新消息", order: "1" },
-    { category: "雲端活動", order: "2" },
-    { category: "雲端技能學習", order: "3" }
-  ]
-
-  const [data, setData] = useState(initialData);
-  const [categoryName, setCategoryName] = useState("");
-
-  function handleOpenDialog() {
-    setIsOpen(true)
-    setCategoryName("")
+type Props = {
+  searchParams: {
+    adminLang: Language
   }
+}
 
-  function handleOrderChange(index: number, newOrder: string) {
-    const updatedData = [...data];
-    updatedData[index].order = newOrder;
-    setData(updatedData);
-  };
+async function fetchCategoryForNews(lang: Language) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/news?adminLang=${lang}`);
+  const result = await res.json();
+  return result
+}
 
-  function handleEdit(category: string) {
-    setIsOpen(true)
-    setCategoryName(category)
-  }
-
-  function handleSaveCategory() {
-    console.log('categoryName', categoryName);
-    setIsOpen(false)
-  }
+export default async function CategoryNewsPage({ searchParams }: Props) {
+  const { data, statusCode, error } = await fetchCategoryForNews(searchParams.adminLang)
 
   return (
     <>
       <div className='flex items-center'>
         <h2 className='text-3xl font-medium'>分類管理</h2>
-        <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-          <DialogTrigger asChild>
-            <Button size="sm" className='ml-auto' onClick={handleOpenDialog}>新增</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <Label htmlFor='news'>分類名稱</Label>
-            <Input
-              id='news'
-              className="primary-input-focus"
-              placeholder="請輸入分類名稱"
-              value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-            />
-            <div className='flex items-center justify-end gap-2'>
-              <Button size="sm" variant='ghost' onClick={() => setIsOpen(false)}>取消</Button>
-              <Button size="sm" onClick={handleSaveCategory}>儲存</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <DialogCategory type="add" />
       </div>
 
       <section>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>分類名稱</TableHead>
-              <TableHead>排序</TableHead>
-              <TableHead>動作</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((item, index) => {
-              return <TableRow key={item.category}>
-                <TableCell>{item.category}</TableCell>
-                <TableCell>
-                  <Input
-                    type="number"
-                    value={item.order}
-                    className='primary-input-focus'
-                    onChange={(e) => handleOrderChange(index, e.target.value)}
-                  />
-                </TableCell>
-                <TableCell className="font-medium">
-                  <div className='flex gap-2'>
-                    <Button variant="outline" size="sm" onClick={() => handleEdit(item.category)}>編輯</Button>
-                    <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            })}
-          </TableBody>
-        </Table>
+        {statusCode === 200 ?
+          <TableCategories initialData={data} /> :
+          <div>{error}</div>
+        }
       </section >
     </>
   )

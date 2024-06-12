@@ -70,9 +70,9 @@ export default function TableNews() {
         <TableRow>
           <TableHead className="w-[100px]">動作</TableHead>
           <TableHead>標題</TableHead>
-          <TableHead>上下架</TableHead>
-          <TableHead>首頁</TableHead>
-          <TableHead>排序</TableHead>
+          <TableHead className='w-20'>上下架</TableHead>
+          <TableHead className='w-20'>首頁</TableHead>
+          <TableHead className='w-28'>排序</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

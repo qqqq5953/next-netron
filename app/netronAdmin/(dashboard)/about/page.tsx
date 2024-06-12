@@ -8,7 +8,7 @@ type Props = {
 }
 
 async function fetchAbout(lang: Language) {
-  const res = await fetch(`${process.env.BASE_URL}/api/admin/about?adminLang=${lang}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about?adminLang=${lang}`);
   const result = await res.json();
   return result
 }
