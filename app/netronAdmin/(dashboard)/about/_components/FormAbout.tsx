@@ -10,7 +10,7 @@ import { Button } from '@/app/netronAdmin/_components/Button'
 import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
 import FormCustomLink, { customLinkSchema } from "@/app/netronAdmin/_components/FormCustomLinkField"
 import CustomEditorField, { contentSchema } from "@/app/netronAdmin/_components/CustomEditorField"
-import { AboutForm } from '@/lib/types/admin-types'
+import { AboutForm } from '@/lib/definitions'
 
 const formSchema = z.object({
   ...metaSchema,

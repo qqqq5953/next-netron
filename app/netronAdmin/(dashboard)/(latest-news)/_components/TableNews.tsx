@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-
 import {
   Table,
   TableBody,
@@ -13,101 +12,121 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from '@/app/netronAdmin/_components/Button'
 import { Input } from '@/components/ui/input'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useParams } from 'next/navigation'
+import { NewsTableData } from '@/lib/definitions'
 
-type InitialData = Record<string, {
-  title: string;
-  isActive: CheckedState;
-  isAddToHome: CheckedState;
-  order: string;
-}[]>
-
-const initialData: InitialData = {
-  "all": [
-    { title: "2024 Netron x AWS Philippines event", isActive: false, isAddToHome: false, order: "1" },
-    { title: "【雲端活動】雲服務技術優化工作坊", isActive: false, isAddToHome: false, order: "2" },
-    { title: "【雲端活動】SRE CONFERENCE 2024", isActive: false, isAddToHome: false, order: "3" }
-  ],
-  "2": [
-    { title: "【媒體報導】網創資訊執行長李尚修主打快速 發揚雲端服務", isActive: false, isAddToHome: false, order: "2" },
-    { title: "【雲端活動】雲服務技術優化工作坊", isActive: false, isAddToHome: false, order: "1" },
-    { title: "【雲端活動】SRE CONFERENCE 2024", isActive: false, isAddToHome: false, order: "3" }
-  ],
-  "5": [
-    { title: "【媒體報導】網創資訊執行長李尚修主打快速 發揚雲端服務", isActive: false, isAddToHome: false, order: "3" },
-    { title: "【最新消息】Netron 網創資訊榮獲騰訊雲二項夥伴大獎 銷售業績位居全球前三", isActive: false, isAddToHome: false, order: "2" },
-    { title: "【媒體報導】Netron網創資訊挾MSP、MSSP與Migration三大認證打造差異化能力，助攻企業迎接雲端轉型浪潮", isActive: false, isAddToHome: false, order: "1" }
-  ],
-  "9": [
-    { title: "【雲端技能學習】安全標準全面更新：深入解析ISO/IEC 27001與27002的最新變革	", isActive: false, isAddToHome: false, order: "1" },
-    { title: "【雲端技能學習】AWS 推出Amazon Q 企業專屬的生成式 AI 助理服務", isActive: false, isAddToHome: false, order: "3" },
-    { title: "【雲端技能學習】專為 AWS 打造的 SentinelOne Singularity Cloud Workload Security", isActive: false, isAddToHome: false, order: "2" }
-  ],
-
+type Props = {
+  id: string
+  data: NewsTableData
 }
 
-export default function TableNews() {
-  const params = useParams<{ id: string }>()
+export default function TableNews(props: Props) {
+  const [news, setNews] = useState(props.data);
 
-  const [data, setData] = useState(params?.id ? initialData[params.id] : initialData['all']);
-
-  function toggleCheckbox(index: number, isChecked: CheckedState, type: 'isActive' | 'isAddToHome') {
-    const updatedData = [...data];
-    updatedData[index][type] = isChecked;
-    setData(updatedData);
+  function toggleCheckbox(index: number, isChecked: CheckedState, type: 'status' | 'show') {
+    const updatedNews = [...news];
+    updatedNews[index][type] = isChecked ? 1 : 0;
+    setNews(updatedNews);
   }
 
   function handleOrderChange(index: number, newOrder: string) {
-    const updatedData = [...data];
-    updatedData[index].order = newOrder;
-    setData(updatedData);
+    const updatedNews = [...news];
+    updatedNews[index].sort = Number(newOrder);
+    setNews(updatedNews);
   };
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">動作</TableHead>
-          <TableHead>標題</TableHead>
-          <TableHead className='w-20'>上下架</TableHead>
-          <TableHead className='w-20'>首頁</TableHead>
-          <TableHead className='w-28'>排序</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((item, index) => {
-          return <TableRow key={item.title}>
-            <TableCell className="font-medium">
-              <div className='flex gap-2'>
-                <Button variant="outline" size="sm">編輯</Button>
-                <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
-                <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
-              </div>
-            </TableCell>
-            <TableCell>{item.title}</TableCell>
-            <TableCell>
-              <Checkbox
-                checked={item.isActive} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'isActive')}
-              />
-            </TableCell>
-            <TableCell>
-              <Checkbox
-                checked={item.isAddToHome}
-                onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'isAddToHome')}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                type="number"
-                className="primary-input-focus"
-                value={item.order}
-                onChange={(e) => handleOrderChange(index, e.target.value)}
-              />
-            </TableCell>
+    <ScrollArea className='rounded-lg'>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className='w-[40%]'>標題</TableHead>
+            <TableHead className='w-[10%] px-0'>上下架</TableHead>
+            <TableHead className='w-[10%] px-0'>首頁</TableHead>
+            <TableHead className='w-[20%] px-0'>排序</TableHead>
+            <TableHead className='w-[220px] px-4'>動作</TableHead>
           </TableRow>
-        })}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {news.map((item, index) => {
+            return <TableRow key={item.title}>
+              <TableCell className=''>{item.title}</TableCell>
+              <TableCell className='px-3'>
+                <Checkbox
+                  checked={item.status === 1} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'status')}
+                />
+              </TableCell>
+              <TableCell className='px-1.5'>
+                <Checkbox
+                  checked={item.show === 1}
+                  onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'show')}
+                />
+              </TableCell>
+              <TableCell className='px-0'>
+                <Input
+                  type="number"
+                  className="primary-input-focus"
+                  value={item.sort}
+                  onChange={(e) => handleOrderChange(index, e.target.value)}
+                />
+              </TableCell>
+              <TableCell className="font-medium px-4">
+                <div className='flex gap-2 w-full'>
+                  <Button variant="outline" size="sm">編輯</Button>
+                  <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
+                  <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          })}
+        </TableBody>
+      </Table>
+    </ScrollArea>
+
+    // <Table>
+    //   <TableHeader className='block bg-neutral-50 rounded-t-lg'>
+    //     <TableRow className='w-full flex'>
+    //       <TableHead className='flex items-center w-[30%] px-4'>標題</TableHead>
+    //       <TableHead className='flex items-center w-[10%] px-0'>上下架</TableHead>
+    //       <TableHead className='flex items-center w-[10%] px-0'>首頁</TableHead>
+    //       <TableHead className='flex items-center w-[20%] px-0'>排序</TableHead>
+    //       <TableHead className='flex items-center w-[220px] px-1'>動作</TableHead>
+    //     </TableRow>
+    //   </TableHeader>
+    //   <TableBody className='block overflow-auto w-full'>
+    //     {news.map((item, index) => {
+    //       return <TableRow key={item.title} className='flex items-center w-full'>
+    //         <TableCell className='w-[30%]'>{item.title}</TableCell>
+    //         <TableCell className='w-[10%] px-2'>
+    //           <Checkbox
+    //             checked={item.status === 1} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'status')}
+    //           />
+    //         </TableCell>
+    //         <TableCell className='w-[10%] px-2'>
+    //           <Checkbox
+    //             checked={item.show === 1}
+    //             onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'show')}
+    //           />
+    //         </TableCell>
+    //         <TableCell className='w-[20%] px-2'>
+    //           <Input
+    //             type="number"
+    //             className="primary-input-focus"
+    //             value={item.sort}
+    //             onChange={(e) => handleOrderChange(index, e.target.value)}
+    //           />
+    //         </TableCell>
+    //         <TableCell className="font-medium w-[220px] px-4">
+    //           <div className='flex gap-2 w-full'>
+    //             <Button variant="outline" size="sm">編輯</Button>
+    //             <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
+    //             <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
+    //           </div>
+    //         </TableCell>
+    //       </TableRow>
+    //     })}
+    //   </TableBody>
+    // </Table>
   )
 }

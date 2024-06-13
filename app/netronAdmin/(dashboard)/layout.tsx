@@ -16,9 +16,9 @@ export default function DashboardLayout({
     <div className="flex h-screen">
       <Sidebar />
       <div className="flex flex-col grow">
-        <main className="grow p-8 flex flex-col">
+        <main className="grow px-8 pt-8 pb-0 flex flex-col">
           <Breadcrumb />
-          <div className='flex flex-col gap-8 pt-2.5'>
+          <div className='grow flex flex-col gap-8 pt-2.5'>
             {children}
           </div>
         </main>

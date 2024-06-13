@@ -1,11 +1,15 @@
 import {
   MenuItem,
   MenuList,
-  Language
+  Language,
+  AboutForm,
+  NewsTableData
 } from '@/lib/types/admin-types'
 
 export type {
   MenuItem,
   MenuList,
-  Language
+  Language,
+  AboutForm,
+  NewsTableData
 }
