@@ -26,16 +26,16 @@ export default function FormAbout(props: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: props.about.m_title,
-      metaKeyword: props.about.m_keywords,
-      metaDescription: props.about.m_description,
-      customizedDescription: props.about.m_url,
-      content: props.about.content,
+      metaTitle: props.about.m_title ?? "",
+      metaKeyword: props.about.m_keywords ?? "",
+      metaDescription: props.about.m_description ?? "",
+      customizedLink: props.about.m_url ?? "",
+      content: props.about.content ?? "",
     },
   })
 
-  async function onSubmit({ metaTitle, metaKeyword, metaDescription, customizedDescription, content }: z.infer<typeof formSchema>) {
-    console.log(metaTitle, metaKeyword, metaDescription, customizedDescription, content);
+  async function onSubmit({ metaTitle, metaKeyword, metaDescription, customizedLink, content }: z.infer<typeof formSchema>) {
+    console.log(metaTitle, metaKeyword, metaDescription, customizedLink, content);
   }
 
   return (

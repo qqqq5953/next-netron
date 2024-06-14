@@ -74,7 +74,7 @@ async function fetchNews(lang: Language, page: string, id: string,) {
 
   const res = await fetch(url);
   const result: FetchResult = await res.json();
-  return { ...result, url }
+  return result
 }
 
 export default async function NewsPage({ searchParams, params }: Props) {

@@ -3,7 +3,8 @@ import {
   MenuList,
   Language,
   AboutForm,
-  NewsTableData
+  MetaForm,
+  NewsTableData,
 } from '@/lib/types/admin-types'
 
 export type {
@@ -11,5 +12,6 @@ export type {
   MenuList,
   Language,
   AboutForm,
-  NewsTableData
+  MetaForm,
+  NewsTableData,
 }

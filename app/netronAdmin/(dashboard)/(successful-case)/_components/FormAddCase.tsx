@@ -35,7 +35,7 @@ export default function FormAddCase() {
       metaTitle: "123",
       metaKeyword: "234",
       metaDescription: "wer",
-      customizedDescription: "",
+      customizedLink: "",
 
       category: "case",
       title: "wer",

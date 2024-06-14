@@ -34,7 +34,7 @@ export default function FormAddBrand() {
       metaTitle: "",
       metaKeyword: "",
       metaDescription: "",
-      customizedDescription: "",
+      customizedLink: "",
       title: "",
       content: "",
     },

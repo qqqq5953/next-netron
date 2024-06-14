@@ -34,7 +34,7 @@ type Props = {
     brandItems: BrandItem[];
     contentItems: ContentItem[];
     title: string;
-    customizedDescription: string;
+    customizedLink: string;
     metaTitle: string;
     metaKeyword: string;
     metaDescription: string;

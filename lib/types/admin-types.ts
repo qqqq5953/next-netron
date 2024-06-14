@@ -11,6 +11,12 @@ export type MenuList = MenuItem[]
 
 export type Language = 'tw' | 'en' | 'cn'
 
+export type MetaForm = {
+  m_title: string,
+  m_keywords: string,
+  m_description: string,
+}
+
 export type AboutForm = {
   m_title: string,
   m_keywords: string,

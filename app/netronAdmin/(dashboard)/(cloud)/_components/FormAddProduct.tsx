@@ -40,7 +40,7 @@ export default function FormAddProduct() {
       metaTitle: "",
       metaKeyword: "",
       metaDescription: "",
-      customizedDescription: "",
+      customizedLink: "",
       title: "",
       contentItems: [
         { title: "雲端運算 Cloud Computing", description: "網創資訊提供多雲政策、企業節費、雲端儲存、代管、AI / Big Data 等企業雲端服務，有了雲端就不需要購買並維護硬體設備，即使需要大量運算也能快速部署，遇到突發狀況也有資料備份、災難復原等機制，不怕資料一去不回。我們擁有專業的整合技術團隊，可以協助您快速上雲，並讓您更專注於產品及業務的開發。", link: "", coverImage: "" },

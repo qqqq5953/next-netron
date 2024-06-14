@@ -36,7 +36,7 @@ export default function FormAddSolution() {
       metaTitle: "",
       metaKeyword: "",
       metaDescription: "",
-      customizedDescription: "",
+      customizedLink: "",
       title: "",
       category: "",
       content: "",
