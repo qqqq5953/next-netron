@@ -6,6 +6,7 @@ import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { startOfMonth } from 'date-fns';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -15,8 +16,13 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const initialMonth = props.selected instanceof Date ?
+    startOfMonth(props.selected) :
+    new Date();
+
   return (
     <DayPicker
+      defaultMonth={initialMonth}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{

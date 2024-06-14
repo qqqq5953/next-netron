@@ -15,9 +15,7 @@ export const metaSchema = {
   metaTitle: z.string().min(1, {
     message: "必填欄位",
   }),
-  metaKeyword: z.string().min(1, {
-    message: "必填欄位",
-  }),
+  metaKeyword: z.string().optional(),
   metaDescription: z.string().min(1, {
     message: "必填欄位",
   }),

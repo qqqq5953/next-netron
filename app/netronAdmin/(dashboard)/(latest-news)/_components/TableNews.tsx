@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -15,14 +15,18 @@ import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { NewsTableData } from '@/lib/definitions'
+import FormNews from './FormNews'
+import DialogAlert from '@/components/DialogAlert'
 
 type Props = {
   id: string
-  data: NewsTableData
+  data: NewsTableData[]
 }
 
 export default function TableNews(props: Props) {
   const [news, setNews] = useState(props.data);
+  const [openDialog, setOpenDialog] = useState(false);
+  const deletedNews = useRef<{ title: string | null, id: number | null }>({ title: null, id: null })
 
   function toggleCheckbox(index: number, isChecked: CheckedState, type: 'status' | 'show') {
     const updatedNews = [...news];
@@ -35,6 +39,12 @@ export default function TableNews(props: Props) {
     updatedNews[index].sort = Number(newOrder);
     setNews(updatedNews);
   };
+
+  function handleRemoveNews(closeLoading: () => void) {
+    // delete request with deletedNews.current.id
+    closeLoading()
+    setOpenDialog(false)
+  }
 
   return (
     <ScrollArea className='rounded-lg'>
@@ -50,8 +60,8 @@ export default function TableNews(props: Props) {
         </TableHeader>
         <TableBody>
           {news.map((item, index) => {
-            return <TableRow key={item.title}>
-              <TableCell className=''>{item.title}</TableCell>
+            return <TableRow key={item.id}>
+              <TableCell>{item.title}</TableCell>
               <TableCell className='px-3'>
                 <Checkbox
                   checked={item.status === 1} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'status')}
@@ -73,8 +83,16 @@ export default function TableNews(props: Props) {
               </TableCell>
               <TableCell className="font-medium px-4">
                 <div className='flex gap-2 w-full'>
-                  <Button variant="outline" size="sm">編輯</Button>
-                  <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
+                  <FormNews type="edit" news={item} />
+                  <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'
+                    onClick={() => {
+                      setOpenDialog(true)
+                      deletedNews.current = {
+                        title: item.title,
+                        id: item.id
+                      }
+                    }}
+                  >刪除</Button>
                   <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
                 </div>
               </TableCell>
@@ -82,6 +100,16 @@ export default function TableNews(props: Props) {
           })}
         </TableBody>
       </Table>
+
+      <DialogAlert
+        title={<div className='leading-8'>
+          <span>最新消息</span>
+          <span className="rounded bg-neutral-100 px-1.5 py-0.5 ml-1">{deletedNews.current.title}</span>
+        </div>}
+        open={openDialog}
+        onConfirm={handleRemoveNews}
+        onClose={() => setOpenDialog(false)}
+      />
     </ScrollArea>
 
     // <Table>

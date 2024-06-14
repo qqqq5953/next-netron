@@ -63,10 +63,10 @@ export const eventSchema = {
   eventWebsite: z.string().min(1, {
     message: "活動網站不得空白",
   }),
-  companyName: z.string().min(1, {
+  hostCompany: z.string().min(1, {
     message: "公司名稱不得空白",
   }),
-  companyWebsite: z.string().min(1, {
+  hostWeb: z.string().min(1, {
     message: "公司官網不得空白",
   }),
 }
@@ -92,9 +92,9 @@ export default function FormEventSection(props: Props) {
                     <SelectValue placeholder="請選擇活動類型" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="online">線上活動</SelectItem>
-                    <SelectItem value="onsite">實體活動</SelectItem>
-                    <SelectItem value="both">線上及實體活動</SelectItem>
+                    <SelectItem value="OnlineEventAttendanceMode">線上活動</SelectItem>
+                    <SelectItem value="OfflineEventAttendanceMode">實體活動</SelectItem>
+                    <SelectItem value="MixedEventAttendanceMode">線上及實體活動</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -241,7 +241,7 @@ export default function FormEventSection(props: Props) {
       <div className='space-y-4'>
         <FormField
           control={props.form.control}
-          name="companyName"
+          name="hostCompany"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="font-normal text-base text-neutral-800">活動舉辦商資訊</FormLabel>
@@ -257,7 +257,7 @@ export default function FormEventSection(props: Props) {
         />
         <FormField
           control={props.form.control}
-          name="companyWebsite"
+          name="hostWeb"
           render={({ field }) => (
             <FormItem>
               <FormControl>

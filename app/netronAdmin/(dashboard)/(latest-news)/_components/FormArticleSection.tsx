@@ -39,7 +39,7 @@ function FormArticleSection(props: Props) {
   return (
     <div className='flex flex-col gap-4'>
       {/* 文章日期 */}
-      <DatePickerField form={props.form} />
+      <DatePickerField label="文章日期" form={props.form} />
 
       {/* 分類 */}
       <FormField
@@ -49,14 +49,14 @@ function FormArticleSection(props: Props) {
           <FormItem>
             <FormLabel className="font-normal text-base text-neutral-800">分類</FormLabel>
             <FormControl>
-              <Select value={field.value} onValueChange={field.onChange}>
+              <Select value={field.value.toString()} onValueChange={field.onChange}>
                 <SelectTrigger className="primary-input-focus">
                   <SelectValue placeholder="請選擇活動分類" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="latest-news">最新消息</SelectItem>
-                  <SelectItem value="cloud-event">雲端活動</SelectItem>
-                  <SelectItem value="cloud-skills">雲端學習技能</SelectItem>
+                  <SelectItem value="5">最新消息</SelectItem>
+                  <SelectItem value="2">雲端活動</SelectItem>
+                  <SelectItem value="9">雲端學習技能</SelectItem>
                 </SelectContent>
               </Select>
             </FormControl>
@@ -69,7 +69,7 @@ function FormArticleSection(props: Props) {
       <FormTitleField form={props.form} />
 
       {/* 封面照 */}
-      <FormCoverImageField form={props.form} />
+      {/* <FormCoverImageField form={props.form} /> */}
     </div>
   )
 }

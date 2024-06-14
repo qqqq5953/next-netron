@@ -19,6 +19,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import { NewsTableData } from '@/lib/definitions'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -28,33 +29,40 @@ const formSchema = z.object({
   ...contentSchema,
 })
 
-export default function FormAddNews() {
+type Props = {
+  type: "edit" | "add"
+  news?: NewsTableData
+}
+
+export default function FormAddNews(props: Props) {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
-      customizedDescription: "",
+      metaTitle: props.news?.m_title ?? "",
+      metaKeyword: props.news?.m_keywords ?? "",
+      metaDescription: props.news?.m_description ?? "",
+      customizedLink: props.news?.m_url ?? "",
 
-      eventType: "",
-      speaker: "",
-      eventStartTime: "",
-      eventEndTime: "",
-      eventCost: "",
-      currency: "TWD",
-      ticketDeadline: "",
-      eventWebsite: "",
-      companyName: "",
-      companyWebsite: "",
+      eventType: props.news?.mode ?? "",
+      speaker: props.news?.lecturer ?? "",
+      eventStartTime: props.news?.start_at?.replace(/ /, '') ?? "",
+      eventEndTime: props.news?.end_at?.replace(/ /, '') ?? "",
+      eventCost: props.news?.price ?? "",
+      currency: props.news?.currency ?? "TWD",
+      ticketDeadline: props.news?.soldout_at ?? "",
+      eventWebsite: props.news?.website ?? "",
+      hostCompany: props.news?.hostCompany ?? "",
+      hostWeb: props.news?.hostWeb ?? "",
 
-      articleDate: undefined,
-      category: "",
-      title: "",
-      coverImage: undefined,
-      content: "",
+      articleDate: props.news?.updated_at ?
+        new Date(props.news?.updated_at) :
+        undefined,
+      category: props.news?.cid.toString() ?? "",
+      title: props.news?.title ?? "",
+      // coverImage: props.news?.img ?? undefined,
+      content: props.news?.content ?? "",
     },
   })
 
@@ -62,11 +70,24 @@ export default function FormAddNews() {
     console.log(data);
   }
 
-
   return (
     <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <SheetTrigger asChild>
-        <Button size="sm" className='ml-auto'>新增</Button>
+        {
+          props.type === "add" ?
+            <Button
+              size="sm"
+              className='ml-auto'>
+              新增
+            </Button> :
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              編輯
+            </Button>
+        }
+
       </SheetTrigger>
       <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
         <Form {...form}>

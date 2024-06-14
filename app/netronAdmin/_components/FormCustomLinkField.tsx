@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 
 export const customLinkSchema = {
-  customizedDescription: z.string()
+  customizedLink: z.string()
 }
 
 type Props = {
@@ -22,7 +22,7 @@ export default function FormCustomLink(props: Props) {
   return (
     <FormField
       control={props.form.control}
-      name="customizedDescription"
+      name="customizedLink"
       render={({ field }) => (
         <FormItem>
           <FormLabel className="font-normal text-base text-neutral-800">連結客製化文字</FormLabel>

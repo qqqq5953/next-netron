@@ -20,13 +20,16 @@ type Props = {
 };
 
 function DatePicker(props: Props) {
-  const [date, setDate] = useState<Date>()
+  const [date, setDate] = useState<Date | undefined>(props.form.getValues('articleDate'));
+
   const [open, setOpen] = useState(false)
 
   function handleSelect(dateObj: Date | undefined, field: ControllerRenderProps<any, "articleDate">) {
-    field.onChange(dateObj);
-    setDate(dateObj);
-    setOpen(false)
+    if (dateObj instanceof Date) {
+      field.onChange(dateObj);
+      setDate(dateObj);
+      setOpen(false)
+    }
   }
 
   return (
@@ -61,13 +64,17 @@ function DatePicker(props: Props) {
   )
 }
 
-function DatePickerField(props: Props) {
+type DatePickerFieldProps = Props & {
+  label: string
+}
+
+function DatePickerField(props: DatePickerFieldProps) {
   return <FormField
     control={props.form.control}
     name="articleDate"
     render={() => (
       <FormItem className='flex flex-col'>
-        <FormLabel className="font-normal text-base text-neutral-800">文章日期</FormLabel>
+        <FormLabel className="font-normal text-base text-neutral-800">{props.label}</FormLabel>
         <DatePicker form={props.form} />
         <FormMessage className='mt-1.5' />
       </FormItem>
