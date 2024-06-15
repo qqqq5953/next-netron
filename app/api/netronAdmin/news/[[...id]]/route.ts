@@ -72,11 +72,11 @@ export async function GET(
       countParams
     } = buildQuery(lang, categoryId, page);
 
-    const { rows, count } = await withDbConnection(pool, async (db: PoolConnection) => {
+    const [rows, count] = await withDbConnection(pool, async (db: PoolConnection) => {
       const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
       const [count] = await db.execute<RowDataPacket[]>(countQuery, countParams);
 
-      return { rows, count };
+      return [rows, count];
     });
 
     return NextResponse.json({
@@ -90,7 +90,7 @@ export async function GET(
     console.log('error', error);
     return NextResponse.json({
       statusCode: 500,
-      error: 'Failed to fetch news data'
+      errorMsg: 'Failed to fetch news data'
     }, { status: 500 });
   }
 }

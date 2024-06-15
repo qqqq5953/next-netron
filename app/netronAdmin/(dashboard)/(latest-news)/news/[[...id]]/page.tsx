@@ -2,7 +2,8 @@ import FormNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/Fo
 import TableNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableNews'
 import Paginations from '@/components/Paginations';
 import TabsNav from '@/components/TabsNav'
-import { Language, NewsTableData } from '@/lib/definitions';
+import { ApiResponse, Language, NewsTableData } from '@/lib/definitions';
+import { isSuccessResponse } from '@/lib/utils';
 
 type Props = {
   params: {
@@ -65,7 +66,7 @@ const tabs = [
 //   "hostWeb": "https://www.netron.asia/"
 // }]
 
-async function fetchNews(lang: Language, page: string, id: string,) {
+async function fetchNews(lang: Language, page: string, id: string): Promise<ApiResponse<{ rows: NewsTableData[], total: number }>> {
   page = page ?? "1"
 
   const url = id ?
@@ -73,12 +74,12 @@ async function fetchNews(lang: Language, page: string, id: string,) {
     `${process.env.BASE_URL}/api/netronAdmin/news?adminLang=${lang}&page=${page}`
 
   const res = await fetch(url);
-  const result: FetchResult = await res.json();
+  const result = await res.json();
   return result
 }
 
 export default async function NewsPage({ searchParams, params }: Props) {
-  const { data, statusCode, errorMsg } = await fetchNews(
+  const result = await fetchNews(
     searchParams.adminLang,
     searchParams.page,
     params?.id?.[0],
@@ -96,16 +97,18 @@ export default async function NewsPage({ searchParams, params }: Props) {
       </div>
 
       <section className='absolute top-28 pt-4 bottom-0 inset-x-0 flex flex-col'>
-        {statusCode === 200 ?
-          <TableNews data={data.rows} id={params.id} key={searchParams.page} /> :
-          <div>{errorMsg}</div>
+        {isSuccessResponse(result) ?
+          <TableNews data={result.data.rows} id={params.id} key={searchParams.page} /> :
+          <div>{result.errorMsg}</div>
         }
 
         <div className='pt-8'>
-          <Paginations
-            perPage={10}
-            total={data.total}
-          />
+          {isSuccessResponse(result) &&
+            <Paginations
+              perPage={10}
+              total={result.data.total}
+            />
+          }
         </div>
       </section>
     </div>

@@ -1,5 +1,12 @@
 import { IconType } from "react-icons"
 
+
+type ErrorResponse = { statusCode: number, errorMsg: string };
+export type DataResponse<T> = { statusCode: 200, data: T };
+export type ApiResponse<T> =
+  | ErrorResponse
+  | DataResponse<T>
+
 export type MenuItem = {
   name: string,
   path: string,
@@ -23,6 +30,11 @@ export type AboutForm = {
   m_description: string,
   m_url: string,
   content: string,
+}
+
+export type CategoryTableData = {
+  title: string;
+  sort: string;
 }
 
 export type NewsTableData = {

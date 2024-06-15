@@ -12,26 +12,24 @@ export async function GET(
   const query = 'SELECT * FROM metas WHERE lang = ? AND type = "news"'
 
   try {
-    const { rows } = await withDbConnection(pool, async (db: PoolConnection) => {
+    const [rows] = await withDbConnection(pool, async (db: PoolConnection) => {
       const [rows] = await db.execute<RowDataPacket[]>(query, [lang])
-      return { rows };
+      return [rows];
     });
-
-    const result = {
-      m_title: rows[0].m_title,
-      m_keywords: rows[0].m_keywords,
-      m_description: rows[0].m_description,
-    }
 
     return NextResponse.json({
       statusCode: 200,
-      data: result
+      data: {
+        m_title: rows[0].m_title,
+        m_keywords: rows[0].m_keywords,
+        m_description: rows[0].m_description,
+      }
     });
   } catch (error) {
     console.log('error', error);
     return NextResponse.json({
       statusCode: 500,
-      error: 'Failed to fetch meta data'
+      errorMsg: 'Failed to fetch meta data'
     }, { status: 500 })
   }
 }

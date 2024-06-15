@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Language } from "./definitions";
+import { ApiResponse, DataResponse, Language } from "./definitions";
 import { Pool, PoolConnection } from "mysql2/promise";
 
 export function cn(...inputs: ClassValue[]) {
@@ -45,3 +45,7 @@ export async function withDbConnection<T>(
     db.release();
   }
 };
+
+export function isSuccessResponse<T>(response: ApiResponse<T>): response is DataResponse<T> {
+  return response.statusCode === 200;
+}
