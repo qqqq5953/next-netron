@@ -15,28 +15,37 @@ import {
 } from "@/components/ui/sheet"
 import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
 import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
-import FormTitleField, { titleSchema } from '../../../_components/FormTitleField'
-import CustomEditorField, { contentSchema } from '../../../_components/CustomEditorField'
+import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
+import CustomEditorField, { contentSchema } from '@/app/netronAdmin/_components/CustomEditorField'
+import { BrandTableData } from '@/lib/definitions'
+import FormCoverImageField, { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
   ...titleSchema,
   ...contentSchema,
+  ...coverImageSchema
 })
 
-export default function FormAddBrand() {
+type Props = {
+  type: "edit" | "add"
+  brand?: BrandTableData
+}
+
+export default function FormAddBrand(props: Props) {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
-      customizedLink: "",
-      title: "",
-      content: "",
+      metaTitle: props.brand?.m_title ?? "",
+      metaKeyword: props.brand?.m_keywords ?? "",
+      metaDescription: props.brand?.m_description ?? "",
+      customizedLink: props.brand?.m_url ?? "",
+      title: props.brand?.title ?? "",
+      content: props.brand?.content ?? "",
+      coverImage: props.brand?.img ?? "",
     },
   })
 
@@ -48,7 +57,20 @@ export default function FormAddBrand() {
   return (
     <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <SheetTrigger asChild>
-        <Button size="sm" className='ml-auto'>新增</Button>
+        {
+          props.type === "add" ?
+            <Button
+              size="sm"
+              className='ml-auto'>
+              新增
+            </Button> :
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              編輯
+            </Button>
+        }
       </SheetTrigger>
       <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
         <Form {...form}>
@@ -63,6 +85,7 @@ export default function FormAddBrand() {
               <h3 className='text-2xl text-neutral-700 font-semibold'>文章</h3>
               <FormTitleField form={form} />
               <CustomEditorField form={form} />
+              <FormCoverImageField form={form} />
             </div>
 
             <div className="text-right">

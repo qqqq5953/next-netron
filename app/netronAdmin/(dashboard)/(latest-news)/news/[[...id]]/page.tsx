@@ -15,15 +15,6 @@ type Props = {
   }
 }
 
-type FetchResult = {
-  statusCode: number,
-  data: {
-    rows: NewsTableData[],
-    total: number
-  },
-  errorMsg?: string
-}
-
 const tabs = [
   { name: "所有資訊", path: "/netronAdmin/news" },
   { name: "雲端活動", path: "/netronAdmin/news/2" },
@@ -78,12 +69,11 @@ async function fetchNews(lang: Language, page: string, id: string): Promise<ApiR
   return result
 }
 
-export default async function NewsPage({ searchParams, params }: Props) {
-  const result = await fetchNews(
-    searchParams.adminLang,
-    searchParams.page,
-    params?.id?.[0],
-  )
+export default async function NewsPage({
+  searchParams: { adminLang, page },
+  params: { id }
+}: Props) {
+  const result = await fetchNews(adminLang, page, id?.[0])
 
   return (
     <div className='relative flex flex-col gap-4 h-full'>
@@ -98,11 +88,11 @@ export default async function NewsPage({ searchParams, params }: Props) {
 
       <section className='absolute top-28 pt-4 bottom-0 inset-x-0 flex flex-col'>
         {isSuccessResponse(result) ?
-          <TableNews data={result.data.rows} id={params.id} key={searchParams.page} /> :
+          <TableNews data={result.data.rows} id={id} key={page} /> :
           <div>{result.errorMsg}</div>
         }
 
-        <div className='pt-8'>
+        <div className='pt-8 mt-auto'>
           {isSuccessResponse(result) &&
             <Paginations
               perPage={10}

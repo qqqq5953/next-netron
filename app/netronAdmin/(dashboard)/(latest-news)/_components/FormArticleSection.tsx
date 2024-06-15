@@ -69,7 +69,7 @@ function FormArticleSection(props: Props) {
       <FormTitleField form={props.form} />
 
       {/* 封面照 */}
-      {/* <FormCoverImageField form={props.form} /> */}
+      <FormCoverImageField form={props.form} />
     </div>
   )
 }

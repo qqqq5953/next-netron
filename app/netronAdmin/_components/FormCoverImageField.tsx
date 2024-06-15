@@ -1,7 +1,7 @@
 'use client'
 
 import { z } from 'zod'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form'
 import { LuImagePlus } from 'react-icons/lu'
 
@@ -12,7 +12,7 @@ import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 
 export const coverImageSchema = {
   coverImage: z.any()
-    .refine((file: File) => !!file, "請上傳圖片")
+    .refine((file: File) => file instanceof File || !!file, "請上傳圖片")
     .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
     .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
 }
@@ -22,15 +22,19 @@ type Props = {
 }
 
 export default function FormCoverImageField(props: Props) {
-  const coverImage = props.form.getValues('coverImage')
-  const blobString = coverImage ? URL.createObjectURL(coverImage) : ""
-  const [preview, setPreview] = useState(blobString);
+  const coverImage: string = props.form.getValues('coverImage')
+
+  // const blobString = coverImage ? URL.createObjectURL(coverImage) : ""
+
+  const [preview, setPreview] = useState(`${process.env.NEXT_PUBLIC_BASE_URL}/${coverImage}`);
+  console.log('preview', preview);
 
   function handleImageChange(
     field: ControllerRenderProps<any, "coverImage">,
     event: ChangeEvent<HTMLInputElement>
   ) {
     if (event.target.files?.length !== 0) {
+      // 未來會先上傳到 file server 產生圖片連結後再賦予 setPreview
       setPreview(URL.createObjectURL(event.target.files![0]))
       field.onChange(event.target.files![0])
     }
@@ -64,7 +68,7 @@ export default function FormCoverImageField(props: Props) {
           </FormItem>
         }}
       />
-      {preview && <img src={preview} alt="preview" className="object-cover rounded-lg size-40" />}
+      {preview && coverImage && <img src={preview} alt="preview" className="object-cover rounded-lg size-40" />}
     </>
   )
 }

@@ -61,7 +61,7 @@ export default function FormAddNews(props: Props) {
         undefined,
       category: props.news?.cid.toString() ?? "",
       title: props.news?.title ?? "",
-      // coverImage: props.news?.img ?? undefined,
+      coverImage: props.news?.img ?? undefined,
       content: props.news?.content ?? "",
     },
   })
@@ -87,7 +87,6 @@ export default function FormAddNews(props: Props) {
               編輯
             </Button>
         }
-
       </SheetTrigger>
       <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
         <Form {...form}>

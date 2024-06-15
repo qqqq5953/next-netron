@@ -32,6 +32,21 @@ export type AboutForm = {
   content: string,
 }
 
+export type BrandTableData = {
+  id: number,
+  title: string,
+  img: string,
+  sort: number,
+  content: string,
+  edit_at: string | null,
+  created_at: string | null,
+  updated_at: string | null,
+  m_title: string,
+  m_keywords: string | null,
+  m_description: string | null,
+  m_url: string | null,
+}
+
 export type CategoryTableData = {
   title: string;
   sort: string;
@@ -51,7 +66,7 @@ export type NewsTableData = {
   m_keywords: string | null,
   m_description: string | null,
   m_url: string | null,
-  edit_at: string,
+  edit_at: string | null,
   post_date: string | null,
   created_at: string,
   updated_at: string,

@@ -7,7 +7,8 @@ import {
   AboutForm,
   MetaForm,
   NewsTableData,
-  CategoryTableData
+  CategoryTableData,
+  BrandTableData
 } from '@/lib/types/admin-types'
 
 export type {
@@ -19,5 +20,6 @@ export type {
   AboutForm,
   MetaForm,
   NewsTableData,
-  CategoryTableData
+  CategoryTableData,
+  BrandTableData
 }
