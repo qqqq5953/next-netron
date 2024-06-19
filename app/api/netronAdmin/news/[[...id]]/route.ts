@@ -55,29 +55,51 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
   };
 };
 
+async function getPaginatedNews(lang: Language, categoryId: string | null, page: string | null) {
+  const {
+    baseQuery,
+    countQuery,
+    queryParams,
+    countParams
+  } = buildQuery(lang, categoryId, parseInt(page ?? "1", 10));
+
+  const [rows, count] = await withDbConnection(pool, async (db: PoolConnection) => {
+    const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
+    const [count] = await db.execute<RowDataPacket[]>(countQuery, countParams);
+    return [rows, count];
+  });
+
+  return [rows, count]
+}
+
+async function getAllNewsWithIdAndTitle(lang: Language) {
+  const newsQuery = `
+    SELECT id, title FROM news 
+    WHERE lang = ? AND type = "news" 
+    ORDER BY sort DESC
+  `
+  const [rows, count] = await withDbConnection(pool, async (db: PoolConnection) => {
+    const [rows] = await db.execute<RowDataPacket[]>(newsQuery, [lang ?? "tw"]);
+    const count = [{ totalNews: rows.length }]
+    return [rows, count];
+  });
+
+  return [rows, count];
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const categoryId = params?.id?.[0];
-  const page = parseInt(request.nextUrl.searchParams.get('page') ?? '1', 10);
+  const page = request.nextUrl.searchParams.get('page')
   const adminLang = request.nextUrl.searchParams.get('adminLang');
   const lang = findCurrentLanguage(adminLang)
 
   try {
-    const {
-      baseQuery,
-      countQuery,
-      queryParams,
-      countParams
-    } = buildQuery(lang, categoryId, page);
-
-    const [rows, count] = await withDbConnection(pool, async (db: PoolConnection) => {
-      const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
-      const [count] = await db.execute<RowDataPacket[]>(countQuery, countParams);
-
-      return [rows, count];
-    });
+    const [rows, count] = page === 'all' ?
+      await getAllNewsWithIdAndTitle(lang) :
+      await getPaginatedNews(lang, categoryId, page)
 
     return NextResponse.json({
       statusCode: 200,
@@ -87,7 +109,7 @@ export async function GET(
       }
     });
   } catch (error) {
-    console.log('error', error);
+    console.log('news error', error);
     return NextResponse.json({
       statusCode: 500,
       errorMsg: 'Failed to fetch news data'

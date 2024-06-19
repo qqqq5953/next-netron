@@ -12,7 +12,7 @@ type Props = {
 }
 
 async function fetchBrands(lang: Language, page: string): Promise<ApiResponse<{ rows: BrandTableData[], total: number }>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brand?adminLang=${lang}&page=${page}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands?adminLang=${lang}&page=${page}`);
   const result = await res.json();
   return result
 }

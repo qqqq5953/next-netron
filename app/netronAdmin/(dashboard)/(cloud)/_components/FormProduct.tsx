@@ -109,7 +109,10 @@ export default function FormAddProduct(props: Props) {
 
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>品牌項目</h3>
-              <FormBrandSection form={form} allBrands={props.allBrands} />
+              {props.allBrands.length !== 0 ?
+                <FormBrandSection form={form} allBrands={props.allBrands} /> :
+                <div className='text-rose-500'>品牌項目資料有誤</div>
+              }
             </div>
 
             <div>

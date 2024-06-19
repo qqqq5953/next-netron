@@ -25,7 +25,7 @@ export const menuNavs: MenuListType = [
   },
   {
     name: "雲產品服務", path: "", icon: IoIosCloudOutline, children: [
-      { name: "品牌項目", path: "/netronAdmin/brand" },
+      { name: "品牌項目", path: "/netronAdmin/brands" },
       { name: "產品項目", path: "/netronAdmin/product" },
     ]
   },

@@ -1,11 +1,7 @@
 import FormProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProduct'
 import TableProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/TableProduct'
-import { ApiResponse, Language, ProducTableData } from '@/lib/definitions'
-import { isSuccessResponse, withDbConnection } from '@/lib/utils'
-
-import { PoolConnection } from "mysql2/promise";
-import { RowDataPacket } from 'mysql2';
-import pool from "@/lib/mysql";
+import { ApiResponse, BrandTableData, Language, NewsTableData, ProducTableData } from '@/lib/definitions'
+import { isSuccessResponse } from '@/lib/utils'
 
 type Props = {
   searchParams: {
@@ -86,37 +82,44 @@ async function fetchProducts(lang: Language): Promise<ApiResponse<ProducTableDat
   return result
 }
 
-async function fetchAllBrandsAndNews(lang: Language) {
-  const brandQuery = `SELECT id, title FROM brands ORDER BY sort DESC`
-  const newsQuery = `
-    SELECT id, title FROM news 
-    WHERE lang = ? AND type = "news" 
-    ORDER BY sort DESC
-  `
+async function fetchAllBrands(lang: Language): Promise<ApiResponse<{
+  rows: Pick<BrandTableData, "id" | "title">[],
+  total: number
+}>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands?adminLang=${lang}&page=all`);
+  const result = await res.json();
+  return result
+}
 
-  const [allBrands, allNews] = await withDbConnection(pool, async (db: PoolConnection) => {
-    const brandPromise = db.execute<RowDataPacket[]>(brandQuery);
-    const newsPromise = db.execute<RowDataPacket[]>(newsQuery, [lang ?? "tw"]);
-    const [[allBrands], [allNews]] = await Promise.all([
-      brandPromise,
-      newsPromise
-    ])
-    return [allBrands, allNews];
-  });
+async function fetchAllNews(lang: Language): Promise<ApiResponse<{
+  rows: Pick<NewsTableData, "id" | "title">[],
+  total: number
+}>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/news?adminLang=${lang}&page=all`);
+  const result = await res.json();
+  return result
+}
 
-  return [allBrands, allNews] as [
-    { id: number, title: string }[],
-    { id: number, title: string }[]
-  ]
+async function fetchAll(lang: Language) {
+  const productsPromise = fetchProducts(lang)
+  const brandsPromise = fetchAllBrands(lang)
+  const newsPromise = fetchAllNews(lang)
+  const result = await Promise.all([productsPromise, brandsPromise, newsPromise])
+  return result
 }
 
 export default async function ProductPage({ searchParams }: Props) {
-  const [allBrands, allNews] = await fetchAllBrandsAndNews(searchParams.adminLang)
+  const [productsRes, brandsRes, newsRes] = await fetchAll(searchParams.adminLang)
+
+  const allBrands = isSuccessResponse(brandsRes) ?
+    brandsRes.data.rows :
+    []
+  const allNews = isSuccessResponse(newsRes) ?
+    newsRes.data.rows :
+    []
 
   // console.log('allBrands', allBrands);
   // console.log('allNews', allNews);
-  const result = await fetchProducts(searchParams.adminLang)
-
 
   return (
     <>
@@ -124,19 +127,19 @@ export default async function ProductPage({ searchParams }: Props) {
         <h2 className='text-3xl font-medium'>雲服務產品資訊</h2>
         <FormProduct
           type="add"
-          allBrands={allBrands1}
-          allNews={allNews1}
+          allBrands={allBrands}
+          allNews={allNews}
         />
       </div>
 
       <section>
-        {isSuccessResponse(result) ?
+        {isSuccessResponse(productsRes) ?
           <TableProduct
-            initialData={result.data}
+            initialData={productsRes.data}
             allBrands={allBrands}
             allNews={allNews}
           /> :
-          <div>{result.errorMsg}</div>
+          <div>{productsRes.errorMsg}</div>
         }
       </section>
     </>
