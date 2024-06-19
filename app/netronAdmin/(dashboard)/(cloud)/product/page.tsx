@@ -1,5 +1,6 @@
 import FormProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProduct'
 import TableProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/TableProduct'
+import { fetchAllBrands, fetchAllNews, fetchProducts } from '@/lib/data'
 import { ApiResponse, BrandTableData, Language, NewsTableData, ProducTableData } from '@/lib/definitions'
 import { isSuccessResponse } from '@/lib/utils'
 
@@ -75,30 +76,6 @@ const allNews1 = [
   { id: 157, title: '【媒體報導】網創資訊執行長李尚修主打快速 發揚雲端服務' },
   { id: 155, title: '【最新消息】Netron 網創資訊榮獲騰訊雲二項夥伴大獎 銷售業績位居全球前三' }
 ]
-
-async function fetchProducts(lang: Language): Promise<ApiResponse<ProducTableData[]>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/product?adminLang=${lang}`);
-  const result = await res.json();
-  return result
-}
-
-async function fetchAllBrands(lang: Language): Promise<ApiResponse<{
-  rows: Pick<BrandTableData, "id" | "title">[],
-  total: number
-}>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands?adminLang=${lang}&page=all`);
-  const result = await res.json();
-  return result
-}
-
-async function fetchAllNews(lang: Language): Promise<ApiResponse<{
-  rows: Pick<NewsTableData, "id" | "title">[],
-  total: number
-}>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/news?adminLang=${lang}&page=all`);
-  const result = await res.json();
-  return result
-}
 
 async function fetchAll(lang: Language) {
   const productsPromise = fetchProducts(lang)

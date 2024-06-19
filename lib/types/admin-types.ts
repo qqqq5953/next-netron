@@ -68,6 +68,21 @@ export type ProducTableData = {
   productItems: any[]
 }
 
+export type SolutionData = {
+  id: number,
+  title: string,
+  content: string,
+  sort: number,
+  lang: string
+  newsList: number[],
+  m_title: string,
+  m_keywords: string | null,
+  m_description: string | null,
+  type: string,
+  m_url: string | null,
+  created_at: string | null,
+  updated_at: string | null
+}
 
 export type NewsTableData = {
   id: number,

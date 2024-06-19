@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { UseFormReturn } from 'react-hook-form';
-import { useState } from 'react';
 
 import {
   FormControl,
@@ -13,23 +12,13 @@ import {
 } from '@/components/ui/form';
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { ProductItems } from './FormProductSection';
 
 export const newsItemsSchema = {
   newsIds: z.number().array(),
 }
 
 type Props = {
-  form: UseFormReturn<{
-    newsIds: number[];
-    brandIds: number[];
-    productItems: ProductItems[];
-    title: string;
-    customizedLink: string;
-    metaTitle: string;
-    metaKeyword?: string;
-    metaDescription: string;
-  }, any, undefined>
+  form: UseFormReturn<any, any, undefined>
   allNews: { id: number, title: string }[]
 };
 
@@ -51,7 +40,7 @@ export default function FormNewsSection(props: Props) {
                       onCheckedChange={(checked) => {
                         const newIds = checked ?
                           [...field.value, news.id] :
-                          field.value.filter(id => id !== news.id)
+                          field.value.filter((id: number) => id !== news.id)
 
                         field.onChange(newIds)
                       }}

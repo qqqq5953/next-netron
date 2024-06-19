@@ -1,6 +1,3 @@
-'use client'
-
-import { useState } from 'react'
 import {
   Table,
   TableBody,
@@ -10,37 +7,33 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from '@/app/netronAdmin/_components/Button'
+import { SolutionData } from '@/lib/types/admin-types'
+import FormSolution from './FormSolution'
 
-type InitialData = {
-  title: string;
-}[]
+type Props = {
+  initialData: SolutionData[]
+  allNews: { id: number, title: string }[]
+}
 
-const initialData: InitialData = [
-  { title: "AWS 解決方案" },
-  { title: "中國解決方案" },
-]
-
-export default function TableBrand() {
-  const [data, setData] = useState(initialData);
-
+export default function TableSolution(props: Props) {
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">動作</TableHead>
           <TableHead>標題</TableHead>
+          <TableHead>動作</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((item, index) => {
-          return <TableRow key={item.title}>
+        {props.initialData.map((solution) => {
+          return <TableRow key={solution.title}>
+            <TableCell>{solution.title}</TableCell>
             <TableCell className="font-medium">
               <div className='flex gap-2'>
-                <Button variant="outline" size="sm">編輯</Button>
+                <FormSolution type="edit" solution={solution} allNews={props.allNews} />
                 <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
               </div>
             </TableCell>
-            <TableCell>{item.title}</TableCell>
           </TableRow>
         })}
       </TableBody>

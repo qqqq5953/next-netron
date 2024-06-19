@@ -29,7 +29,7 @@ export const menuNavs: MenuListType = [
       { name: "產品項目", path: "/netronAdmin/product" },
     ]
   },
-  { name: "解決方案", path: "/netronAdmin/solution", icon: CgToolbox },
+  { name: "解決方案", path: "/netronAdmin/solutions", icon: CgToolbox },
   {
     name: "成功案例", path: "", icon: SiFuturelearn, children: [
       { name: "分類管理", path: "/netronAdmin/category/case" },

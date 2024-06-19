@@ -18,6 +18,8 @@ import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/
 import FormTitleField, { titleSchema } from '../../../_components/FormTitleField'
 import CustomEditorField, { contentSchema } from '../../../_components/CustomEditorField'
 import FormCategoryField, { categorySchema } from './FormCategoryField'
+import { SolutionData } from '@/lib/types/admin-types'
+import FormNewsSection, { newsItemsSchema } from '../../(cloud)/_components/FormNewsSection'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -25,21 +27,29 @@ const formSchema = z.object({
   ...titleSchema,
   ...categorySchema,
   ...contentSchema,
+  ...newsItemsSchema
 })
 
-export default function FormAddSolution() {
+type Props = {
+  type: "add" | "edit"
+  solution?: SolutionData
+  allNews: { id: number, title: string }[],
+}
+
+export default function FormSolution(props: Props) {
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
-      customizedLink: "",
-      title: "",
-      category: "",
-      content: "",
+      metaTitle: props.solution?.m_title ?? "",
+      metaKeyword: props.solution?.m_keywords ?? "",
+      metaDescription: props.solution?.m_description ?? "",
+      customizedLink: props.solution?.m_url ?? "",
+      title: props.solution?.title ?? "",
+      category: props.solution?.type ?? "",
+      content: props.solution?.content ?? "",
+      newsIds: props.solution?.newsList,
     },
   })
 
@@ -50,9 +60,22 @@ export default function FormAddSolution() {
   return (
     <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
       <SheetTrigger asChild>
-        <Button size="sm" className='ml-auto'>新增</Button>
+        {
+          props.type === "add" ?
+            <Button
+              size="sm"
+              className='ml-auto'>
+              新增
+            </Button> :
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              編輯
+            </Button>
+        }
       </SheetTrigger>
-      <SheetContent className='w-[50vw] sm:max-w-xl overflow-auto px-12'>
+      <SheetContent className='w-[60vw] sm:max-w-4xl overflow-auto px-12'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-12">
             <div className='flex flex-col gap-4'>
@@ -66,6 +89,11 @@ export default function FormAddSolution() {
               <FormTitleField form={form} />
               <FormCategoryField form={form} />
               <CustomEditorField form={form} />
+            </div>
+
+            <div>
+              <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>最新消息</h3>
+              <FormNewsSection form={form} allNews={props.allNews} />
             </div>
 
             <div className="text-right">
