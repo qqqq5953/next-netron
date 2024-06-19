@@ -1,6 +1,7 @@
 'use client'
 
-import { UseFormReturn, useFieldArray } from 'react-hook-form';
+import { z } from 'zod';
+import { UseFormReturn } from 'react-hook-form';
 
 import {
   FormControl,
@@ -10,60 +11,63 @@ import {
   FormMessage
 } from '@/components/ui/form';
 import { Checkbox } from "@/components/ui/checkbox"
-
-import { z } from 'zod';
-import { ContentItem } from './FormProductSection';
-import { newsItem } from './FormNewsSection';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-const brandItemSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  isActivated: z.boolean()
-});
+import { ProductItems } from './FormProductSection';
+import { useState } from 'react';
 
 export const brandItemsSchema = {
-  brandItems: z.array(brandItemSchema),
+  brandIds: z.number().array(),
 }
-
-export type BrandItem = z.infer<typeof brandItemSchema>;
 
 type Props = {
   form: UseFormReturn<{
-    newsItems: newsItem[];
-    brandItems: BrandItem[];
-    contentItems: ContentItem[];
+    newsIds: number[];
+    brandIds: number[];
+    productItems: ProductItems[];
     title: string;
     customizedLink: string;
     metaTitle: string;
-    metaKeyword: string;
+    metaKeyword?: string;
     metaDescription: string;
   }, any, undefined>
+  allBrands: { id: number, title: string }[]
 };
 
 export default function FormBrandSection(props: Props) {
-  const fieldArray = useFieldArray({
-    control: props.form.control,
-    name: "brandItems",
-  });
+  const [brandIds, setBrandIds] = useState(props.form.getValues('brandIds'))
 
   return (
-    <ScrollArea className={`grid rounded-md border ${fieldArray.fields.length > 6 ? 'h-[342px]' : 'h-auto'}`}>
-      {fieldArray.fields.map((fieldItem, index) => (
+    <ScrollArea className="grid rounded-md border h-80">
+      {props.allBrands.map(brand => (
         <FormField
-          key={fieldItem.id}
+          key={brand.id}
           control={props.form.control}
-          name={`brandItems.${index}.isActivated`}
+          name={`brandIds`}
           render={({ field }) => (
             <FormItem className='p-4 border-b last:border-none'>
               <FormLabel className="flex items-center gap-4 font-normal text-base text-neutral-800">
                 <FormControl>
+                  {/* <Checkbox
+                    checked={brandIds?.includes(brand.id)}
+                    onCheckedChange={(checked) => {
+                      const newIds = checked ?
+                        [...brandIds, brand.id] :
+                        brandIds.filter(id => id !== brand.id)
+                      setBrandIds(newIds)
+                    }}
+                  /> */}
                   <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
+                    checked={field.value?.includes(brand.id)}
+                    onCheckedChange={(checked) => {
+                      const newIds = checked ?
+                        [...field.value, brand.id] :
+                        field.value.filter(id => id !== brand.id)
+
+                      field.onChange(newIds)
+                    }}
                   />
                 </FormControl>
-                {fieldItem.name}
+                {brand.id} /{brand.title} / {JSON.stringify(field.value)}
               </FormLabel>
               <FormMessage className='mt-1.5' />
             </FormItem>

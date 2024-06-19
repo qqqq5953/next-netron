@@ -23,8 +23,6 @@ import { Textarea } from '@/components/ui/textarea';
 import DialogAlert from '@/components/DialogAlert';
 import { Button } from '@/app/netronAdmin/_components/Button';
 import { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField';
-import type { BrandItem } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormBrandSection';
-import type { newsItem } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormNewsSection';
 
 import { z } from 'zod';
 import { IoIosAdd } from "react-icons/io";
@@ -42,24 +40,24 @@ const productSchema = z.object({
 });
 
 export const productsSchema = {
-  contentItems: z.array(productSchema).refine(items => {
+  productItems: z.array(productSchema).refine(items => {
     return items.length > 0, {
       message: "At least one content item is required",
     }
   }),
 }
 
-export type ContentItem = z.infer<typeof productSchema>;
+export type ProductItems = z.infer<typeof productSchema>;
 
 type Props = {
   form: UseFormReturn<{
-    newsItems: newsItem[];
-    brandItems: BrandItem[];
-    contentItems: ContentItem[];
+    newsIds: number[];
+    brandIds: number[];
+    productItems: ProductItems[];
     title: string;
     customizedLink: string;
     metaTitle: string;
-    metaKeyword: string;
+    metaKeyword?: string;
     metaDescription: string;
   }, any, undefined>
 };
@@ -67,8 +65,10 @@ type Props = {
 export default function FormProductSection(props: Props) {
   const fieldArray = useFieldArray({
     control: props.form.control,
-    name: "contentItems",
+    name: "productItems",
   });
+
+  const [products, setProducts] = useState(props.form.getValues('productItems'))
 
   const [previews, setPreviews] = useState<string[]>(fieldArray.fields.map(field => {
     if (typeof field.coverImage === 'object') {
@@ -83,12 +83,13 @@ export default function FormProductSection(props: Props) {
   const deletedItemIndex = useRef(-1)
 
   function handleAddItem() {
-    fieldArray.append({ title: "", description: "", link: "", coverImage: "" })
+    // fieldArray.append({ title: "", description: "", link: "", coverImage: "" })
+    setProducts(prev => [...prev, { title: "", description: "", link: "", coverImage: "" }])
     setTitles(prev => [...prev, `項目${prev.length + 1}`])
   }
 
   function handleTitleChange(
-    field: ControllerRenderProps<any, `contentItems.${number}.title`>,
+    field: ControllerRenderProps<any, `productItems.${number}.title`>,
     index: number,
     event: ChangeEvent<HTMLInputElement>
   ) {
@@ -100,7 +101,7 @@ export default function FormProductSection(props: Props) {
   };
 
   function handleImageChange(
-    field: ControllerRenderProps<any, `contentItems.${number}.coverImage`>,
+    field: ControllerRenderProps<any, `productItems.${number}.coverImage`>,
     index: number,
     event: ChangeEvent<HTMLInputElement>
   ) {
@@ -114,8 +115,9 @@ export default function FormProductSection(props: Props) {
   }
 
   function handleRemoveItem(closeLoading: () => void) {
-    fieldArray.remove(deletedItemIndex.current)
+    // fieldArray.remove(deletedItemIndex.current)
 
+    setProducts(products.filter((_, index) => index !== deletedItemIndex.current));
     setTitles(titles.filter((_, index) => index !== deletedItemIndex.current));
     setPreviews(previews.filter((_, index) => index !== deletedItemIndex.current));
 
@@ -136,8 +138,8 @@ export default function FormProductSection(props: Props) {
         </Button>
       </div>
       <div className='grid grid-cols-3 gap-4'>
-        {fieldArray.fields.map((fieldItem, index) => (
-          <Card key={fieldItem.id} className='shadow-lg'>
+        {products.map((fieldItem, index) => (
+          <Card key={fieldItem.title + index} className='shadow-lg'>
             <CardHeader>
               <CardTitle className='truncate py-1'>{titles[index] || ''}</CardTitle>
             </CardHeader>
@@ -146,7 +148,7 @@ export default function FormProductSection(props: Props) {
               {/* 產品名稱 */}
               <FormField
                 control={props.form.control}
-                name={`contentItems.${index}.title`}
+                name={`productItems.${index}.title`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal text-base text-neutral-800">產品名稱</FormLabel>
@@ -166,7 +168,7 @@ export default function FormProductSection(props: Props) {
               {/* 產品敘述 */}
               <FormField
                 control={props.form.control}
-                name={`contentItems.${index}.description`}
+                name={`productItems.${index}.description`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal text-base text-neutral-800">產品敘述</FormLabel>
@@ -186,13 +188,14 @@ export default function FormProductSection(props: Props) {
               {/* 連結 */}
               <FormField
                 control={props.form.control}
-                name={`contentItems.${index}.link`}
+                name={`productItems.${index}.link`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal text-base text-neutral-800">連結</FormLabel>
                     <FormControl>
                       <Input
                         {...field}
+                        value={field.value ?? ""}
                         className='primary-input-focus'
                         placeholder="Enter link here"
                       />
@@ -205,7 +208,7 @@ export default function FormProductSection(props: Props) {
               {/* 圖片 */}
               <FormField
                 control={props.form.control}
-                name={`contentItems.${index}.coverImage`}
+                name={`productItems.${index}.coverImage`}
                 render={({ field }) => (
                   <FormItem className='flex flex-col gap-2'>
                     <div className='text-neutral-800'>圖片</div>
@@ -248,7 +251,7 @@ export default function FormProductSection(props: Props) {
                 onClick={() => {
                   deletedItemIndex.current = index
 
-                  const { title, description, link, coverImage } = props.form.getValues("contentItems")[deletedItemIndex.current]
+                  const { title, description, link, coverImage } = props.form.getValues("productItems")[deletedItemIndex.current]
 
                   if ([title, description, link, coverImage].some(field => !!field)) {
                     setOpen(true)

@@ -52,6 +52,23 @@ export type CategoryTableData = {
   sort: string;
 }
 
+export type ProducTableData = {
+  id: number,
+  title: string,
+  lang: string,
+  sort: number,
+  brandList: number[],
+  newsList: number[],
+  created_at: string | null,
+  updated_at: string | null,
+  m_title: string,
+  m_keywords: string | null,
+  m_description: string | null,
+  m_url: string | null,
+  productItems: any[]
+}
+
+
 export type NewsTableData = {
   id: number,
   title: string,

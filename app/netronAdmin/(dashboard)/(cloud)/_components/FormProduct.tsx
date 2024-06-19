@@ -21,6 +21,7 @@ import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormT
 import FormProductSection, { productsSchema } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProductSection'
 import FormBrandSection, { brandItemsSchema } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormBrandSection'
 import FormNewsSection, { newsItemsSchema } from './FormNewsSection'
+import { ProducTableData } from '@/lib/definitions'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -31,40 +32,63 @@ const formSchema = z.object({
   ...newsItemsSchema
 });
 
-export default function FormAddProduct() {
+type Props = {
+  type: "add" | "edit"
+  product?: ProducTableData
+  allBrands: { id: number, title: string }[],
+  allNews: { id: number, title: string }[],
+}
+
+export default function FormAddProduct(props: Props) {
   const [open, setOpen] = useState(false)
+  const defaultForm = {
+    metaTitle: props.product?.m_title ?? "",
+    metaKeyword: props.product?.m_keywords ?? "",
+    metaDescription: props.product?.m_description ?? "",
+    customizedLink: props.product?.m_url ?? "",
+    title: props.product?.title ?? "",
+    productItems: props.product?.productItems.map(item => {
+      return {
+        title: item.title,
+        description: item.description,
+        link: item.url,
+        coverImage: item.img
+      }
+    }) ?? [],
+    brandIds: props.product?.brandList,
+    newsIds: props.product?.newsList,
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
-      customizedLink: "",
-      title: "",
-      contentItems: [
-        { title: "雲端運算 Cloud Computing", description: "網創資訊提供多雲政策、企業節費、雲端儲存、代管、AI / Big Data 等企業雲端服務，有了雲端就不需要購買並維護硬體設備，即使需要大量運算也能快速部署，遇到突發狀況也有資料備份、災難復原等機制，不怕資料一去不回。我們擁有專業的整合技術團隊，可以協助您快速上雲，並讓您更專注於產品及業務的開發。", link: "", coverImage: "" },
-        { title: "資安防護 Cyber Security", description: "網創資訊為亞太區最大 Anti-DDoS 供應商，除了提供 DDoS 防護服務，也可為企業導入 WAF、機器人偵測等資安解決方案，豐富的防禦經驗保護您的機敏資料不外洩。", link: "https://www.netron.asia/tw/brand/security", coverImage: "" }
-      ],
-      brandItems: [
-        { id: crypto.randomUUID(), name: "brand1", isActivated: true },
-        { id: crypto.randomUUID(), name: "brand2", isActivated: false },
-      ],
-      newsItems: [
-        { id: crypto.randomUUID(), name: "news1", isActivated: true },
-        { id: crypto.randomUUID(), name: "news2", isActivated: false },
-      ],
-    },
+    defaultValues: defaultForm,
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log('onSubmit', values);
+    setOpen(false)
   }
 
   return (
-    <Sheet open={open} onOpenChange={(isOpen) => setOpen(isOpen)}>
+    <Sheet open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) form.reset()
+      setOpen(isOpen)
+    }}>
       <SheetTrigger asChild>
-        <Button size="sm" className='ml-auto'>新增</Button>
+        {
+          props.type === "add" ?
+            <Button
+              size="sm"
+              className='ml-auto'>
+              新增
+            </Button> :
+            <Button
+              size="sm"
+              variant="outline"
+            >
+              編輯
+            </Button>
+        }
       </SheetTrigger>
       <SheetContent className='w-[80vw] sm:max-w-4xl overflow-auto px-12'>
         <Form {...form}>
@@ -85,19 +109,22 @@ export default function FormAddProduct() {
 
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>品牌項目</h3>
-              <FormBrandSection form={form} />
+              <FormBrandSection form={form} allBrands={props.allBrands} />
             </div>
 
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>最新消息</h3>
-              <FormNewsSection form={form} />
+              <FormNewsSection form={form} allNews={props.allNews} />
             </div>
 
             <div className="space-x-2 text-right pb-12">
               <Button
                 variant="ghost"
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  form.reset()
+                  setOpen(false)
+                }}
               >
                 取消
               </Button>
