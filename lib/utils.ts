@@ -1,7 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { ApiResponse, DataResponse, Language } from "./definitions";
-import { Pool, PoolConnection } from "mysql2/promise";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -33,18 +32,6 @@ export function findCurrentLanguage(adminLang: string | null) {
 
   return lang
 }
-
-export async function withDbConnection<T>(
-  pool: Pool,
-  callback: (db: PoolConnection) => Promise<T>
-): Promise<T> {
-  const db = await pool.getConnection();
-  try {
-    return await callback(db);
-  } finally {
-    db.release();
-  }
-};
 
 export function isSuccessResponse<T>(response: ApiResponse<T>): response is DataResponse<T> {
   return response.statusCode === 200;

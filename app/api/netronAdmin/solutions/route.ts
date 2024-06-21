@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RowDataPacket } from 'mysql2';
 import { PoolConnection } from "mysql2/promise";
-import pool from "@/lib/mysql";
-import { findCurrentLanguage, withDbConnection } from "@/lib/utils";
+import { withDbConnection } from "@/lib/mysql";
+import { findCurrentLanguage } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
@@ -12,7 +12,7 @@ export async function GET(
   const solutionQuery = 'SELECT * FROM solutions WHERE lang = ?';
 
   try {
-    const data = await withDbConnection(pool, async (db: PoolConnection) => {
+    const data = await withDbConnection(async (db: PoolConnection) => {
       const [solutions] = await db.execute<RowDataPacket[]>(solutionQuery, [lang]);
 
       return solutions.map(solution => {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RowDataPacket } from 'mysql2';
 import { PoolConnection } from "mysql2/promise";
-import pool from "@/lib/mysql";
-import { findCurrentLanguage, withDbConnection } from "@/lib/utils";
+import { withDbConnection } from "@/lib/mysql";
+import { findCurrentLanguage } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
@@ -12,7 +12,7 @@ export async function GET(
   const query = 'SELECT * FROM metas WHERE lang = ? AND type = "news"'
 
   try {
-    const [rows] = await withDbConnection(pool, async (db: PoolConnection) => {
+    const [rows] = await withDbConnection(async (db: PoolConnection) => {
       const [rows] = await db.execute<RowDataPacket[]>(query, [lang])
       return [rows];
     });

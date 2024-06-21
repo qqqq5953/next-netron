@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RowDataPacket } from 'mysql2';
 import { PoolConnection } from "mysql2/promise";
-import pool from "@/lib/mysql";
-import { findCurrentLanguage, withDbConnection } from "@/lib/utils";
+import { withDbConnection } from "@/lib/mysql";
+import { findCurrentLanguage } from "@/lib/utils";
 
 export async function GET(
   request: NextRequest,
@@ -13,7 +13,7 @@ export async function GET(
   const productItemsQuery = 'SELECT * FROM product_items WHERE pid = ?';
 
   try {
-    const data = await withDbConnection(pool, async (db: PoolConnection) => {
+    const data = await withDbConnection(async (db: PoolConnection) => {
       const [products] = await db.execute<RowDataPacket[]>(productsQuery, [lang]);
 
       const promise = products.map(async (product) => {

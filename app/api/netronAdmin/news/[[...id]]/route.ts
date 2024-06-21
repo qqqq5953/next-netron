@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import pool from "@/lib/mysql";
+import { withDbConnection } from "@/lib/mysql";
 import { Language } from "@/lib/definitions";
+import { findCurrentLanguage } from "@/lib/utils";
 import { RowDataPacket } from 'mysql2';
-import { findCurrentLanguage, withDbConnection } from "@/lib/utils";
 import { PoolConnection } from "mysql2/promise";
 
 type QueryInfo = {
@@ -63,7 +63,7 @@ async function getPaginatedNews(lang: Language, categoryId: string | null, page:
     countParams
   } = buildQuery(lang, categoryId, parseInt(page ?? "1", 10));
 
-  const [rows, count] = await withDbConnection(pool, async (db: PoolConnection) => {
+  const [rows, count] = await withDbConnection(async (db: PoolConnection) => {
     const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
     const [count] = await db.execute<RowDataPacket[]>(countQuery, countParams);
     return [rows, count];
@@ -78,7 +78,7 @@ async function getAllNewsWithIdAndTitle(lang: Language) {
     WHERE lang = ? AND type = "news" 
     ORDER BY sort DESC
   `
-  const [rows, count] = await withDbConnection(pool, async (db: PoolConnection) => {
+  const [rows, count] = await withDbConnection(async (db: PoolConnection) => {
     const [rows] = await db.execute<RowDataPacket[]>(newsQuery, [lang ?? "tw"]);
     const count = [{ totalNews: rows.length }]
     return [rows, count];
