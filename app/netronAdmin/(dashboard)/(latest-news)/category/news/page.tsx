@@ -1,7 +1,7 @@
 import { ApiResponse, CategoryTableData, Language } from '@/lib/definitions'
+import { isSuccessResponse } from '@/lib/utils'
 import TableCategories from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableCategories'
 import DialogCategory from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/DialogCategory'
-import { isSuccessResponse } from '@/lib/utils'
 
 type Props = {
   searchParams: {

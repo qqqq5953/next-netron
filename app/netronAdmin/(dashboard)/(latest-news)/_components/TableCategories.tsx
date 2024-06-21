@@ -20,7 +20,6 @@ type Props = {
 
 export default function TableCategories(props: Props) {
   const [categories, setCategories] = useState(props.initialData);
-  const sortedCategories = [...categories].sort((a, b) => Number(b.sort) - Number(a.sort))
 
   function handleOrderChange(index: number, newOrder: string) {
     const updatedData = [...categories];
@@ -38,7 +37,7 @@ export default function TableCategories(props: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {sortedCategories.map((item, index) => {
+        {categories.map((item, index) => {
           return <TableRow key={item.title}>
             <TableCell>{item.title}</TableCell>
             <TableCell>
