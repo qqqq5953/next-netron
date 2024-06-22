@@ -1,42 +1,30 @@
-'use client'
+import { ApiResponse, Language, MetaForm } from "@/lib/definitions"
+import { isSuccessResponse } from "@/lib/utils"
+import FormMeta from "../../../(latest-news)/meta/news/_components/FormMeta"
 
-import {
-  Form,
-} from "@/components/ui/form"
-import { useForm } from 'react-hook-form'
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormMetaSection'
-import { Button } from '@/app/netronAdmin/_components/Button'
-
-const formSchema = z.object(metaSchema)
-
-export default function MetaCasePage() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      metaTitle: "",
-      metaKeyword: "",
-      metaDescription: "",
-    },
-  })
-
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+type Props = {
+  searchParams: {
+    adminLang: Language
   }
+}
+
+async function fetchMeta(lang: Language): Promise<ApiResponse<MetaForm>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/success?adminLang=${lang}`);
+  const result = await res.json();
+  return result
+}
+
+export default async function MetaCasePage({ searchParams }: Props) {
+  const result = await fetchMeta(searchParams.adminLang)
 
   return (
     <>
       <h2 className='text-3xl font-medium'>Meta 資訊</h2>
       <section>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormMetaSection form={form} />
-            <div className="text-right">
-              <Button type="submit">儲存</Button>
-            </div>
-          </form>
-        </Form>
+        {isSuccessResponse(result) ?
+          <FormMeta meta={result.data} /> :
+          <div>{result.errorMsg}</div>
+        }
       </section>
     </>
   )
