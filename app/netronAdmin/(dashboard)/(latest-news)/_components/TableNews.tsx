@@ -19,7 +19,6 @@ import FormNews from './FormNews'
 import DialogAlert from '@/components/DialogAlert'
 
 type Props = {
-  id: string
   data: NewsTableData[]
 }
 
@@ -47,7 +46,7 @@ export default function TableNews(props: Props) {
   }
 
   return (
-    <ScrollArea className='rounded-lg'>
+    <ScrollArea>
       <Table>
         <TableHeader>
           <TableRow>

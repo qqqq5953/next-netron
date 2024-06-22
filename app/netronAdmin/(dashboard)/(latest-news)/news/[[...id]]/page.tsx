@@ -3,7 +3,7 @@ import TableNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/T
 import Paginations from '@/components/Paginations';
 import TabsNav from '@/components/TabsNav'
 import { ApiResponse, Language, NewsTableData } from '@/lib/definitions';
-import { isSuccessResponse } from '@/lib/utils';
+import { isInvalidPageNumber, isSuccessResponse } from '@/lib/utils';
 
 type Props = {
   params: {
@@ -58,7 +58,7 @@ const tabs = [
 // }]
 
 async function fetchNews(lang: Language, page: string, id: string): Promise<ApiResponse<{ rows: NewsTableData[], total: number }>> {
-  page = page ?? "1"
+  page = isInvalidPageNumber(page) ? "1" : page
 
   const url = id ?
     `${process.env.BASE_URL}/api/netronAdmin/news/${id}?adminLang=${lang}&page=${page}` :
@@ -88,7 +88,7 @@ export default async function NewsPage({
 
       <section className='absolute top-28 pt-4 bottom-0 inset-x-0 flex flex-col'>
         {isSuccessResponse(result) ?
-          <TableNews data={result.data.rows} id={id} key={page} /> :
+          <TableNews data={result.data.rows} key={page} /> :
           <div>{result.errorMsg}</div>
         }
 

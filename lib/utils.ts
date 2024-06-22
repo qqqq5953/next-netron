@@ -36,3 +36,12 @@ export function findCurrentLanguage(adminLang: string | null) {
 export function isSuccessResponse<T>(response: ApiResponse<T>): response is DataResponse<T> {
   return response.statusCode === 200;
 }
+
+export function isPositiveInteger(input: string) {
+  const regex = /^[1-9]\d*$/;
+  return regex.test(input);
+}
+
+export function isInvalidPageNumber(page: string | null) {
+  return page !== null && !isPositiveInteger(page)
+}

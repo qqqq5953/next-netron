@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import {
   Table,
@@ -14,86 +14,86 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from '@/app/netronAdmin/_components/Button'
 import { Input } from '@/components/ui/input'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { useParams } from 'next/navigation'
+import { NewsTableData } from '@/lib/definitions'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import DialogAlert from '@/components/DialogAlert'
 
-type InitialData = Record<string, {
-  title: string;
-  isActive: CheckedState;
-  order: string;
-}[]>
-
-const initialData: InitialData = {
-  "all": [
-    { title: "UGG", isActive: false, order: "1" },
-    { title: "【MAYO 鼎恒數位科技", isActive: false, order: "3" },
-    { title: "藥華醫藥", isActive: false, order: "2" }
-  ],
-  "3": [
-    { title: "【MAYO 鼎恒數位科技", isActive: false, order: "3" },
-    { title: "藥華醫藥", isActive: false, order: "2" },
-    { title: "UGG", isActive: false, order: "1" },
-  ],
-  "14": [
-    { title: "藥華醫藥", isActive: false, order: "2" },
-    { title: "UGG", isActive: false, order: "1" },
-    { title: "【MAYO 鼎恒數位科技", isActive: false, order: "3" }
-  ],
+type Props = {
+  data: NewsTableData[]
 }
 
-export default function TableCase() {
-  const params = useParams<{ id: string }>()
+export default function TableCase(props: Props) {
+  const [news, setNews] = useState(props.data);
+  const [openDialog, setOpenDialog] = useState(false);
+  const deletedNews = useRef<{ title: string | null, id: number | null }>({ title: null, id: null })
 
-  const [data, setData] = useState(params?.id ? initialData[params.id] : initialData['all']);
-
-  function toggleCheckbox(index: number, isChecked: CheckedState, type: 'isActive') {
-    const updatedData = [...data];
-    updatedData[index][type] = isChecked;
-    setData(updatedData);
+  function toggleCheckbox(index: number, isChecked: CheckedState, type: 'status') {
+    const updatedNews = [...news];
+    updatedNews[index][type] = isChecked ? 1 : 0;
+    setNews(updatedNews);
   }
 
   function handleOrderChange(index: number, newOrder: string) {
-    const updatedData = [...data];
-    updatedData[index].order = newOrder;
-    setData(updatedData);
+    const updatedNews = [...news];
+    updatedNews[index].sort = Number(newOrder);
+    setNews(updatedNews);
   };
 
+  function handleRemoveNews(closeLoading: () => void) {
+    // delete request with deletedNews.current.id
+    closeLoading()
+    setOpenDialog(false)
+  }
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">動作</TableHead>
-          <TableHead>標題</TableHead>
-          <TableHead>上下架</TableHead>
-          <TableHead>排序</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {data.map((item, index) => {
-          return <TableRow key={item.title}>
-            <TableCell className="font-medium">
-              <div className='flex gap-2'>
-                <Button variant="outline" size="sm">編輯</Button>
-                <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
-                <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
-              </div>
-            </TableCell>
-            <TableCell>{item.title}</TableCell>
-            <TableCell>
-              <Checkbox
-                checked={item.isActive} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'isActive')}
-              />
-            </TableCell>
-            <TableCell>
-              <Input
-                type="number"
-                className="primary-input-focus"
-                value={item.order}
-                onChange={(e) => handleOrderChange(index, e.target.value)}
-              />
-            </TableCell>
+    <ScrollArea>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>標題</TableHead>
+            <TableHead>上下架</TableHead>
+            <TableHead>排序</TableHead>
+            <TableHead>動作</TableHead>
           </TableRow>
-        })}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {news.map((item, index) => {
+            return <TableRow key={item.id}>
+              <TableCell>{item.title}</TableCell>
+              <TableCell>
+                <Checkbox
+                  checked={item.status === 1} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'status')}
+                />
+              </TableCell>
+              <TableCell>
+                <Input
+                  type="number"
+                  className="primary-input-focus"
+                  value={item.sort}
+                  onChange={(e) => handleOrderChange(index, e.target.value)}
+                />
+              </TableCell>
+              <TableCell className="font-medium">
+                <div className='flex gap-2'>
+                  <Button variant="outline" size="sm">編輯</Button>
+                  <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
+                  <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          })}
+        </TableBody>
+      </Table>
+
+      <DialogAlert
+        title={<div className='leading-8'>
+          <span>最新消息</span>
+          <span className="rounded bg-neutral-100 px-1.5 py-0.5 ml-1">{deletedNews.current.title}</span>
+        </div>}
+        open={openDialog}
+        onConfirm={handleRemoveNews}
+        onClose={() => setOpenDialog(false)}
+      />
+    </ScrollArea>
   )
 }
