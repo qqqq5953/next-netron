@@ -9,8 +9,7 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage
 } from '@/components/ui/breadcrumb'
-import { menuNavs } from './Drawer';
-import { MenuItem } from '@/lib/definitions';
+import { menuListObj } from './Drawer';
 
 const redirectPathMap: Record<string, string> = {
   "/netronAdmin/news/2": "/netronAdmin/news",
@@ -22,9 +21,8 @@ const redirectPathMap: Record<string, string> = {
 
 export default function BreadcrumbCustom() {
   const pathname = usePathname()
-  const menuObj = convertToMenuObj(menuNavs)
   const redirectPath = redirectPathMap[pathname]
-  const breadcrumbs = redirectPath ? menuObj[redirectPath] : menuObj[pathname]
+  const breadcrumbs = redirectPath ? menuListObj[redirectPath] : menuListObj[pathname]
 
   const breadcrumbItems = breadcrumbs.map((breadcrumb, index) => {
     const isLastItem = breadcrumbs.length - 1 === index
@@ -42,25 +40,6 @@ export default function BreadcrumbCustom() {
       </Fragment>
     }
   })
-
-  function convertToMenuObj(navs: MenuItem[], parentBreadcrumb: string[] = []) {
-    return navs.reduce((menuObj, nav) => {
-      const currentBreadcrumb = [...parentBreadcrumb, nav.name];
-
-      if (nav.path) {
-        menuObj[nav.path] = currentBreadcrumb;
-      }
-
-      if (nav.children) {
-        menuObj = {
-          ...menuObj,
-          ...convertToMenuObj(nav.children, currentBreadcrumb),
-        };
-      }
-
-      return menuObj;
-    }, {} as Record<MenuItem['path'], MenuItem['name'][]>);
-  };
 
   return <>
     {breadcrumbs.length > 1 ?

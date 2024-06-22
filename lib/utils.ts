@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { ApiResponse, DataResponse, Language } from "./definitions";
+import { ApiResponse, DataResponse, Language, MenuItem } from "./definitions";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -32,6 +32,26 @@ export function findCurrentLanguage(adminLang: string | null) {
 
   return lang
 }
+
+export function convertToMenuObj(navs: MenuItem[], parentBreadcrumb: string[] = []) {
+  return navs.reduce((menuObj, nav) => {
+    const currentBreadcrumb = [...parentBreadcrumb, nav.name];
+
+    if (nav.path) {
+      menuObj[nav.path] = currentBreadcrumb;
+    }
+
+    if (nav.children) {
+      menuObj = {
+        ...menuObj,
+        ...convertToMenuObj(nav.children, currentBreadcrumb),
+      };
+    }
+
+    return menuObj;
+  }, {} as Record<MenuItem['path'], MenuItem['name'][]>);
+};
+
 
 export function isSuccessResponse<T>(response: ApiResponse<T>): response is DataResponse<T> {
   return response.statusCode === 200;

@@ -13,8 +13,9 @@ import { IoNewspaperOutline } from "react-icons/io5";
 import { IoIosCloudOutline } from "react-icons/io";
 import { CgToolbox } from "react-icons/cg";
 import { SiFuturelearn } from "react-icons/si";
+import { convertToMenuObj } from "@/lib/utils";
 
-export const menuNavs: MenuListType = [
+export const menuList: MenuListType = [
   { name: "關於我們", path: "/netronAdmin/about", icon: BsPersonVcard },
   {
     name: "最新消息", path: "", icon: IoNewspaperOutline, children: [
@@ -38,6 +39,8 @@ export const menuNavs: MenuListType = [
     ]
   },
 ]
+
+export const menuListObj = convertToMenuObj(menuList)
 
 const sidebar = {
   open: {
@@ -96,7 +99,7 @@ export default function Drawer() {
         </motion.div>
         <DrawerToggle isOpen={isOpen} toggle={toggleOpen} />
       </div>
-      <MenuList menuList={menuNavs} open={isOpen} />
+      <MenuList menuList={menuList} open={isOpen} />
     </motion.nav>
   );
 };
