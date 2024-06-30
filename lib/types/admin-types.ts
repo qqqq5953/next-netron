@@ -2,7 +2,7 @@ import { IconType } from "react-icons"
 
 
 type ErrorResponse = { statusCode: number, errorMsg: string };
-export type DataResponse<T> = { statusCode: 200, data: T };
+export type DataResponse<T> = { statusCode: 200, data: T, msg?: string };
 export type ApiResponse<T> =
   | ErrorResponse
   | DataResponse<T>
@@ -25,6 +25,7 @@ export type MetaForm = {
 }
 
 export type AboutForm = {
+  id: number,
   m_title: string,
   m_keywords: string,
   m_description: string,

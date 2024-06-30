@@ -9,7 +9,9 @@ type Props = {
 }
 
 async function fetchAbout(lang: Language): Promise<ApiResponse<AboutForm>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about?adminLang=${lang}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about?adminLang=${lang}`, {
+    next: { tags: ['about'] }
+  });
   const result = await res.json();
   return result
 }
