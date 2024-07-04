@@ -10,8 +10,13 @@ type Props = {
 
 
 async function fetchMeta(lang: Language): Promise<ApiResponse<MetaForm>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/news?adminLang=${lang}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/news?adminLang=${lang}`, {
+    next: {
+      tags: ['meta-news']
+    }
+  });
   const result = await res.json();
+
   return result
 }
 

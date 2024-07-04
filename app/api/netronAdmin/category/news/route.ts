@@ -41,10 +41,6 @@ export async function PUT(
 
   try {
     const { title, id } = await request.json();
-
-    console.log('title, id', title, id);
-
-
     const [updated] = await withDbConnection(async (db: PoolConnection) => {
       return db.execute<ResultSetHeader>(updateQuery, [
         title,
@@ -55,16 +51,12 @@ export async function PUT(
     const { affectedRows, changedRows } = updated
 
     if (affectedRows === changedRows) {
-
       return NextResponse.json({
         statusCode: 200,
         msg: "Update successful. All matched rows were modified.",
         data: null
       })
     } else if (changedRows === 0) {
-      // console.log(`${process.env.BASE_URL}/netronAdmin/solutions`);
-
-      // return NextResponse.redirect(`${process.env.BASE_URL}/netronAdmin/solutions`)
       return NextResponse.json({
         statusCode: 204,
         msg: "Update successful but no rows were changed",

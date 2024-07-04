@@ -59,3 +59,32 @@ export async function updateCategoryNews({
 
   return result
 }
+
+export async function updateMeta({
+  id,
+  metaTitle,
+  metaKeyword,
+  metaDescription
+}: {
+  id: number,
+  metaTitle: string,
+  metaKeyword: string | undefined,
+  metaDescription: string,
+}) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/meta/news`, {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      metaTitle,
+      metaKeyword,
+      metaDescription
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('meta-news')
+
+  return result
+}

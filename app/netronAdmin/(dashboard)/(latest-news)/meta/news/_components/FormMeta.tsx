@@ -7,6 +7,8 @@ import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormM
 import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form } from "@/components/ui/form"
 import { MetaForm } from '@/lib/definitions'
+import { updateMeta } from '@/lib/actions'
+import { toast } from "sonner"
 
 type Props = {
   meta: MetaForm
@@ -24,8 +26,30 @@ export default function FormMeta(props: Props) {
     },
   })
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+  async function onSubmit({
+    metaTitle,
+    metaKeyword,
+    metaDescription
+  }: z.infer<typeof formSchema>) {
+    try {
+      const result = await updateMeta({
+        id: props.meta.id,
+        metaTitle,
+        metaKeyword,
+        metaDescription
+      })
+
+      if (result.statusCode === 200) {
+        toast.success(result.msg)
+      } else if (result.statusCode === 204) {
+        toast.info(result.msg)
+      } else {
+        toast.error(result.errorMsg)
+      }
+    } catch (error) {
+      console.log('error', error);
+      toast.error("Oops! Something went wrong.")
+    }
   }
 
   return (
