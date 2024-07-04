@@ -6,41 +6,7 @@ import { motion, useCycle } from "framer-motion";
 import { useDimensions } from "@/hooks/useDimensions";
 import MenuList from "./MenuList";
 import DrawerToggle from "./DrawerToggle";
-import { MenuList as MenuListType } from '@/lib/definitions'
-
-import { BsPersonVcard } from "react-icons/bs";
-import { IoNewspaperOutline } from "react-icons/io5";
-import { IoIosCloudOutline } from "react-icons/io";
-import { CgToolbox } from "react-icons/cg";
-import { SiFuturelearn } from "react-icons/si";
-import { convertToMenuObj } from "@/lib/utils";
-
-export const menuList: MenuListType = [
-  { name: "關於我們", path: "/netronAdmin/about", icon: BsPersonVcard },
-  {
-    name: "最新消息", path: "", icon: IoNewspaperOutline, children: [
-      { name: "分類管理", path: "/netronAdmin/category/news" },
-      { name: "消息清單", path: "/netronAdmin/news" },
-      { name: "Meta 資訊", path: "/netronAdmin/meta/news" },
-    ]
-  },
-  {
-    name: "雲產品服務", path: "", icon: IoIosCloudOutline, children: [
-      { name: "品牌項目", path: "/netronAdmin/brands" },
-      { name: "產品項目", path: "/netronAdmin/product" },
-    ]
-  },
-  { name: "解決方案", path: "/netronAdmin/solutions", icon: CgToolbox },
-  {
-    name: "成功案例", path: "", icon: SiFuturelearn, children: [
-      { name: "分類管理", path: "/netronAdmin/category/case" },
-      { name: "案例清單", path: "/netronAdmin/case" },
-      { name: "Meta 資訊", path: "/netronAdmin/meta/success" },
-    ]
-  },
-]
-
-export const menuListObj = convertToMenuObj(menuList)
+import { menuList } from "@/lib/utils";
 
 const sidebar = {
   open: {

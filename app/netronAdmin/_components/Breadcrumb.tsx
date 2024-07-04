@@ -9,20 +9,11 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage
 } from '@/components/ui/breadcrumb'
-import { menuListObj } from './Drawer';
-
-const redirectPathMap: Record<string, string> = {
-  "/netronAdmin/news/2": "/netronAdmin/news",
-  "/netronAdmin/news/5": "/netronAdmin/news",
-  "/netronAdmin/news/9": "/netronAdmin/news",
-  "/netronAdmin/case/3": "/netronAdmin/case",
-  "/netronAdmin/case/14": "/netronAdmin/case",
-}
+import { getBreadCrumbs } from '@/lib/utils';
 
 export default function BreadcrumbCustom() {
   const pathname = usePathname()
-  const redirectPath = redirectPathMap[pathname]
-  const breadcrumbs = redirectPath ? menuListObj[redirectPath] : menuListObj[pathname]
+  const breadcrumbs = getBreadCrumbs(pathname)
 
   const breadcrumbItems = breadcrumbs.map((breadcrumb, index) => {
     const isLastItem = breadcrumbs.length - 1 === index
