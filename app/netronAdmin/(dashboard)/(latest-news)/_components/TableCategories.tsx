@@ -53,6 +53,8 @@ export default function TableCategories(props: Props) {
                 <DialogCategory
                   type="edit"
                   title={item.title}
+                  id={item.id}
+                  setCategories={setCategories}
                 />
                 <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
               </div>

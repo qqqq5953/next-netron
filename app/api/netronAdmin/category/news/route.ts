@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RowDataPacket } from 'mysql2';
-import { PoolConnection } from "mysql2/promise";
+import { PoolConnection, ResultSetHeader } from "mysql2/promise";
 import { withDbConnection } from "@/lib/mysql";
 import { findCurrentLanguage } from "@/lib/utils";
 
@@ -28,4 +28,64 @@ export async function GET(
       errorMsg: 'Failed to fetch category news data'
     }, { status: 500 })
   }
+}
+
+export async function PUT(
+  request: NextRequest,
+) {
+  const updateQuery = `
+    UPDATE categories 
+    SET title = ?
+    WHERE id = ?;
+  `;
+
+  try {
+    const { title, id } = await request.json();
+
+    console.log('title, id', title, id);
+
+
+    const [updated] = await withDbConnection(async (db: PoolConnection) => {
+      return db.execute<ResultSetHeader>(updateQuery, [
+        title,
+        id
+      ]);
+    });
+
+    const { affectedRows, changedRows } = updated
+
+    if (affectedRows === changedRows) {
+
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update successful. All matched rows were modified.",
+        data: null
+      })
+    } else if (changedRows === 0) {
+      // console.log(`${process.env.BASE_URL}/netronAdmin/solutions`);
+
+      // return NextResponse.redirect(`${process.env.BASE_URL}/netronAdmin/solutions`)
+      return NextResponse.json({
+        statusCode: 204,
+        msg: "Update successful but no rows were changed",
+        data: null
+      })
+    } else {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update partially successful",
+        data: {
+          affectedRows,
+          changedRows
+        }
+      })
+    }
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({
+      statusCode: 500,
+      errorMsg: 'Failed to update about info'
+    }, { status: 500 });
+  }
+
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -9,10 +9,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/app/netronAdmin/_components/Button'
+import { toast } from "sonner"
+import { updateCategoryNews } from '@/lib/actions'
+import { CategoryTableData } from '@/lib/definitions'
 
 type Props = {
   type: "edit" | "add"
   title?: string
+  id?: number
+  setCategories?: Dispatch<SetStateAction<CategoryTableData[]>>
 }
 
 export default function DialogAddCategory(props: Props) {
@@ -24,9 +29,45 @@ export default function DialogAddCategory(props: Props) {
     setCategoryName("")
   }
 
-  function handleSaveCategory() {
+  async function handleSaveCategory() {
     console.log('categoryName', categoryName);
     setIsDialogOpen(false)
+
+    try {
+      if (categoryName && props.id && props.setCategories) {
+        // edit
+        const result = await updateCategoryNews({
+          id: props.id,
+          title: categoryName
+        })
+
+        if (result.statusCode === 200) {
+          toast.success(result.msg)
+        } else if (result.statusCode === 204) {
+          toast.info(result.msg)
+        } else {
+          toast.error(result.errorMsg)
+        }
+
+        props.setCategories(prev => {
+          return prev.map(category => {
+            if (category.id === props.id) {
+              return {
+                ...category,
+                title: categoryName
+              }
+            } else {
+              return category
+            }
+          })
+        })
+      } else {
+        // add
+      }
+    } catch (error) {
+      console.log('error', error);
+      toast.error("Oops! Something went wrong.")
+    }
   }
 
   function handleEdit(category?: string) {

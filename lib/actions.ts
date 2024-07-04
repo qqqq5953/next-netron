@@ -37,3 +37,25 @@ export async function editAbout({
   return result
 }
 
+export async function updateCategoryNews({
+  id,
+  title
+}: {
+  id: number,
+  title: string,
+}) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/news`, {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      title
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('category-news')
+
+  return result
+}

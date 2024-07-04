@@ -1,7 +1,7 @@
 import { ApiResponse, CategoryTableData, Language } from '@/lib/definitions'
 import { isSuccessResponse } from '@/lib/utils'
 import TableCategories from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableCategories'
-import DialogCategory from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/DialogCategory'
+// import DialogCategory from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/DialogCategory'
 
 type Props = {
   searchParams: {
@@ -10,7 +10,11 @@ type Props = {
 }
 
 async function fetchCategoryForNews(lang: Language): Promise<ApiResponse<CategoryTableData[]>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/news?adminLang=${lang}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/news?adminLang=${lang}`, {
+    next: {
+      tags: ['category-news']
+    }
+  });
   const result = await res.json();
   return result
 }
@@ -22,7 +26,7 @@ export default async function CategoryNewsPage({ searchParams }: Props) {
     <>
       <div className='flex items-center'>
         <h2 className='text-3xl font-medium'>分類管理</h2>
-        <DialogCategory type="add" />
+        {/* <DialogCategory type="add" /> */}
       </div>
 
       <section>

@@ -49,8 +49,13 @@ export type BrandTableData = {
 }
 
 export type CategoryTableData = {
+  id: number;
+  lang: string;
+  type: 'news' | 'case';
   title: string;
   sort: string;
+  created_at: string | null,
+  updated_at: string | null,
 }
 
 export type ProducTableData = {
