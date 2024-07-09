@@ -9,6 +9,7 @@ import { Form } from "@/components/ui/form"
 import { MetaForm } from '@/lib/definitions'
 import { updateMeta } from '@/lib/actions'
 import { toast } from "sonner"
+import { handleModifyApiResponse } from '@/lib/utils'
 
 type Props = {
   meta: MetaForm
@@ -39,13 +40,7 @@ export default function FormMeta(props: Props) {
         metaDescription
       })
 
-      if (result.statusCode === 200) {
-        toast.success(result.msg)
-      } else if (result.statusCode === 204) {
-        toast.info(result.msg)
-      } else {
-        toast.error(result.errorMsg)
-      }
+      handleModifyApiResponse(result)
     } catch (error) {
       console.log('error', error);
       toast.error("Oops! Something went wrong.")

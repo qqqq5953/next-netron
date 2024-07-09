@@ -13,7 +13,7 @@ import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 export const coverImageSchema = {
   coverImage: z.any()
     .refine((file: File) => file instanceof File || !!file, "請上傳圖片")
-    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 5MB")
+    .refine((file: File) => file?.size < MAX_FILE_SIZE, "檔案限制為 10MB")
     .refine((file: File) => checkFileType(file), "圖片只能上傳 JPG、JPEG、PNG").optional(),
 }
 

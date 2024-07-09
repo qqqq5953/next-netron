@@ -1,19 +1,12 @@
 import FormAbout from '@/app/netronAdmin/(dashboard)/about/_components/FormAbout'
-import { AboutForm, ApiResponse, Language } from '@/lib/definitions';
+import { fetchAbout } from '@/lib/data';
+import { Language } from '@/lib/definitions';
 import { isSuccessResponse } from '@/lib/utils';
 
 type Props = {
   searchParams: {
     adminLang: Language
   }
-}
-
-async function fetchAbout(lang: Language): Promise<ApiResponse<AboutForm>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about?adminLang=${lang}`, {
-    next: { tags: ['about'] }
-  });
-  const result = await res.json();
-  return result
 }
 
 export default async function AboutPage({ searchParams }: Props) {

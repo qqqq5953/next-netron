@@ -1,5 +1,7 @@
 import {
-  ApiResponse,
+  ApiGetResponse,
+  ApiPostResponse,
+  ApiPutResponse,
   DataResponse,
   MenuItem,
   MenuList,
@@ -9,11 +11,14 @@ import {
   NewsTableData,
   CategoryTableData,
   BrandTableData,
-  ProducTableData
+  ProducTableData,
+  SolutionData
 } from '@/lib/types/admin-types'
 
 export type {
-  ApiResponse,
+  ApiGetResponse,
+  ApiPostResponse,
+  ApiPutResponse,
   DataResponse,
   MenuItem,
   MenuList,
@@ -23,5 +28,6 @@ export type {
   NewsTableData,
   CategoryTableData,
   BrandTableData,
-  ProducTableData
+  ProducTableData,
+  SolutionData
 }

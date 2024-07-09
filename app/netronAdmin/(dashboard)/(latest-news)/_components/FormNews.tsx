@@ -20,17 +20,21 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { NewsTableData } from '@/lib/definitions'
+import { updateNews, addNews } from '@/lib/actions'
+import { handleModifyApiResponse, toLocalISOString } from '@/lib/utils'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
   ...metaSchema,
   ...customLinkSchema,
   ...eventSchema,
   ...articleSchema,
-  ...contentSchema,
+  ...contentSchema
 })
 
 type Props = {
   type: "edit" | "add"
+  lang?: string
   news?: NewsTableData
 }
 
@@ -45,7 +49,7 @@ export default function FormAddNews(props: Props) {
       metaDescription: props.news?.m_description ?? "",
       customizedLink: props.news?.m_url ?? "",
 
-      eventType: props.news?.mode ?? "",
+      eventType: props.news?.mode ?? null,
       speaker: props.news?.lecturer ?? "",
       eventStartTime: props.news?.start_at?.replace(/ /, '') ?? "",
       eventEndTime: props.news?.end_at?.replace(/ /, '') ?? "",
@@ -67,7 +71,89 @@ export default function FormAddNews(props: Props) {
   })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    console.log(data);
+    const {
+      metaTitle,
+      metaKeyword,
+      metaDescription,
+      customizedLink,
+      eventType,
+      speaker,
+      eventStartTime,
+      eventEndTime,
+      eventCost,
+      currency,
+      ticketDeadline,
+      eventWebsite,
+      hostCompany,
+      hostWeb,
+      articleDate,
+      category,
+      title,
+      coverImage,
+      content,
+    } = data
+
+    try {
+      let result
+
+      if (props.news?.id) {
+        result = await updateNews({
+          id: props.news.id,
+          m_title: metaTitle,
+          m_keywords: metaKeyword ?? "",
+          m_description: metaDescription,
+          m_url: customizedLink,
+          mode: eventType,
+          lecturer: speaker,
+          start_at: eventStartTime,
+          end_at: eventEndTime,
+          price: eventCost,
+          currency: currency,
+          soldout_at: ticketDeadline,
+          website: eventWebsite,
+          hostCompany: hostCompany,
+          hostWeb: hostWeb,
+          updated_at: toLocalISOString(articleDate),
+          cid: +category,
+          title: title,
+          img: coverImage, // 無法傳 File 到 server action
+          content: content
+        })
+      } else {
+        result = await addNews({
+          m_title: metaTitle,
+          m_keywords: metaKeyword ?? "",
+          m_description: metaDescription,
+          m_url: customizedLink,
+          mode: eventType,
+          lecturer: speaker,
+          start_at: eventStartTime,
+          end_at: eventEndTime,
+          price: eventCost,
+          currency: currency,
+          soldout_at: ticketDeadline,
+          website: eventWebsite,
+          hostCompany: hostCompany,
+          hostWeb: hostWeb,
+          updated_at: toLocalISOString(articleDate),
+          cid: +category,
+          title: title,
+          img: "test.png", // 無法傳 File 到 server action
+          content: content,
+          lang: props.lang ?? 'tw',
+          post_date: null,
+          location: null,
+          county: null,
+          street: null,
+          created_at: "2024-07-05",
+        })
+      }
+
+      handleModifyApiResponse(result)
+    } catch (error) {
+      toast.error("Oops! Something went wrong.")
+    }
+    setOpen(false)
   }
 
   return (

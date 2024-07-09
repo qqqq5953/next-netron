@@ -1,9 +1,10 @@
 import TableCase from '@/app/netronAdmin/(dashboard)/(successful-case)/_components/TableCase'
 import FormAddCase from '@/app/netronAdmin/(dashboard)/(successful-case)/_components/FormAddCase'
 import TabsNav from '@/components/TabsNav'
-import { ApiResponse, Language, NewsTableData } from '@/lib/definitions'
-import { isInvalidPageNumber, isSuccessResponse } from '@/lib/utils'
+import { Language } from '@/lib/definitions'
+import { isSuccessResponse } from '@/lib/utils'
 import Paginations from '@/components/Paginations'
+import { fetchCases } from '@/lib/data'
 
 type Props = {
   params: {
@@ -20,19 +21,6 @@ const tabs = [
   { name: "成功案例", path: "/netronAdmin/case/3" },
   { name: "MSP 新世代雲端託管", path: "/netronAdmin/case/14" },
 ]
-
-async function fetchCases(lang: Language, page: string, id: string): Promise<ApiResponse<{ rows: NewsTableData[], total: number }>> {
-  page = isInvalidPageNumber(page) ? "1" : page
-  lang = lang ?? "tw"
-
-  const url = id ?
-    `${process.env.BASE_URL}/api/netronAdmin/cases/${id}?adminLang=${lang}&page=${page}` :
-    `${process.env.BASE_URL}/api/netronAdmin/cases?adminLang=${lang}&page=${page}`
-
-  const res = await fetch(url);
-  const result = await res.json();
-  return result
-}
 
 export default async function CasePage({
   searchParams: { adminLang, page },

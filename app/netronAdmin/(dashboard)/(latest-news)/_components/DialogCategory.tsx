@@ -12,6 +12,7 @@ import { Button } from '@/app/netronAdmin/_components/Button'
 import { toast } from "sonner"
 import { updateCategoryNews } from '@/lib/actions'
 import { CategoryTableData } from '@/lib/definitions'
+import { handleModifyApiResponse } from '@/lib/utils'
 
 type Props = {
   type: "edit" | "add"
@@ -41,13 +42,7 @@ export default function DialogAddCategory(props: Props) {
           title: categoryName
         })
 
-        if (result.statusCode === 200) {
-          toast.success(result.msg)
-        } else if (result.statusCode === 204) {
-          toast.info(result.msg)
-        } else {
-          toast.error(result.errorMsg)
-        }
+        handleModifyApiResponse(result)
 
         props.setCategories(prev => {
           return prev.map(category => {

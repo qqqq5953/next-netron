@@ -1,9 +1,28 @@
 import { IconType } from "react-icons"
 
+// export type ApiResponseBase = {
+//   statusCode: number;
+// };
+
+// export type ErrorResponse = ApiResponseBase & {
+//   errorMsg: string;
+// };
+// export type GetDataResponse<T> = ApiResponseBase & {
+//   data: T;
+// };
 
 type ErrorResponse = { statusCode: number, errorMsg: string };
-export type DataResponse<T> = { statusCode: 200, data: T, msg?: string };
-export type ApiResponse<T> =
+
+export type DataResponse<T> = { statusCode: 200 | 204, data: T, msg?: string };
+export type ApiGetResponse<T> =
+  | ErrorResponse
+  | DataResponse<T>
+
+export type ApiPostResponse<T> =
+  | ErrorResponse
+  | DataResponse<T>
+
+export type ApiPutResponse<T> =
   | ErrorResponse
   | DataResponse<T>
 

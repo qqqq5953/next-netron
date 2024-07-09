@@ -1,22 +1,13 @@
-import { ApiResponse, CategoryTableData, Language } from '@/lib/definitions'
+import { Language } from '@/lib/definitions'
 import { isSuccessResponse } from '@/lib/utils'
 import TableCategories from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableCategories'
+import { fetchCategoryForNews } from '@/lib/data'
 // import DialogCategory from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/DialogCategory'
 
 type Props = {
   searchParams: {
     adminLang: Language
   }
-}
-
-async function fetchCategoryForNews(lang: Language): Promise<ApiResponse<CategoryTableData[]>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/news?adminLang=${lang}`, {
-    next: {
-      tags: ['category-news']
-    }
-  });
-  const result = await res.json();
-  return result
 }
 
 export default async function CategoryNewsPage({ searchParams }: Props) {

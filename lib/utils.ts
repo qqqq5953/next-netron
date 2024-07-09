@@ -1,18 +1,20 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { ApiResponse, DataResponse, Language, MenuItem } from "./definitions";
+import { ApiGetResponse, ApiPostResponse, ApiPutResponse, Language, MenuItem } from "./definitions";
 import { MenuList as MenuListType } from '@/lib/definitions'
 import { BsPersonVcard } from "react-icons/bs";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { IoIosCloudOutline } from "react-icons/io";
 import { CgToolbox } from "react-icons/cg";
 import { SiFuturelearn } from "react-icons/si";
+import { DataResponse } from "./types/admin-types";
+import { toast } from "sonner"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const MAX_FILE_SIZE = 5000000;
+export const MAX_FILE_SIZE = 10000000; // 10MB
 
 export const ACCEPTED_IMAGE_TYPES = [
   "image/jpg",
@@ -58,9 +60,26 @@ export function convertToMenuObj(navs: MenuItem[], parentBreadcrumb: string[] = 
   }, {} as Record<MenuItem['path'], MenuItem['name'][]>);
 };
 
+export function handleModifyApiResponse<T>(response: ApiPostResponse<T> | ApiPutResponse<T>): void {
+  if (isSuccessResponse(response)) {
+    toast.success(response.msg)
+  } else if (isSuccess204Response(response)) {
+    toast.info(response.msg)
+  } else {
+    toast.error(response.errorMsg)
+  }
+}
 
-export function isSuccessResponse<T>(response: ApiResponse<T>): response is DataResponse<T> {
-  return response.statusCode === 200;
+export function isSuccessResponse<T>(
+  response: ApiGetResponse<T> | ApiPostResponse<T> | ApiPutResponse<T>
+): response is DataResponse<T> {
+  return response.statusCode === 200
+}
+
+export function isSuccess204Response<T>(
+  response: ApiPostResponse<T> | ApiPutResponse<T>
+): response is DataResponse<T> {
+  return response.statusCode === 204
 }
 
 export function isPositiveInteger(input: string) {
@@ -70,6 +89,12 @@ export function isPositiveInteger(input: string) {
 
 export function isInvalidPageNumber(page: string | null) {
   return page !== null && !isPositiveInteger(page)
+}
+
+export function toLocalISOString(date: Date) {
+  const timezoneOffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
+  const localISOTime = new Date(date.getTime() - timezoneOffset).toISOString();
+  return localISOTime.slice(0, 16);
 }
 
 export const menuList: MenuListType = [

@@ -18,8 +18,8 @@ import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/
 import FormTitleField, { titleSchema } from '../../../_components/FormTitleField'
 import CustomEditorField, { contentSchema } from '../../../_components/CustomEditorField'
 import FormCategoryField, { categorySchema } from './FormCategoryField'
-import { SolutionData } from '@/lib/types/admin-types'
 import FormNewsSection, { newsItemsSchema } from '../../(cloud)/_components/FormNewsSection'
+import { SolutionData } from '@/lib/definitions'
 
 const formSchema = z.object({
   ...metaSchema,

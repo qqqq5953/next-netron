@@ -1,6 +1,7 @@
-import { ApiResponse, Language, MetaForm } from "@/lib/definitions";
+import { Language } from "@/lib/definitions";
 import FormMeta from "./_components/FormMeta"
 import { isSuccessResponse } from "@/lib/utils";
+import { fetchMetaNews } from "@/lib/data";
 
 type Props = {
   searchParams: {
@@ -8,20 +9,8 @@ type Props = {
   }
 }
 
-
-async function fetchMeta(lang: Language): Promise<ApiResponse<MetaForm>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/news?adminLang=${lang}`, {
-    next: {
-      tags: ['meta-news']
-    }
-  });
-  const result = await res.json();
-
-  return result
-}
-
 export default async function MetaNewsPage({ searchParams }: Props) {
-  const result = await fetchMeta(searchParams.adminLang)
+  const result = await fetchMetaNews(searchParams.adminLang)
 
   return (
     <>

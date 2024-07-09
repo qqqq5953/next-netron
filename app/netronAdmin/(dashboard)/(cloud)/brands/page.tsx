@@ -1,7 +1,8 @@
 import FormBrand from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormBrand'
 import TableBrand from '@/app/netronAdmin/(dashboard)/(cloud)/_components/TableBrand'
 import Paginations from '@/components/Paginations'
-import { ApiResponse, BrandTableData, Language } from '@/lib/definitions'
+import { fetchBrands } from '@/lib/data'
+import { Language } from '@/lib/definitions'
 import { isSuccessResponse } from '@/lib/utils'
 
 type Props = {
@@ -9,12 +10,6 @@ type Props = {
     adminLang: Language
     page: string
   }
-}
-
-async function fetchBrands(lang: Language, page: string): Promise<ApiResponse<{ rows: BrandTableData[], total: number }>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands?adminLang=${lang}&page=${page}`);
-  const result = await res.json();
-  return result
 }
 
 export default async function BrandPage({

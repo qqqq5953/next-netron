@@ -2,8 +2,9 @@ import FormNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/Fo
 import TableNews from '@/app/netronAdmin/(dashboard)/(latest-news)/_components/TableNews'
 import Paginations from '@/components/Paginations';
 import TabsNav from '@/components/TabsNav'
-import { ApiResponse, Language, NewsTableData } from '@/lib/definitions';
-import { isInvalidPageNumber, isSuccessResponse } from '@/lib/utils';
+import { fetchNews } from '@/lib/data';
+import { Language } from '@/lib/definitions';
+import { isSuccessResponse } from '@/lib/utils';
 
 type Props = {
   params: {
@@ -57,18 +58,6 @@ const tabs = [
 //   "hostWeb": "https://www.netron.asia/"
 // }]
 
-async function fetchNews(lang: Language, page: string, id: string): Promise<ApiResponse<{ rows: NewsTableData[], total: number }>> {
-  page = isInvalidPageNumber(page) ? "1" : page
-
-  const url = id ?
-    `${process.env.BASE_URL}/api/netronAdmin/news/${id}?adminLang=${lang}&page=${page}` :
-    `${process.env.BASE_URL}/api/netronAdmin/news?adminLang=${lang}&page=${page}`
-
-  const res = await fetch(url);
-  const result = await res.json();
-  return result
-}
-
 export default async function NewsPage({
   searchParams: { adminLang, page },
   params: { id }
@@ -79,7 +68,7 @@ export default async function NewsPage({
     <div className='relative flex flex-col gap-4 h-full'>
       <div className='absolute top-0 inset-x-0 flex items-center'>
         <h2 className='text-3xl font-medium'>消息清單</h2>
-        <FormNews type="add" />
+        <FormNews type="add" lang={adminLang} />
       </div>
 
       <div className='absolute top-16'>

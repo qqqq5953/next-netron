@@ -17,9 +17,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { z } from "zod"
 
 export const eventSchema = {
-  eventType: z.string().min(1, {
-    message: "活動類型不得空白",
-  }),
+  eventType: z.nullable(z.enum(["OnlineEventAttendanceMode", "OfflineEventAttendanceMode", "MixedEventAttendanceMode"])),
   speaker: z.string().min(1, {
     message: "主講人不得空白",
   }),

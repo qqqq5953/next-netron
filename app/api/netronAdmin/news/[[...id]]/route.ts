@@ -3,7 +3,7 @@ import { withDbConnection } from "@/lib/mysql";
 import { Language } from "@/lib/definitions";
 import { findCurrentLanguage } from "@/lib/utils";
 import { RowDataPacket } from 'mysql2';
-import { PoolConnection } from "mysql2/promise";
+import { PoolConnection, ResultSetHeader } from "mysql2/promise";
 
 type QueryInfo = {
   baseQuery: string;
@@ -115,4 +115,242 @@ export async function GET(
       errorMsg: 'Failed to fetch news data'
     }, { status: 500 });
   }
+}
+
+export async function PUT(
+  request: NextRequest,
+) {
+  const updateQuery = `
+    UPDATE news 
+    SET m_title = ?,
+    m_keywords = ?,
+    m_description = ?,
+    m_url = ?,
+    mode = ?,
+    lecturer = ?,
+    start_at = ?,
+    end_at = ?,
+    price = ?,
+    currency = ?,
+    soldout_at = ?,
+    website = ?,
+    hostCompany = ?,
+    hostWeb = ?,
+    updated_at = ?,
+    cid = ?,
+    title = ?,
+    img = ?,
+    content = ?
+    WHERE id = ?;
+  `;
+
+  try {
+    const data = await request.json();
+
+    const {
+      id,
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      mode,
+      lecturer,
+      start_at,
+      end_at,
+      price,
+      currency,
+      soldout_at,
+      website,
+      hostCompany,
+      hostWeb,
+      updated_at,
+      cid,
+      title,
+      img,
+      content
+    } = data
+
+    const [updated] = await withDbConnection(async (db: PoolConnection) => {
+      return db.execute<ResultSetHeader>(updateQuery, [
+        m_title,
+        m_keywords,
+        m_description,
+        m_url,
+        mode,
+        lecturer,
+        start_at,
+        end_at,
+        price,
+        currency,
+        soldout_at,
+        website,
+        hostCompany,
+        hostWeb,
+        updated_at,
+        cid,
+        title,
+        img,
+        content,
+        id,
+      ]);
+    });
+
+    const { affectedRows, changedRows } = updated
+
+    if (affectedRows === changedRows) {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update successful. All matched rows were modified.",
+        data: null
+      })
+    } else if (changedRows === 0) {
+      return NextResponse.json({
+        statusCode: 204,
+        msg: "Update successful but no rows were changed",
+        data: null
+      })
+    } else {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update partially successful",
+        data: {
+          affectedRows,
+          changedRows
+        }
+      })
+    }
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({
+      statusCode: 500,
+      errorMsg: 'Failed to update news'
+    }, { status: 500 });
+  }
+}
+
+export async function POST(
+  request: NextRequest,
+) {
+  const createQuery = `
+    INSERT INTO news (
+      title,
+      cid,
+      description,
+      img,
+      content,
+      lang,
+      status,
+      sort,
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      edit_at,
+      post_date,
+      created_at,
+      updated_at,
+      \`show\`,
+      type,
+      mode,
+      location,
+      county,
+      street,
+      lecturer,
+      start_at,
+      end_at,
+      price,
+      currency,
+      soldout_at,
+      website,
+      hostCompany,
+      hostWeb
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  `;
+
+  const maxSortQuery = 'SELECT MAX(sort) AS max_sort_value FROM news';
+
+  try {
+    const {
+      title,
+      cid,
+      img,
+      content,
+      lang,
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      post_date,
+      created_at,
+      updated_at,
+      mode,
+      location,
+      county,
+      street,
+      lecturer,
+      start_at,
+      end_at,
+      price,
+      currency,
+      soldout_at,
+      website,
+      hostCompany,
+      hostWeb
+    } = await request.json();
+
+    const [created] = await withDbConnection(async (db: PoolConnection) => {
+      const [rows] = await db.execute<RowDataPacket[]>(maxSortQuery);
+      const sort_value = rows[0].max_sort_value + 1
+
+      return await db.execute<ResultSetHeader>(createQuery, [
+        title,
+        cid,
+        null, // description
+        img,
+        content,
+        lang,
+        1, // status
+        sort_value, // sort
+        m_title,
+        m_keywords,
+        m_description,
+        m_url,
+        (new Date()).toLocaleDateString('zh-TW'), // edit_at,
+        post_date,
+        created_at,
+        updated_at,
+        1, // show,
+        "news", // type,
+        mode,
+        location,
+        county,
+        street,
+        lecturer,
+        start_at,
+        end_at,
+        price,
+        currency,
+        soldout_at,
+        website,
+        hostCompany,
+        hostWeb
+      ]);
+    });
+
+    console.log('created', created);
+
+    return NextResponse.json({
+      statusCode: 200,
+      msg: "News article created successfully.",
+      data: null
+    })
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({
+      statusCode: 500,
+      errorMsg: 'Failed to create news article'
+    }, { status: 500 });
+  }
+
 }

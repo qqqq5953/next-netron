@@ -7,8 +7,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from '@/app/netronAdmin/_components/Button'
-import { SolutionData } from '@/lib/types/admin-types'
 import FormSolution from './FormSolution'
+import { SolutionData } from "@/lib/definitions"
 
 type Props = {
   initialData: SolutionData[]

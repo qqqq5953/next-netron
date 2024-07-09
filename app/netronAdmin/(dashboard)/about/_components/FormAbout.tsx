@@ -12,7 +12,8 @@ import FormCustomLink, { customLinkSchema } from "@/app/netronAdmin/_components/
 import CustomEditorField, { contentSchema } from "@/app/netronAdmin/_components/CustomEditorField"
 import { AboutForm } from '@/lib/definitions'
 import { toast } from "sonner"
-import { editAbout } from '@/lib/actions'
+import { updateAbout } from '@/lib/actions'
+import { handleModifyApiResponse } from '@/lib/utils'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -38,7 +39,7 @@ export default function FormAbout(props: Props) {
 
   async function onSubmit({ metaTitle, metaKeyword, metaDescription, customizedLink, content }: z.infer<typeof formSchema>) {
     try {
-      const result = await editAbout({
+      const result = await updateAbout({
         id: props.about.id,
         metaTitle,
         metaKeyword,
@@ -47,13 +48,7 @@ export default function FormAbout(props: Props) {
         content
       })
 
-      if (result.statusCode === 200) {
-        toast.success(result.msg)
-      } else if (result.statusCode === 204) {
-        toast.info(result.msg)
-      } else {
-        toast.error(result.errorMsg)
-      }
+      handleModifyApiResponse(result)
     } catch (error) {
       console.log('error', error);
       toast.error("Oops! Something went wrong.")

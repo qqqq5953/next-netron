@@ -1,7 +1,7 @@
 import FormProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProduct'
 import TableProduct from '@/app/netronAdmin/(dashboard)/(cloud)/_components/TableProduct'
 import { fetchAllBrands, fetchAllNews, fetchProducts } from '@/lib/data'
-import { ApiResponse, BrandTableData, Language, NewsTableData, ProducTableData } from '@/lib/definitions'
+import { Language } from '@/lib/definitions'
 import { isSuccessResponse } from '@/lib/utils'
 
 type Props = {

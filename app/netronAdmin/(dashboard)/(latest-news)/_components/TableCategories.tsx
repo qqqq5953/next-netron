@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/app/netronAdmin/_components/Button'
 import DialogCategory from './DialogCategory'
-import { CategoryTableData } from '@/lib/types/admin-types'
+import { CategoryTableData } from '@/lib/definitions'
 
 type Props = {
   initialData: CategoryTableData[]
