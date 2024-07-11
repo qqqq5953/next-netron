@@ -115,7 +115,7 @@ export type NewsTableData = {
   title: string,
   cid: number,
   description: string,
-  img: string,
+  img: string | null, // 暫時 null
   content: string,
   lang: string,
   status: 0 | 1,
@@ -137,7 +137,7 @@ export type NewsTableData = {
   lecturer: string | null,
   start_at: string | null,
   end_at: string | null,
-  price: string | null,
+  price: number | null,
   currency: "TWD" | "USD" | null,
   soldout_at: string | null,
   website: string | null,

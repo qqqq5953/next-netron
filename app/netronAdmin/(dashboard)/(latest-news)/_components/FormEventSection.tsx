@@ -18,9 +18,7 @@ import { z } from "zod"
 
 export const eventSchema = {
   eventType: z.nullable(z.enum(["OnlineEventAttendanceMode", "OfflineEventAttendanceMode", "MixedEventAttendanceMode"])),
-  speaker: z.string().min(1, {
-    message: "主講人不得空白",
-  }),
+  speaker: z.string().nullable(), // 主講人
   eventStartTime: z.string().refine(val => {
     const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
     return dateTimeRegex.test(val);
@@ -33,9 +31,7 @@ export const eventSchema = {
   }, {
     message: "日期格式不正確，應為 yyyy-mm-ddThh:mm",
   }),
-  eventCost: z.string().min(1, {
-    message: "活動費用不得空白",
-  }),
+  eventCost: z.number().nullable(), // 活動費用
   currency: z.enum(["TWD", "USD"], {
     errorMap: (error, ctx) => {
       const typedError = error as z.ZodIssueOptionalMessage & { options?: string[] };
@@ -52,21 +48,16 @@ export const eventSchema = {
     }
   }
   ),
-  ticketDeadline: z.string().refine(val => {
+  ticketDeadline: z.string().nullable().refine(val => {
+    if (!val) return true
     const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
     return dateTimeRegex.test(val);
   }, {
     message: "日期格式不正確，應為 yyyy-mm-ddThh:mm",
   }),
-  eventWebsite: z.string().min(1, {
-    message: "活動網站不得空白",
-  }),
-  hostCompany: z.string().min(1, {
-    message: "公司名稱不得空白",
-  }),
-  hostWeb: z.string().min(1, {
-    message: "公司官網不得空白",
-  }),
+  eventWebsite: z.string().nullable(), // 活動網站
+  hostCompany: z.string().nullable(), // 公司名稱
+  hostWeb: z.string().nullable() // 公司官網
 }
 
 type Props = {
@@ -173,7 +164,9 @@ export default function FormEventSection(props: Props) {
               <Input
                 className="primary-input-focus"
                 placeholder="請輸入金額"
-                {...field} />
+                {...field}
+                value={field.value ?? ""}
+              />
             </FormControl>
             <FormMessage className='mt-1.5' />
           </FormItem>
@@ -227,7 +220,9 @@ export default function FormEventSection(props: Props) {
                 <Input
                   className="primary-input-focus"
                   placeholder="請輸入活動網站"
-                  {...field} />
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormMessage className='mt-1.5' />
             </div>
@@ -247,7 +242,9 @@ export default function FormEventSection(props: Props) {
                 <Input
                   className="primary-input-focus"
                   placeholder="公司名稱"
-                  {...field} />
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormMessage className='mt-1.5' />
             </FormItem>
@@ -262,7 +259,9 @@ export default function FormEventSection(props: Props) {
                 <Input
                   className="primary-input-focus"
                   placeholder="公司官網"
-                  {...field} />
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormMessage className='mt-1.5' />
             </FormItem>

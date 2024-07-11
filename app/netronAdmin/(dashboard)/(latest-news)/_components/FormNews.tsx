@@ -53,7 +53,7 @@ export default function FormAddNews(props: Props) {
       speaker: props.news?.lecturer ?? "",
       eventStartTime: props.news?.start_at?.replace(/ /, '') ?? "",
       eventEndTime: props.news?.end_at?.replace(/ /, '') ?? "",
-      eventCost: props.news?.price ?? "",
+      eventCost: props.news?.price ?? null,
       currency: props.news?.currency ?? "TWD",
       ticketDeadline: props.news?.soldout_at ?? "",
       eventWebsite: props.news?.website ?? "",
@@ -93,6 +93,9 @@ export default function FormAddNews(props: Props) {
       content,
     } = data
 
+    console.log('coverImage', coverImage);
+
+
     try {
       let result
 
@@ -100,45 +103,45 @@ export default function FormAddNews(props: Props) {
         result = await updateNews({
           id: props.news.id,
           m_title: metaTitle,
-          m_keywords: metaKeyword ?? "",
-          m_description: metaDescription,
-          m_url: customizedLink,
+          m_keywords: metaKeyword || null,
+          m_description: metaDescription || null,
+          m_url: customizedLink || null,
           mode: eventType,
-          lecturer: speaker,
+          lecturer: speaker || null,
           start_at: eventStartTime,
           end_at: eventEndTime,
-          price: eventCost,
+          price: eventCost || null,
           currency: currency,
-          soldout_at: ticketDeadline,
-          website: eventWebsite,
-          hostCompany: hostCompany,
-          hostWeb: hostWeb,
+          soldout_at: ticketDeadline || null,
+          website: eventWebsite || null,
+          hostCompany: hostCompany || null,
+          hostWeb: hostWeb || null,
           updated_at: toLocalISOString(articleDate),
           cid: +category,
           title: title,
-          img: coverImage, // 無法傳 File 到 server action
+          img: coverImage || null, // 無法傳 File 到 server action
           content: content
         })
       } else {
         result = await addNews({
           m_title: metaTitle,
-          m_keywords: metaKeyword ?? "",
-          m_description: metaDescription,
-          m_url: customizedLink,
+          m_keywords: metaKeyword || null,
+          m_description: metaDescription || null,
+          m_url: customizedLink || null,
           mode: eventType,
           lecturer: speaker,
           start_at: eventStartTime,
           end_at: eventEndTime,
-          price: eventCost,
+          price: eventCost || null,
           currency: currency,
-          soldout_at: ticketDeadline,
-          website: eventWebsite,
-          hostCompany: hostCompany,
-          hostWeb: hostWeb,
+          soldout_at: ticketDeadline || null,
+          website: eventWebsite || null,
+          hostCompany: hostCompany || null,
+          hostWeb: hostWeb || null,
           updated_at: toLocalISOString(articleDate),
           cid: +category,
           title: title,
-          img: "test.png", // 無法傳 File 到 server action
+          img: coverImage || null, // (coverImage) 無法傳 File 到 server action
           content: content,
           lang: props.lang ?? 'tw',
           post_date: null,
