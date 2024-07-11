@@ -3,7 +3,7 @@ import { withDbConnection } from "@/lib/mysql";
 import { Language } from "@/lib/definitions";
 import { findCurrentLanguage } from "@/lib/utils";
 import { RowDataPacket } from 'mysql2';
-import { PoolConnection } from "mysql2/promise";
+import { PoolConnection, ResultSetHeader } from "mysql2/promise";
 
 type QueryInfo = {
   baseQuery: string;
@@ -93,4 +93,154 @@ export async function GET(
       errorMsg: 'Failed to fetch brand data'
     }, { status: 500 });
   }
+}
+
+export async function PUT(
+  request: NextRequest,
+) {
+  const updateQuery = `
+    UPDATE brands 
+    SET m_title = ?,
+    m_keywords = ?,
+    m_description = ?,
+    m_url = ?,
+    title = ?,
+    content = ?,
+    updated_at = ?,
+    img = ?
+    WHERE id = ?;
+  `;
+
+  try {
+    const {
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      title,
+      content,
+      img,
+      updated_at,
+      id,
+    } = await request.json();
+    const [updated] = await withDbConnection(async (db: PoolConnection) => {
+      return db.execute<ResultSetHeader>(updateQuery, [
+        m_title,
+        m_keywords,
+        m_description,
+        m_url,
+        title,
+        content,
+        updated_at,
+        img,
+        id,
+      ]);
+    });
+
+    const { affectedRows, changedRows } = updated
+
+    if (affectedRows === changedRows) {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update successful. All matched rows were modified.",
+        data: null
+      })
+    } else if (changedRows === 0) {
+      return NextResponse.json({
+        statusCode: 204,
+        msg: "Update successful but no rows were changed",
+        data: null
+      })
+    } else {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update partially successful",
+        data: {
+          affectedRows,
+          changedRows
+        }
+      })
+    }
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({
+      statusCode: 500,
+      errorMsg: 'Failed to update about info'
+    }, { status: 500 });
+  }
+
+}
+
+export async function POST(
+  request: NextRequest,
+) {
+  const createQuery = `
+    INSERT INTO brands (
+      title,
+      img,
+      sort, 
+      content,
+      m_url,
+      lang,
+      edit_at,
+      created_at,
+      updated_at,
+      m_title,
+      m_description,
+      m_keywords
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  `;
+
+  const maxSortQuery = 'SELECT MAX(sort) AS max_sort_value FROM brands';
+
+  try {
+    const {
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      title,
+      content,
+      img,
+      lang,
+      updated_at,
+      created_at,
+      edit_at,
+    } = await request.json();
+
+    const [created] = await withDbConnection(async (db: PoolConnection) => {
+      const [rows] = await db.execute<RowDataPacket[]>(maxSortQuery);
+      const sort_value = rows[0].max_sort_value + 1
+
+      return await db.execute<ResultSetHeader>(createQuery, [
+        title,
+        img,
+        sort_value, // sort, 
+        content,
+        m_url,
+        lang,
+        edit_at,  //edit_at,
+        created_at,
+        updated_at,
+        m_title,
+        m_description,
+        m_keywords,
+      ]);
+    });
+
+    console.log('created', created);
+
+    return NextResponse.json({
+      statusCode: 200,
+      msg: "Brand created successfully.",
+      data: null
+    })
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({
+      statusCode: 500,
+      errorMsg: 'Failed to update brand info'
+    }, { status: 500 });
+  }
+
 }

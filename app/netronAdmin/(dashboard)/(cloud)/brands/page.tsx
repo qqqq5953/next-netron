@@ -21,7 +21,7 @@ export default async function BrandPage({
     <div className='relative flex flex-col gap-4 h-full'>
       <div className='absolute top-0 inset-x-0 flex items-center'>
         <h2 className='text-3xl font-medium'>品牌項目</h2>
-        <FormBrand type="add" />
+        <FormBrand type="add" lang={adminLang} />
       </div>
 
       <section className='absolute top-16 pt-4 bottom-0 inset-x-0 flex flex-col'>

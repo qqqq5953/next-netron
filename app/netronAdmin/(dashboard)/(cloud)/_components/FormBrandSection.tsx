@@ -27,7 +27,7 @@ type Props = {
     title: string;
     customizedLink: string;
     metaTitle: string;
-    metaKeyword?: string;
+    metaKeyword: string | null;
     metaDescription: string;
   }, any, undefined>
   allBrands: { id: number, title: string }[]

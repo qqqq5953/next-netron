@@ -17,8 +17,11 @@ import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormM
 import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
 import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
 import CustomEditorField, { contentSchema } from '@/app/netronAdmin/_components/CustomEditorField'
-import { BrandTableData } from '@/lib/definitions'
+import { BrandTableData, Language } from '@/lib/definitions'
 import FormCoverImageField, { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField'
+import { addBrand, updateBrand } from '@/lib/actions'
+import { handleModifyApiResponse, toTimestampString } from '@/lib/utils'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -30,6 +33,7 @@ const formSchema = z.object({
 
 type Props = {
   type: "edit" | "add"
+  lang?: Language
   brand?: BrandTableData
 }
 
@@ -51,6 +55,54 @@ export default function FormAddBrand(props: Props) {
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
     console.log(data);
+
+    const {
+      metaTitle,
+      metaKeyword,
+      metaDescription,
+      customizedLink,
+      title,
+      content,
+      coverImage
+    } = data
+
+    try {
+      let result
+      if (props.brand?.id) {
+        result = await updateBrand({
+          id: props.brand.id,
+          m_title: metaTitle,
+          m_keywords: metaKeyword,
+          m_description: metaDescription,
+          m_url: customizedLink,
+          title,
+          content,
+          img: coverImage,
+          updated_at: toTimestampString(new Date())
+        })
+      } else {
+        result = await addBrand({
+          m_title: metaTitle,
+          m_keywords: metaKeyword,
+          m_description: metaDescription,
+          m_url: customizedLink,
+          title,
+          content,
+          img: coverImage || "test.png",
+          updated_at: toTimestampString(new Date()),
+          created_at: toTimestampString(new Date()),
+          edit_at: null,
+          lang: props.lang ?? 'tw',
+        })
+      }
+      handleModifyApiResponse(result)
+    } catch (error) {
+      console.log('error', error);
+      toast.error("Oops! Something went wrong.")
+    }
+
+
+    setOpen(false)
   }
 
 

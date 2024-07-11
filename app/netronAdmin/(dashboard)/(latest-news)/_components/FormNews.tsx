@@ -19,9 +19,9 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { NewsTableData } from '@/lib/definitions'
+import { Language, NewsTableData } from '@/lib/definitions'
 import { updateNews, addNews } from '@/lib/actions'
-import { handleModifyApiResponse, toLocalISOString } from '@/lib/utils'
+import { handleModifyApiResponse, toYYYYMMDD, toTimestampString } from '@/lib/utils'
 import { toast } from 'sonner'
 
 const formSchema = z.object({
@@ -34,7 +34,7 @@ const formSchema = z.object({
 
 type Props = {
   type: "edit" | "add"
-  lang?: string
+  lang?: Language
   news?: NewsTableData
 }
 
@@ -94,6 +94,7 @@ export default function FormAddNews(props: Props) {
     } = data
 
     console.log('coverImage', coverImage);
+    console.log('toYYYYMMDD(articleDate)', toYYYYMMDD(articleDate));
 
 
     try {
@@ -116,10 +117,10 @@ export default function FormAddNews(props: Props) {
           website: eventWebsite || null,
           hostCompany: hostCompany || null,
           hostWeb: hostWeb || null,
-          updated_at: toLocalISOString(articleDate),
+          updated_at: toYYYYMMDD(articleDate),
           cid: +category,
           title: title,
-          img: coverImage || null, // 無法傳 File 到 server action
+          img: coverImage || "test.png", // 無法傳 File 到 server action
           content: content
         })
       } else {
@@ -138,17 +139,17 @@ export default function FormAddNews(props: Props) {
           website: eventWebsite || null,
           hostCompany: hostCompany || null,
           hostWeb: hostWeb || null,
-          updated_at: toLocalISOString(articleDate),
+          updated_at: toYYYYMMDD(articleDate),
           cid: +category,
           title: title,
-          img: coverImage || null, // (coverImage) 無法傳 File 到 server action
+          img: coverImage || "test.png", // (coverImage) 無法傳 File 到 server action
           content: content,
           lang: props.lang ?? 'tw',
           post_date: null,
           location: null,
           county: null,
           street: null,
-          created_at: "2024-07-05",
+          created_at: toTimestampString(new Date()),
         })
       }
 

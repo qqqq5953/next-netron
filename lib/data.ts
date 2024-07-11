@@ -38,7 +38,11 @@ export async function fetchAllNews(lang: Language): Promise<ApiGetResponse<{
 }
 
 export async function fetchBrands(lang: Language, page: string): Promise<ApiGetResponse<{ rows: BrandTableData[], total: number }>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands?adminLang=${lang}&page=${page}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands?adminLang=${lang}&page=${page}`, {
+    next: {
+      tags: ['brands']
+    }
+  });
   const result = await res.json();
   return result
 }

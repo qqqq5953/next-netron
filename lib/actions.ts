@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { NewsTableData, ApiPostResponse, ApiPutResponse } from "./definitions";
+import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, Language } from "./definitions";
 
 export async function updateAbout({
   id,
@@ -13,7 +13,7 @@ export async function updateAbout({
 }: {
   id: number,
   metaTitle: string,
-  metaKeyword: string | undefined,
+  metaKeyword: string | null,
   metaDescription: string,
   customizedLink: string,
   content: string
@@ -37,6 +37,43 @@ export async function updateAbout({
   console.log('result', result);
 
   revalidateTag('about')
+
+  return result
+}
+
+export async function updateBrand({
+  id,
+  m_title,
+  m_keywords,
+  m_description,
+  m_url,
+  title,
+  content,
+  img,
+  updated_at,
+}: Omit<BrandTableData, "sort" | "edit_at" | "created_at" | "lang">): Promise<ApiPutResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/brands`, {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      title,
+      content,
+      img,
+      updated_at
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('brands')
 
   return result
 }
@@ -75,7 +112,7 @@ export async function updateMeta({
 }: {
   id: number,
   metaTitle: string,
-  metaKeyword: string | undefined,
+  metaKeyword: string | null,
   metaDescription: string,
 }): Promise<ApiPutResponse<{
   affectedRows: number,
@@ -223,6 +260,47 @@ export async function addNews({
   console.log('result', result);
 
   revalidateTag('news')
+
+  return result
+}
+
+export async function addBrand({
+  m_title,
+  m_keywords,
+  m_description,
+  m_url,
+  title,
+  content,
+  img,
+  updated_at,
+  created_at,
+  edit_at,
+  lang
+}: Omit<BrandTableData, "id" | "sort">): Promise<ApiPutResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/brands`, {
+    method: "POST",
+    body: JSON.stringify({
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      title,
+      content,
+      img,
+      updated_at,
+      created_at,
+      edit_at,
+      lang
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('brands')
 
   return result
 }

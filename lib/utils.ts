@@ -91,10 +91,20 @@ export function isInvalidPageNumber(page: string | null) {
   return page !== null && !isPositiveInteger(page)
 }
 
-export function toLocalISOString(date: Date) {
+export function toLocaleISOString(date: Date) {
   const timezoneOffset = date.getTimezoneOffset() * 60000; // offset in milliseconds
   const localISOTime = new Date(date.getTime() - timezoneOffset).toISOString();
-  return localISOTime.slice(0, 16);
+  return localISOTime.slice(0, 16); // yyyy-mm-ddTHH:mm
+}
+
+export function toTimestampString(date: Date) {
+  const timezoneOffset = date.getTimezoneOffset(); // offset in milliseconds
+  const localeISOTimestamp = new Date(date.getTime() - timezoneOffset).toLocaleString('sv');
+  return localeISOTimestamp // yyyy-mm-dd HH:mm:ss
+}
+
+export function toYYYYMMDD(date: Date) {
+  return toTimestampString(date).split(" ")[0] // yyyy-mm-dd
 }
 
 export const menuList: MenuListType = [
