@@ -6,23 +6,30 @@ import { fetchCategoryForCases } from '@/lib/data'
 
 type Props = {
   searchParams: {
-    adminLang: Language
+    adminLang?: Language
   }
 }
 
 export default async function CategoryCasePage({ searchParams }: Props) {
-  const result = await fetchCategoryForCases(searchParams.adminLang)
+  const result = await fetchCategoryForCases(searchParams.adminLang ?? "tw")
 
   return (
     <>
       <div className='flex items-center'>
         <h2 className='text-3xl font-medium'>分類管理</h2>
-        <DialogCategory type="add" />
+        <DialogCategory
+          type="add"
+          category='case'
+          lang={searchParams.adminLang}
+        />
       </div>
 
       <section>
         {isSuccessResponse(result) ?
-          <TableCategories initialData={result.data} /> :
+          <TableCategories
+            initialData={result.data}
+            category="case"
+          /> :
           <div>{result.errorMsg}</div>
         }
       </section >

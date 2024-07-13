@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, Language } from "./definitions";
+import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, CategoryTableData } from "./definitions";
 
 export async function updateAbout({
   id,
@@ -21,7 +21,7 @@ export async function updateAbout({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/about`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about`, {
     method: "PUT",
     body: JSON.stringify({
       id,
@@ -55,7 +55,7 @@ export async function updateBrand({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/brands`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands`, {
     method: "PUT",
     body: JSON.stringify({
       id,
@@ -78,21 +78,45 @@ export async function updateBrand({
   return result
 }
 
-export async function updateCategoryNews({
+export async function updateCategoryCases({
   id,
-  title
-}: {
-  id: number,
-  title: string,
-}): Promise<ApiPutResponse<{
+  title,
+  updated_at
+}: Pick<CategoryTableData, "id" | "title" | "updated_at">): Promise<ApiPutResponse<{
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/news`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases`, {
     method: "PUT",
     body: JSON.stringify({
       id,
-      title
+      title,
+      updated_at
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('category-cases')
+
+  return result
+}
+
+export async function updateCategoryNews({
+  id,
+  title,
+  updated_at
+}: Pick<CategoryTableData, "id" | "title" | "updated_at">): Promise<ApiPutResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/news`, {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      title,
+      updated_at
     })
   });
 
@@ -118,7 +142,7 @@ export async function updateMeta({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/meta/news`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/news`, {
     method: "PUT",
     body: JSON.stringify({
       id,
@@ -161,7 +185,7 @@ export async function updateNews({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/news`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/news`, {
     method: "PUT",
     body: JSON.stringify({
       id,
@@ -191,6 +215,32 @@ export async function updateNews({
   console.log('result', result);
 
   revalidateTag('news')
+
+  return result
+}
+
+export async function addCategoryCases({
+  title,
+  lang,
+  type,
+  created_at,
+  updated_at
+}: Omit<CategoryTableData, "id" | "sort">): Promise<ApiPostResponse<null>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases`, {
+    method: "POST",
+    body: JSON.stringify({
+      title,
+      type,
+      lang,
+      created_at,
+      updated_at
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('category-cases')
 
   return result
 }
@@ -225,7 +275,7 @@ export async function addNews({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/news`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/news`, {
     method: "POST",
     body: JSON.stringify({
       m_title,
@@ -280,7 +330,7 @@ export async function addBrand({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/brands`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands`, {
     method: "POST",
     body: JSON.stringify({
       m_title,

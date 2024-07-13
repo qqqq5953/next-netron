@@ -61,7 +61,11 @@ export async function fetchCases(lang: Language, page: string, id: string): Prom
 }
 
 export async function fetchCategoryForCases(lang: Language): Promise<ApiGetResponse<CategoryTableData[]>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases?adminLang=${lang}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases?adminLang=${lang}`, {
+    next: {
+      tags: ['category-cases']
+    }
+  });
   const result = await res.json();
   return result
 }

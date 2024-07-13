@@ -22,7 +22,10 @@ export default async function CategoryNewsPage({ searchParams }: Props) {
 
       <section>
         {isSuccessResponse(result) ?
-          <TableCategories initialData={result.data} /> :
+          <TableCategories
+            initialData={result.data}
+            category="news"
+          /> :
           <div>{result.errorMsg}</div>
         }
       </section >

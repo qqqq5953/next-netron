@@ -1,6 +1,6 @@
 'use client'
 
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -10,55 +10,77 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/app/netronAdmin/_components/Button'
 import { toast } from "sonner"
-import { updateCategoryNews } from '@/lib/actions'
-import { CategoryTableData } from '@/lib/definitions'
-import { handleModifyApiResponse } from '@/lib/utils'
+import { addCategoryCases, updateCategoryCases, updateCategoryNews } from '@/lib/actions'
+import { ApiPostResponse, Language } from '@/lib/definitions'
+import { handleModifyApiResponse, toTimestampString } from '@/lib/utils'
+import { mutate } from 'swr';
 
 type Props = {
-  type: "edit" | "add"
-  title?: string
-  id?: number
-  setCategories?: Dispatch<SetStateAction<CategoryTableData[]>>
+  type: "edit"
+  category: "news" | "case"
+  title: string
+  id: number
+} | {
+  type: "add"
+  category: "news" | "case"
+  lang: Language | undefined
 }
 
 export default function DialogAddCategory(props: Props) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [categoryName, setCategoryName] = useState("");
 
-  function handleOpenDialog() {
-    setIsDialogOpen(true)
-    setCategoryName("")
+  function isEditProps(props: Props): props is Extract<Props, { type: 'edit' }> {
+    return props.type === 'edit';
+  }
+
+  async function handleUpdate(): Promise<ApiPostResponse<{
+    affectedRows: number;
+    changedRows: number;
+  } | null>> {
+    if (!isEditProps(props)) {
+      throw new Error("Invalid props: 'handleUpdate' called with non-edit props");
+    }
+
+    let result
+
+    if (props.category === 'news') {
+      result = await updateCategoryNews({
+        id: props.id,
+        title: categoryName,
+        updated_at: toTimestampString(new Date())
+      })
+    } else {
+      result = await updateCategoryCases({
+        id: props.id,
+        title: categoryName,
+        updated_at: toTimestampString(new Date())
+      })
+    }
+
+    return result
   }
 
   async function handleSaveCategory() {
-    console.log('categoryName', categoryName);
     setIsDialogOpen(false)
 
     try {
-      if (categoryName && props.id && props.setCategories) {
-        // edit
-        const result = await updateCategoryNews({
-          id: props.id,
-          title: categoryName
-        })
+      let result
 
-        handleModifyApiResponse(result)
-
-        props.setCategories(prev => {
-          return prev.map(category => {
-            if (category.id === props.id) {
-              return {
-                ...category,
-                title: categoryName
-              }
-            } else {
-              return category
-            }
-          })
-        })
+      if (props.type === 'edit') {
+        result = await handleUpdate()
       } else {
-        // add
+        result = await addCategoryCases({
+          title: categoryName,
+          lang: props.lang ?? "tw",
+          type: props.category,
+          created_at: toTimestampString(new Date()),
+          updated_at: toTimestampString(new Date())
+        })
       }
+
+      handleModifyApiResponse(result)
+      mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/cases?adminLang=tw`);
     } catch (error) {
       console.log('error', error);
       toast.error("Oops! Something went wrong.")
@@ -68,6 +90,11 @@ export default function DialogAddCategory(props: Props) {
   function handleEdit(category?: string) {
     setIsDialogOpen(true)
     if (category) setCategoryName(category)
+  }
+
+  function handleOpenDialog() {
+    setIsDialogOpen(true)
+    setCategoryName("")
   }
 
   return (

@@ -35,31 +35,33 @@ export async function PUT(
 ) {
   const updateQuery = `
     UPDATE categories 
-    SET title = ?
+    SET title = ?,
+    updated_at = ?
     WHERE id = ?;
   `;
 
   try {
-    const { title, id } = await request.json();
+    const { title, id, updated_at } = await request.json();
     const [updated] = await withDbConnection(async (db: PoolConnection) => {
       return db.execute<ResultSetHeader>(updateQuery, [
         title,
-        id
+        updated_at,
+        id,
       ]);
     });
 
     const { affectedRows, changedRows } = updated
 
-    if (affectedRows === changedRows) {
-      return NextResponse.json({
-        statusCode: 200,
-        msg: "Update successful. All matched rows were modified.",
-        data: null
-      })
-    } else if (changedRows === 0) {
+    if (changedRows === 0) {
       return NextResponse.json({
         statusCode: 204,
         msg: "Update successful but no rows were changed",
+        data: null
+      })
+    } else if (affectedRows === changedRows) {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update successful. All matched rows were modified.",
         data: null
       })
     } else {
