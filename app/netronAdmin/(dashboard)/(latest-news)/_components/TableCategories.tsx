@@ -15,6 +15,7 @@ import DialogCategory from './DialogCategory'
 import { CategoryTableData } from '@/lib/definitions'
 
 import useSWR from 'swr';
+import Loader from '@/components/loader'
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -46,18 +47,30 @@ export default function TableCategories(props: Props) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>分類名稱</TableHead>
-          <TableHead>排序</TableHead>
-          <TableHead>動作</TableHead>
+          <TableHead className='w-1/3'>分類名稱</TableHead>
+          <TableHead className='w-1/3'>排序</TableHead>
+          <TableHead className='w-1/3'>動作</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {isLoading && <TableRow>
-          <TableCell>Loading...</TableCell>
-        </TableRow>}
         {error && <TableRow>
           <TableCell>Failed to load data...</TableCell>
         </TableRow>}
+
+        {isLoading && [...Array(2)].map((_ele, i) => {
+          return <TableRow key={i}>
+            <TableCell>
+              <div className='bg-neutral-200 w-full h-5 rounded animate-pulse'></div>
+            </TableCell>
+            <TableCell>
+              <div className='bg-neutral-200 w-full h-5 rounded animate-pulse'></div>
+            </TableCell>
+            <TableCell>
+              <div className='bg-neutral-200 w-full h-5 rounded animate-pulse'></div>
+            </TableCell>
+          </TableRow>
+        })}
+
         {categories.map((item, index) => {
           return <TableRow key={item.id}>
             <TableCell>{item.title}</TableCell>

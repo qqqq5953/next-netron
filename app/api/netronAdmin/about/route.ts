@@ -73,16 +73,16 @@ export async function PUT(
 
     const { affectedRows, changedRows } = updated
 
-    if (affectedRows === changedRows) {
-      return NextResponse.json({
-        statusCode: 200,
-        msg: "Update successful. All matched rows were modified.",
-        data: null
-      })
-    } else if (changedRows === 0) {
+    if (changedRows === 0) {
       return NextResponse.json({
         statusCode: 204,
         msg: "Update successful but no rows were changed",
+        data: null
+      })
+    } else if (affectedRows === changedRows) {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Update successful. All matched rows were modified.",
         data: null
       })
     } else {
