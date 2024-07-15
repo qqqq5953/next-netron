@@ -1,20 +1,16 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, CategoryTableData } from "./definitions";
+import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, CategoryTableData, MetaForm } from "./definitions";
 
 export async function updateAbout({
   id,
-  metaTitle,
-  metaKeyword,
-  metaDescription,
+  m_title,
+  m_keywords,
+  m_description,
   customizedLink,
   content
-}: {
-  id: number,
-  metaTitle: string,
-  metaKeyword: string | null,
-  metaDescription: string,
+}: MetaForm & {
   customizedLink: string,
   content: string
 }): Promise<ApiPutResponse<{
@@ -25,9 +21,9 @@ export async function updateAbout({
     method: "PUT",
     body: JSON.stringify({
       id,
-      metaTitle,
-      metaKeyword,
-      metaDescription,
+      m_title,
+      m_keywords,
+      m_description,
       customizedLink,
       content
     })
@@ -130,32 +126,37 @@ export async function updateCategoryNews({
 
 export async function updateMeta({
   id,
-  metaTitle,
-  metaKeyword,
-  metaDescription
-}: {
-  id: number,
-  metaTitle: string,
-  metaKeyword: string | null,
-  metaDescription: string,
-}): Promise<ApiPutResponse<{
+  type,
+  m_title,
+  m_keywords,
+  m_description
+}: MetaForm): Promise<ApiPutResponse<{
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/news`, {
+  const url = type === "news" ?
+    `${process.env.BASE_URL}/api/netronAdmin/meta/news` :
+    `${process.env.BASE_URL}/api/netronAdmin/meta/success`
+
+  const res = await fetch(url, {
     method: "PUT",
     body: JSON.stringify({
       id,
-      metaTitle,
-      metaKeyword,
-      metaDescription
+      type,
+      m_title,
+      m_keywords,
+      m_description
     })
   });
 
   const result = await res.json();
   console.log('result', result);
 
-  revalidateTag('meta-news')
+  if (type === "news") {
+    revalidateTag('meta-news')
+  } else if (type === "success") {
+    revalidateTag('meta-success')
+  }
 
   return result
 }

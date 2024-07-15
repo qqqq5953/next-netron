@@ -58,7 +58,7 @@ type Props = {
     customizedLink: string;
     metaTitle: string;
     metaKeyword: string | null;
-    metaDescription: string;
+    metaDescription: string | null;
   }, any, undefined>
 };
 

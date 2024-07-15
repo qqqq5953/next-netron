@@ -41,9 +41,9 @@ export default function FormAbout(props: Props) {
     try {
       const result = await updateAbout({
         id: props.about.id,
-        metaTitle,
-        metaKeyword,
-        metaDescription,
+        m_title: metaTitle,
+        m_keywords: metaKeyword,
+        m_description: metaDescription,
         customizedLink,
         content
       })

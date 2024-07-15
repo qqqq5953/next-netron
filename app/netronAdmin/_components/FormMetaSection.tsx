@@ -16,9 +16,7 @@ export const metaSchema = {
     message: "必填欄位",
   }),
   metaKeyword: z.string().nullable(),
-  metaDescription: z.string().min(1, {
-    message: "必填欄位",
-  }),
+  metaDescription: z.string().nullable(),
 }
 
 type Props = {

@@ -92,7 +92,11 @@ export async function fetchMetaNews(lang: Language): Promise<ApiGetResponse<Meta
 }
 
 export async function fetchMetaSuccess(lang: Language): Promise<ApiGetResponse<MetaForm>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/success?adminLang=${lang}`);
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/meta/success?adminLang=${lang}`, {
+    next: {
+      tags: ['meta-success']
+    }
+  });
   const result = await res.json();
   return result
 }

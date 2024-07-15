@@ -21,9 +21,9 @@ export default function FormMeta(props: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: props.meta.m_title ?? "",
-      metaKeyword: props.meta.m_keywords ?? "",
-      metaDescription: props.meta.m_description ?? "",
+      metaTitle: props.meta.m_title ?? null,
+      metaKeyword: props.meta.m_keywords ?? null,
+      metaDescription: props.meta.m_description ?? null,
     },
   })
 
@@ -35,9 +35,10 @@ export default function FormMeta(props: Props) {
     try {
       const result = await updateMeta({
         id: props.meta.id,
-        metaTitle,
-        metaKeyword,
-        metaDescription
+        type: props.meta.type,
+        m_title: metaTitle,
+        m_keywords: metaKeyword,
+        m_description: metaDescription
       })
 
       handleModifyApiResponse(result)

@@ -39,9 +39,10 @@ export type Language = 'tw' | 'en' | 'cn'
 
 export type MetaForm = {
   id: number,
+  type: "news" | "success"
   m_title: string,
-  m_keywords: string,
-  m_description: string,
+  m_keywords: string | null,
+  m_description: string | null,
 }
 
 export type AboutForm = {
