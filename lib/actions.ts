@@ -355,3 +355,17 @@ export async function addBrand({
 
   return result
 }
+
+export async function deleteCategoryCases({ id }: { id: number }) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases`, {
+    method: "DELETE",
+    body: JSON.stringify({ id })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('category-cases')
+
+  return result
+}
