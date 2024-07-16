@@ -39,9 +39,8 @@ export default function TableNews(props: Props) {
     setNews(updatedNews);
   };
 
-  function handleRemoveNews(closeLoading: () => void) {
+  function handleRemoveNews() {
     // delete request with deletedNews.current.id
-    closeLoading()
     setOpenDialog(false)
   }
 

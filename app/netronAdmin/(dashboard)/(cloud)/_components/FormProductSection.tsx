@@ -114,14 +114,13 @@ export default function FormProductSection(props: Props) {
     setPreviews(newPreviews);
   }
 
-  function handleRemoveItem(closeLoading: () => void) {
+  function handleRemoveItem() {
     // fieldArray.remove(deletedItemIndex.current)
 
     setProducts(products.filter((_, index) => index !== deletedItemIndex.current));
     setTitles(titles.filter((_, index) => index !== deletedItemIndex.current));
     setPreviews(previews.filter((_, index) => index !== deletedItemIndex.current));
 
-    closeLoading()
     setOpen(false)
   }
 

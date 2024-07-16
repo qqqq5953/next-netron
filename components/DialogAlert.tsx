@@ -17,7 +17,7 @@ type Props = {
   description?: ReactNode;
   confirmText?: ReactNode;
   open: boolean,
-  onConfirm: (callback: () => void) => void
+  onConfirm: (() => Promise<void>) | (() => void);
   onClose?: () => void;
 }
 
@@ -27,7 +27,14 @@ export default function DialogAlert({ open, title, description, confirmText, onC
   function handleConfirm() {
     if (isLoading) return
     setIsLoading(true)
-    onConfirm(() => setIsLoading(false))
+
+    const result = onConfirm();
+
+    if (result instanceof Promise) {
+      result.finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
   }
 
   return (

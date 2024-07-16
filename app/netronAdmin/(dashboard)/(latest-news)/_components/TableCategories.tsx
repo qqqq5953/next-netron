@@ -51,12 +51,11 @@ export default function TableCategories(props: Props) {
     }
   }, [rawData])
 
-  async function handleDelete(closeLoading: () => void) {
+  async function handleDelete() {
     const result = await deleteCategoryCases({ id: deletedItem.id })
     await mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/cases?adminLang=tw`);
 
     handleModifyApiResponse(result)
-    closeLoading()
     setOpenDialog(false)
   }
 
