@@ -26,7 +26,11 @@ export default async function CategoryCasePage({ searchParams }: Props) {
 
       <section>
         {isSuccessResponse(result) ?
-          <TableCategories initialData={result.data} /> :
+          <TableCategories
+            initialData={result.data}
+            category='case'
+            lang={searchParams.adminLang}
+          /> :
           <div>{result.errorMsg}</div>
         }
       </section >

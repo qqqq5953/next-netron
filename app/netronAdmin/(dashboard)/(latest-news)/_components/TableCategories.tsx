@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/app/netronAdmin/_components/Button'
 import DialogCategory from './DialogCategory'
-import { CategoryTableData } from '@/lib/definitions'
+import { CategoryTableData, Language } from '@/lib/definitions'
 
 import useSWR, { mutate } from 'swr';
 import { deleteCategoryCases } from '@/lib/actions'
@@ -22,22 +22,25 @@ import { handleModifyApiResponse } from '@/lib/utils'
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 type Props = {
-  initialData: CategoryTableData[]
+  initialData: CategoryTableData[],
+  category: "news" | "case",
+  lang?: Language
 }
 
 export default function TableCategories(props: Props) {
   const [openDialog, setOpenDialog] = useState(false)
   const [deletedItem, setDeletedItem] = useState({ id: -1, title: "" })
+  const [categories, setCategories] = useState<CategoryTableData[]>(props.initialData);
+
+  const categoryType = props.category === 'case' ? 'cases' : props.category
 
   const {
     data: rawData,
     // error,
     // isLoading
-  } = useSWR(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/cases?adminLang=tw`, fetcher, {
+  } = useSWR(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/${categoryType}?adminLang=${props.lang ?? 'tw'}`, fetcher, {
     revalidateOnFocus: false,
   });
-
-  const [categories, setCategories] = useState<CategoryTableData[]>(props.initialData);
 
   function handleOrderChange(index: number, newOrder: string) {
     const updatedData = [...categories];
@@ -47,6 +50,8 @@ export default function TableCategories(props: Props) {
 
   useEffect(() => {
     if (rawData?.data) {
+      console.log('setCategories');
+
       setCategories(rawData?.data ?? [])
     }
   }, [rawData])
