@@ -1,3 +1,4 @@
+import useHttp from "@/hooks/useHttp";
 import {
   ApiGetResponse,
   AboutForm,
@@ -10,6 +11,8 @@ import {
   SolutionData
 } from "./definitions";
 import { isInvalidPageNumber } from "./utils";
+
+const http = useHttp();
 
 export async function fetchAbout(lang: Language): Promise<ApiGetResponse<AboutForm>> {
   const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about?adminLang=${lang}`, {
@@ -52,8 +55,8 @@ export async function fetchCases(lang: Language, page: string, id: string): Prom
   lang = lang ?? "tw"
 
   const url = id ?
-    `${process.env.BASE_URL}/api/netronAdmin/cases/${id}?adminLang=${lang}&page=${page}` :
-    `${process.env.BASE_URL}/api/netronAdmin/cases?adminLang=${lang}&page=${page}`
+    `${process.env.BASE_URL}/api/netronAdmin/case/${id}?adminLang=${lang}&page=${page}` :
+    `${process.env.BASE_URL}/api/netronAdmin/case?adminLang=${lang}&page=${page}`
 
   const res = await fetch(url);
   const result = await res.json();
@@ -61,9 +64,9 @@ export async function fetchCases(lang: Language, page: string, id: string): Prom
 }
 
 export async function fetchCategoryForCases(lang: Language): Promise<ApiGetResponse<CategoryTableData[]>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases?adminLang=${lang}`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/case?adminLang=${lang}`, {
     next: {
-      tags: ['category-cases']
+      tags: ['category-case']
     }
   });
   const result = await res.json();
@@ -78,6 +81,12 @@ export async function fetchCategoryForNews(lang: Language): Promise<ApiGetRespon
   });
   const result = await res.json();
   return result
+}
+
+export function swrFetchCategories(lang: Language | undefined, categoryType: "news" | "case") {
+  return http.get<{ data: CategoryTableData[], statusCode: number }>(`category/${categoryType}?adminLang=${lang ?? 'tw'}`, {
+    revalidateOnFocus: false,
+  });
 }
 
 export async function fetchMetaNews(lang: Language): Promise<ApiGetResponse<MetaForm>> {

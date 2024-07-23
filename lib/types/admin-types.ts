@@ -72,7 +72,7 @@ export type BrandTableData = {
 
 export type CategoryTableData = {
   id: number;
-  lang: string;
+  lang: Language;
   type: 'news' | 'case';
   title: string;
   sort: string;

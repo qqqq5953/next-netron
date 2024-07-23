@@ -82,7 +82,7 @@ export async function updateCategoryCases({
   affectedRows: number,
   changedRows: number
 } | null>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/case`, {
     method: "PUT",
     body: JSON.stringify({
       id,
@@ -94,7 +94,7 @@ export async function updateCategoryCases({
   const result = await res.json();
   console.log('result', result);
 
-  revalidateTag('category-cases')
+  revalidateTag('category-case')
 
   return result
 }
@@ -227,7 +227,7 @@ export async function addCategoryCases({
   created_at,
   updated_at
 }: Omit<CategoryTableData, "id" | "sort">): Promise<ApiPostResponse<null>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/case`, {
     method: "POST",
     body: JSON.stringify({
       title,
@@ -241,7 +241,7 @@ export async function addCategoryCases({
   const result = await res.json();
   console.log('result', result);
 
-  revalidateTag('category-cases')
+  revalidateTag('category-case')
 
   return result
 }
@@ -357,7 +357,7 @@ export async function addBrand({
 }
 
 export async function deleteCategoryCases({ id }: { id: number }) {
-  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/cases`, {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/case`, {
     method: "DELETE",
     body: JSON.stringify({ id })
   });
@@ -365,7 +365,21 @@ export async function deleteCategoryCases({ id }: { id: number }) {
   const result = await res.json();
   console.log('result', result);
 
-  revalidateTag('category-cases')
+  revalidateTag('category-case')
+
+  return result
+}
+
+export async function deleteCategoryNews({ id }: { id: number }) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/news`, {
+    method: "DELETE",
+    body: JSON.stringify({ id })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('category-news')
 
   return result
 }

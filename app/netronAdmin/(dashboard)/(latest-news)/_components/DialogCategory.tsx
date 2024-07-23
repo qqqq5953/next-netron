@@ -20,6 +20,7 @@ type Props = {
   category: "news" | "case"
   title: string
   id: number
+  lang: Language | undefined
 } | {
   type: "add"
   category: "news" | "case"
@@ -58,6 +59,8 @@ export default function DialogAddCategory(props: Props) {
       })
     }
 
+    mutate(`category/${props.category}?adminLang=${props.lang ?? 'tw'}`)
+
     return result
   }
 
@@ -80,7 +83,7 @@ export default function DialogAddCategory(props: Props) {
       }
 
       handleModifyApiResponse(result)
-      mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/cases?adminLang=tw`);
+      mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/case?adminLang=tw`);
     } catch (error) {
       console.log('error', error);
       toast.error("Oops! Something went wrong.")

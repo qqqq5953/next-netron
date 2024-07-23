@@ -14,12 +14,11 @@ import { Button } from '@/app/netronAdmin/_components/Button'
 import DialogCategory from './DialogCategory'
 import { CategoryTableData, Language } from '@/lib/definitions'
 
-import useSWR, { mutate } from 'swr';
-import { deleteCategoryCases } from '@/lib/actions'
+// import { mutate } from "swr"
+import { deleteCategoryCases, deleteCategoryNews } from '@/lib/actions'
 import DialogAlert from '@/components/DialogAlert'
 import { handleModifyApiResponse } from '@/lib/utils'
-
-const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { swrFetchCategories } from '@/lib/data'
 
 type Props = {
   initialData: CategoryTableData[],
@@ -32,15 +31,12 @@ export default function TableCategories(props: Props) {
   const [deletedItem, setDeletedItem] = useState({ id: -1, title: "" })
   const [categories, setCategories] = useState<CategoryTableData[]>(props.initialData);
 
-  const categoryType = props.category === 'case' ? 'cases' : props.category
-
   const {
     data: rawData,
     // error,
     // isLoading
-  } = useSWR(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/${categoryType}?adminLang=${props.lang ?? 'tw'}`, fetcher, {
-    revalidateOnFocus: false,
-  });
+    mutate
+  } = swrFetchCategories(props.lang, props.category)
 
   function handleOrderChange(index: number, newOrder: string) {
     const updatedData = [...categories];
@@ -57,8 +53,17 @@ export default function TableCategories(props: Props) {
   }, [rawData])
 
   async function handleDelete() {
-    const result = await deleteCategoryCases({ id: deletedItem.id })
-    await mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/cases?adminLang=tw`);
+    console.log('id', deletedItem.id);
+
+    let result
+    if (props.category === 'case') {
+      result = await deleteCategoryCases({ id: deletedItem.id })
+    } else {
+      result = await deleteCategoryNews({ id: deletedItem.id })
+    }
+
+    await mutate()
+    // await mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/category/case?adminLang=tw`);
 
     handleModifyApiResponse(result)
     setOpenDialog(false)
@@ -110,6 +115,7 @@ export default function TableCategories(props: Props) {
                   category={item.type}
                   title={item.title}
                   id={item.id}
+                  lang={item.lang}
                 />
                 <Button
                   variant="outline"
