@@ -19,10 +19,11 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Language, NewsTableData } from '@/lib/definitions'
+import { ApiGetResponse, Language, NewsTableData } from '@/lib/definitions'
 import { updateNews, addNews } from '@/lib/actions'
 import { handleModifyApiResponse, toYYYYMMDD, toTimestampString } from '@/lib/utils'
 import { toast } from 'sonner'
+import { KeyedMutator } from 'swr'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -33,9 +34,16 @@ const formSchema = z.object({
 })
 
 type Props = {
-  type: "edit" | "add"
+  type: "edit"
   lang?: Language
-  news?: NewsTableData
+  news: NewsTableData
+  mutate: KeyedMutator<ApiGetResponse<{
+    rows: NewsTableData[];
+    total: number;
+  }>>
+} | {
+  type: "add"
+  lang?: Language
 }
 
 export default function FormAddNews(props: Props) {
@@ -44,29 +52,30 @@ export default function FormAddNews(props: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: props.news?.m_title ?? "",
-      metaKeyword: props.news?.m_keywords ?? "",
-      metaDescription: props.news?.m_description ?? "",
-      customizedLink: props.news?.m_url ?? "",
+      metaTitle: props.type === 'edit' ? (props.news.m_title ?? "") : "",
+      metaKeyword: props.type === 'edit' ? (props.news.m_keywords ?? "") : "",
+      metaDescription: props.type === 'edit' ? (props.news.m_description ?? "") : "",
+      customizedLink: props.type === 'edit' ? (props.news.m_url ?? "") : "",
 
-      eventType: props.news?.mode ?? null,
-      speaker: props.news?.lecturer ?? "",
-      eventStartTime: props.news?.start_at?.replace(/ /, '') ?? "",
-      eventEndTime: props.news?.end_at?.replace(/ /, '') ?? "",
-      eventCost: props.news?.price ?? null,
-      currency: props.news?.currency ?? "TWD",
-      ticketDeadline: props.news?.soldout_at ?? "",
-      eventWebsite: props.news?.website ?? "",
-      hostCompany: props.news?.hostCompany ?? "",
-      hostWeb: props.news?.hostWeb ?? "",
-
-      articleDate: props.news?.updated_at ?
-        new Date(props.news?.updated_at) :
+      eventType: props.type === 'edit' ? props.news.mode : null,
+      speaker: props.type === 'edit' ? (props.news.lecturer ?? "") : "",
+      eventStartTime: props.type === 'edit' ? props.news.start_at?.replace(/ /, '') : "",
+      eventEndTime: props.type === 'edit' ? props.news.end_at?.replace(/ /, '') : "",
+      eventCost: props.type === 'edit' ? props.news.price : null,
+      currency: props.type === 'edit' ?
+        (props.news.currency ?? "TWD") :
+        "TWD",
+      ticketDeadline: props.type === 'edit' ? (props.news.soldout_at ?? "") : "",
+      eventWebsite: props.type === 'edit' ? (props.news.website ?? "") : "",
+      hostCompany: props.type === 'edit' ? (props.news.hostCompany ?? "") : "",
+      hostWeb: props.type === 'edit' ? props.news.hostWeb : "",
+      articleDate: props.type === 'edit' ?
+        (props.news.updated_at ? new Date(props.news.updated_at) : undefined) :
         undefined,
-      category: props.news?.cid.toString() ?? "",
-      title: props.news?.title ?? "",
-      coverImage: props.news?.img ?? undefined,
-      content: props.news?.content ?? "",
+      category: props.type === 'edit' ? props.news.cid.toString() : "",
+      title: props.type === 'edit' ? (props.news.title ?? "") : "",
+      coverImage: props.type === 'edit' ? (props.news.img ?? undefined) : undefined,
+      content: props.type === 'edit' ? (props.news.content ?? "") : "",
     },
   })
 
@@ -96,11 +105,10 @@ export default function FormAddNews(props: Props) {
     console.log('coverImage', coverImage);
     console.log('toYYYYMMDD(articleDate)', toYYYYMMDD(articleDate));
 
-
     try {
       let result
 
-      if (props.news?.id) {
+      if (props.type === 'edit') {
         result = await updateNews({
           id: props.news.id,
           m_title: metaTitle,
@@ -123,6 +131,8 @@ export default function FormAddNews(props: Props) {
           img: coverImage || "test.png", // 無法傳 File 到 server action
           content: content
         })
+
+        await props.mutate()
       } else {
         result = await addNews({
           m_title: metaTitle,

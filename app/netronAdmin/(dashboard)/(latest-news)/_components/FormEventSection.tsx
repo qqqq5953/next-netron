@@ -46,8 +46,7 @@ export const eventSchema = {
         };
       }
     }
-  }
-  ),
+  }),
   ticketDeadline: z.string().nullable().refine(val => {
     if (!val) return true
     const dateTimeRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -14,11 +14,17 @@ import { Button } from '@/app/netronAdmin/_components/Button'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { CheckedState } from '@radix-ui/react-checkbox'
-import { NewsTableData } from '@/lib/definitions'
+import { Language, NewsTableData } from '@/lib/definitions'
 import FormNews from './FormNews'
 import DialogAlert from '@/components/DialogAlert'
+import { swrFetchNews } from '@/lib/data'
+import { handleModifyApiResponse, isSuccessResponse } from '@/lib/utils'
+import { deleteNews } from '@/lib/actions'
 
 type Props = {
+  lang: Language
+  id: string
+  page: string
   data: NewsTableData[]
 }
 
@@ -26,6 +32,13 @@ export default function TableNews(props: Props) {
   const [news, setNews] = useState(props.data);
   const [openDialog, setOpenDialog] = useState(false);
   const deletedNews = useRef<{ title: string | null, id: number | null }>({ title: null, id: null })
+
+  const {
+    data: rawData,
+    // error,
+    // isLoading
+    mutate
+  } = swrFetchNews(props.lang, props.page, props.id)
 
   function toggleCheckbox(index: number, isChecked: CheckedState, type: 'status' | 'show') {
     const updatedNews = [...news];
@@ -39,8 +52,21 @@ export default function TableNews(props: Props) {
     setNews(updatedNews);
   };
 
-  function handleRemoveNews() {
+  useEffect(() => {
+    if (rawData && isSuccessResponse(rawData)) {
+      console.log('setnews');
+      setNews(rawData.data.rows ?? [])
+    }
+  }, [rawData])
+
+  async function handleRemoveNews() {
     // delete request with deletedNews.current.id
+    if (!deletedNews.current.id) return
+
+    const result = await deleteNews({ id: deletedNews.current.id })
+    await mutate()
+
+    handleModifyApiResponse(result)
     setOpenDialog(false)
   }
 
@@ -81,7 +107,7 @@ export default function TableNews(props: Props) {
               </TableCell>
               <TableCell className="font-medium px-4">
                 <div className='flex gap-2 w-full'>
-                  <FormNews type="edit" news={item} />
+                  <FormNews type="edit" news={item} mutate={mutate} />
                   <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'
                     onClick={() => {
                       setOpenDialog(true)

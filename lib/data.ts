@@ -84,9 +84,10 @@ export async function fetchCategoryForNews(lang: Language): Promise<ApiGetRespon
 }
 
 export function swrFetchCategories(lang: Language | undefined, categoryType: "news" | "case") {
-  return http.get<{ data: CategoryTableData[], statusCode: number }>(`category/${categoryType}?adminLang=${lang ?? 'tw'}`, {
-    revalidateOnFocus: false,
-  });
+  return http.get<ApiGetResponse<CategoryTableData[]>>
+    (`category/${categoryType}?adminLang=${lang ?? 'tw'}`, {
+      revalidateOnFocus: false,
+    });
 }
 
 export async function fetchMetaNews(lang: Language): Promise<ApiGetResponse<MetaForm>> {
@@ -124,6 +125,18 @@ export async function fetchNews(lang: Language, page: string, id: string): Promi
   });
   const result = await res.json();
   return result
+}
+
+export function swrFetchNews(lang: Language, page: string, id: string) {
+  page = isInvalidPageNumber(page) ? "1" : page
+
+  const url = id ?
+    `news/${id}?adminLang=${lang}&page=${page}` :
+    `news?adminLang=${lang}&page=${page}`
+
+  return http.get<ApiGetResponse<{ rows: NewsTableData[], total: number }>>(url, {
+    revalidateOnFocus: false,
+  });
 }
 
 export async function fetchProducts(lang: Language): Promise<ApiGetResponse<ProducTableData[]>> {

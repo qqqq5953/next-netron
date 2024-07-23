@@ -77,7 +77,13 @@ export default async function NewsPage({
 
       <section className='absolute top-28 pt-4 bottom-0 inset-x-0 flex flex-col'>
         {isSuccessResponse(result) ?
-          <TableNews data={result.data.rows} key={page} /> :
+          <TableNews
+            data={result.data.rows}
+            lang={adminLang ?? 'tw'}
+            id={id}
+            page={page}
+            key={page}
+          /> :
           <div>{result.errorMsg}</div>
         }
 

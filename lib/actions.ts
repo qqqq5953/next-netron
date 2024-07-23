@@ -10,7 +10,7 @@ export async function updateAbout({
   m_description,
   customizedLink,
   content
-}: MetaForm & {
+}: Omit<MetaForm, "type"> & {
   customizedLink: string,
   content: string
 }): Promise<ApiPutResponse<{
@@ -380,6 +380,20 @@ export async function deleteCategoryNews({ id }: { id: number }) {
   console.log('result', result);
 
   revalidateTag('category-news')
+
+  return result
+}
+
+export async function deleteNews({ id }: { id: number }) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/news`, {
+    method: "DELETE",
+    body: JSON.stringify({ id })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('news')
 
   return result
 }

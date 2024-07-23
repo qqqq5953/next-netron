@@ -17,7 +17,7 @@ import { CategoryTableData, Language } from '@/lib/definitions'
 // import { mutate } from "swr"
 import { deleteCategoryCases, deleteCategoryNews } from '@/lib/actions'
 import DialogAlert from '@/components/DialogAlert'
-import { handleModifyApiResponse } from '@/lib/utils'
+import { handleModifyApiResponse, isSuccessResponse } from '@/lib/utils'
 import { swrFetchCategories } from '@/lib/data'
 
 type Props = {
@@ -45,7 +45,7 @@ export default function TableCategories(props: Props) {
   };
 
   useEffect(() => {
-    if (rawData?.data) {
+    if (rawData && isSuccessResponse(rawData)) {
       console.log('setCategories');
 
       setCategories(rawData?.data ?? [])
