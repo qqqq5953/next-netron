@@ -23,41 +23,6 @@ const tabs = [
   { name: "雲端技能學習", path: "/netronAdmin/news/9" },
 ]
 
-// const data1: NewsTableData[] = [{
-//   "id": 161,
-//   "title": "【雲端活動】雲服務技術優化工作坊",
-//   "cid": 2,
-//   "description": "",
-//   "img": "0YWN8zD10NZ4BGTw5sgBOMItp50hngv4sBeola28.png",
-//   "content": "<div class=\"editorstreditorstr\"><meta charset=\"utf-8\"></div>\r\n<title></title>\r\n<link href=\"https://edm.gaia.net/Picture/logo/netron_200X200.png\" rel=\"icon\" sizes=\"16x16\" type=\"image/x-icon\" />\r\n<div class=\"editorstreditorstr\">\r\n<p style=\"text-align: center;\"><a href=\"https://docs.google.com/forms/d/e/1FAIpQLSdGxbjKUPWH9HKTNepLYEBvgYgdbLdmiD5h5zRTFdVHM-e1gQ/viewform?fbzx=1290876493433033915\" target=\"_blank\"><img alt=\"\" src=\"https://edm.netron.asia/Picture/netron/GenAI_1.png\" style=\"width: 1080px; height: 5756px;\" usemap=\"#Map\" /></a><map name=\"Map\"><area coords=\"550,900,1200,1100\" href=\"https://docs.google.com/forms/d/e/1FAIpQLSdGxbjKUPWH9HKTNepLYEBvgYgdbLdmiD5h5zRTFdVHM-e1gQ/viewform?fbzx=1290876493433033915\" shape=\"rect\" /> <area coords=\"550,4000,1200,4300\" href=\"https://docs.google.com/forms/d/e/1FAIpQLSdGxbjKUPWH9HKTNepLYEBvgYgdbLdmiD5h5zRTFdVHM-e1gQ/viewform?fbzx=1290876493433033915\" shape=\"rect\" /> <area coords=\"550,8700,1200,9000\" href=\"https://docs.google.com/forms/d/e/1FAIpQLSdGxbjKUPWH9HKTNepLYEBvgYgdbLdmiD5h5zRTFdVHM-e1gQ/viewform?fbzx=1290876493433033915\" shape=\"rect\" /></map></p>\r\n</div>",
-//   "lang": "tw",
-//   "status": 1,
-//   "sort": 41,
-//   "m_title": "【雲端活動】雲服務技術優化工作坊",
-//   "m_keywords": null,
-//   "m_description": "誠摯邀請您參加我們即將舉辦的「Gen AI 應用 創新雲端服務」工作坊，掌握最新趨勢、提升競爭力，實現事業突破！",
-//   "m_url": null,
-//   "edit_at": "2024-05-16T16:00:00.000Z",
-//   "post_date": null,
-//   "created_at": "2024-05-13T06:22:59.000Z",
-//   "updated_at": "2024-05-18T16:00:00.000Z",
-//   "show": 1,
-//   "type": "news",
-//   "mode": "OfflineEventAttendanceMode",
-//   "location": "集思北科大會議中心",
-//   "county": "台北市",
-//   "street": "大安區忠孝東路三段1號億光大樓",
-//   "lecturer": null,
-//   "start_at": "2024-05-19 T09:30",
-//   "end_at": "2024-05-19 T16:30",
-//   "price": null,
-//   "currency": null,
-//   "soldout_at": null,
-//   "website": "https://edm.netron.asia/EDM/GenAI_EDM.html",
-//   "hostCompany": "Netron網創資訊",
-//   "hostWeb": "https://www.netron.asia/"
-// }]
-
 export default async function NewsPage({
   searchParams: { adminLang, page },
   params: { id }
@@ -68,7 +33,7 @@ export default async function NewsPage({
     <div className='relative flex flex-col gap-4 h-full'>
       <div className='absolute top-0 inset-x-0 flex items-center'>
         <h2 className='text-3xl font-medium'>消息清單</h2>
-        <FormNews type="add" lang={adminLang} />
+        <FormNews type="add" lang={adminLang} page={page} />
       </div>
 
       <div className='absolute top-16'>

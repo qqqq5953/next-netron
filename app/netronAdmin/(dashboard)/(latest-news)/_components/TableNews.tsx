@@ -35,8 +35,6 @@ export default function TableNews(props: Props) {
 
   const {
     data: rawData,
-    // error,
-    // isLoading
     mutate
   } = swrFetchNews(props.lang, props.page, props.id)
 
@@ -52,13 +50,6 @@ export default function TableNews(props: Props) {
     setNews(updatedNews);
   };
 
-  useEffect(() => {
-    if (rawData && isSuccessResponse(rawData)) {
-      console.log('setnews');
-      setNews(rawData.data.rows ?? [])
-    }
-  }, [rawData])
-
   async function handleRemoveNews() {
     // delete request with deletedNews.current.id
     if (!deletedNews.current.id) return
@@ -69,6 +60,13 @@ export default function TableNews(props: Props) {
     handleModifyApiResponse(result)
     setOpenDialog(false)
   }
+
+  useEffect(() => {
+    // update existing news
+    if (rawData && isSuccessResponse(rawData)) {
+      setNews(rawData.data.rows ?? [])
+    }
+  }, [rawData])
 
   return (
     <ScrollArea>
@@ -135,50 +133,5 @@ export default function TableNews(props: Props) {
         onClose={() => setOpenDialog(false)}
       />
     </ScrollArea>
-
-    // <Table>
-    //   <TableHeader className='block bg-neutral-50 rounded-t-lg'>
-    //     <TableRow className='w-full flex'>
-    //       <TableHead className='flex items-center w-[30%] px-4'>標題</TableHead>
-    //       <TableHead className='flex items-center w-[10%] px-0'>上下架</TableHead>
-    //       <TableHead className='flex items-center w-[10%] px-0'>首頁</TableHead>
-    //       <TableHead className='flex items-center w-[20%] px-0'>排序</TableHead>
-    //       <TableHead className='flex items-center w-[220px] px-1'>動作</TableHead>
-    //     </TableRow>
-    //   </TableHeader>
-    //   <TableBody className='block overflow-auto w-full'>
-    //     {news.map((item, index) => {
-    //       return <TableRow key={item.title} className='flex items-center w-full'>
-    //         <TableCell className='w-[30%]'>{item.title}</TableCell>
-    //         <TableCell className='w-[10%] px-2'>
-    //           <Checkbox
-    //             checked={item.status === 1} onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'status')}
-    //           />
-    //         </TableCell>
-    //         <TableCell className='w-[10%] px-2'>
-    //           <Checkbox
-    //             checked={item.show === 1}
-    //             onCheckedChange={(isChecked) => toggleCheckbox(index, isChecked, 'show')}
-    //           />
-    //         </TableCell>
-    //         <TableCell className='w-[20%] px-2'>
-    //           <Input
-    //             type="number"
-    //             className="primary-input-focus"
-    //             value={item.sort}
-    //             onChange={(e) => handleOrderChange(index, e.target.value)}
-    //           />
-    //         </TableCell>
-    //         <TableCell className="font-medium w-[220px] px-4">
-    //           <div className='flex gap-2 w-full'>
-    //             <Button variant="outline" size="sm">編輯</Button>
-    //             <Button variant="outline" size="sm" className='text-rose-500 border-current hover:text-rose-500/90'>刪除</Button>
-    //             <Button variant="outline" size="sm" className='text-neutral-500 border-current hover:text-neutral-500/90'>預覽</Button>
-    //           </div>
-    //         </TableCell>
-    //       </TableRow>
-    //     })}
-    //   </TableBody>
-    // </Table>
   )
 }

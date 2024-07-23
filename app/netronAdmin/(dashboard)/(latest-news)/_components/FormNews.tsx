@@ -23,7 +23,7 @@ import { ApiGetResponse, Language, NewsTableData } from '@/lib/definitions'
 import { updateNews, addNews } from '@/lib/actions'
 import { handleModifyApiResponse, toYYYYMMDD, toTimestampString } from '@/lib/utils'
 import { toast } from 'sonner'
-import { KeyedMutator } from 'swr'
+import { KeyedMutator, mutate } from 'swr'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -43,7 +43,8 @@ type Props = {
   }>>
 } | {
   type: "add"
-  lang?: Language
+  lang?: Language,
+  page: string
 }
 
 export default function FormAddNews(props: Props) {
@@ -161,6 +162,8 @@ export default function FormAddNews(props: Props) {
           street: null,
           created_at: toTimestampString(new Date()),
         })
+
+        await mutate(`news?adminLang=${props.lang}&page=${props.page}`)
       }
 
       handleModifyApiResponse(result)
