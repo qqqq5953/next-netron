@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cn, getBreadCrumbs, redirectPathMap } from '@/lib/utils'
+import { cn, getBreadCrumbs } from '@/lib/utils'
 import { MenuItem } from "./MenuItem";
 import { MenuList as MenuListType } from '@/lib/definitions'
 import { Accordion } from "@/components/ui/accordion";
@@ -24,7 +24,6 @@ type Props = {
 export default function MenuList(props: Props) {
   const pathname = usePathname()
   const breadcrumbs = getBreadCrumbs(pathname)
-  const redirectPath = redirectPathMap[pathname]
   const [expandedItem, setExpandedItem] = useState(props.isChild ? "" : breadcrumbs[0])
 
   return <motion.ul variants={listVariants} className={cn(
@@ -39,9 +38,8 @@ export default function MenuList(props: Props) {
       className="space-y-4"
     >
       {props.menuList.map((item) => {
-        const isActive = redirectPath ?
-          item.path === redirectPath :
-          item.path === pathname
+        const regex = new RegExp(`${item.path}(/.+)?`)
+        const isActive = regex.test(pathname)
 
         return <MenuItem
           key={item.name}

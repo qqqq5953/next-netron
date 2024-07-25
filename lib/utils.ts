@@ -132,18 +132,22 @@ export const menuList: MenuListType = [
   },
 ]
 
-export const redirectPathMap: Record<string, string> = {
-  "/netronAdmin/news/2": "/netronAdmin/news",
-  "/netronAdmin/news/5": "/netronAdmin/news",
-  "/netronAdmin/news/9": "/netronAdmin/news",
-  "/netronAdmin/case/3": "/netronAdmin/case",
-  "/netronAdmin/case/14": "/netronAdmin/case",
-}
-
 export function getBreadCrumbs(pathname: string) {
-  const menuListObj = convertToMenuObj(menuList)
-  const redirectPath = redirectPathMap[pathname]
-  const breadcrumbs = redirectPath ? menuListObj[redirectPath] : menuListObj[pathname]
+  const patterns = [
+    { pattern: '/netronAdmin/case(/.+)?', replacement: '/netronAdmin/case' },
+    { pattern: '/netronAdmin/news(/.+)?', replacement: '/netronAdmin/news' },
+    // Add more patterns here as needed
+  ];
 
-  return breadcrumbs
+  patterns.forEach(({ pattern, replacement }) => {
+    const regex = new RegExp(pattern);
+    if (pathname !== replacement && regex.test(pathname)) {
+      pathname = pathname.replace(regex, replacement);
+    }
+  });
+
+  const menuListObj = convertToMenuObj(menuList);
+  const breadcrumbs = menuListObj[pathname];
+
+  return breadcrumbs;
 }
