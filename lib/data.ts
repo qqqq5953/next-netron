@@ -58,9 +58,26 @@ export async function fetchCases(lang: Language, page: string, id: string): Prom
     `${process.env.BASE_URL}/api/netronAdmin/case/${id}?adminLang=${lang}&page=${page}` :
     `${process.env.BASE_URL}/api/netronAdmin/case?adminLang=${lang}&page=${page}`
 
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    next: {
+      tags: ['case']
+    }
+  });
   const result = await res.json();
   return result
+}
+
+export function swrFetchCases(lang: Language | undefined, page: string, id: string) {
+  page = isInvalidPageNumber(page) ? "1" : page
+  lang = lang ?? "tw"
+
+  const url = id ?
+    `case/${id}?adminLang=${lang}&page=${page}` :
+    `case?adminLang=${lang}&page=${page}`
+
+  return http.get<ApiGetResponse<{ rows: NewsTableData[], total: number }>>(url, {
+    revalidateOnFocus: false,
+  });
 }
 
 export async function fetchCategoryForCases(lang: Language): Promise<ApiGetResponse<CategoryTableData[]>> {

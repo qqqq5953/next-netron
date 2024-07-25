@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 
 import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
 import FormCoverImageField, { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField'
+import { Language } from "@/lib/definitions"
 
 export const caseSchema = {
   category: z.string().min(1, {
@@ -31,9 +32,23 @@ export const caseSchema = {
 
 type Props = {
   form: UseFormReturn<any, any, undefined>
+  lang: Language,
 };
 
 function FormCaseSection(props: Props) {
+  const selectOptionsMap = {
+    "tw": <>
+      <SelectItem value="3">成功案例</SelectItem>
+      <SelectItem value="14">MSP 新世代雲端託管</SelectItem>
+    </>,
+    "en": <>
+      <SelectItem value="7">成功案例</SelectItem>
+    </>,
+    "cn": <>
+      <SelectItem value="6">成功案例</SelectItem>
+    </>
+  }
+
   return (
     <div className='flex flex-col gap-4'>
       {/* 分類 */}
@@ -49,8 +64,7 @@ function FormCaseSection(props: Props) {
                   <SelectValue placeholder="請選擇活動分類" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="case">成功案例</SelectItem>
-                  <SelectItem value="msp">MSP 新世代雲端託管</SelectItem>
+                  {selectOptionsMap[props.lang]}
                 </SelectContent>
               </Select>
             </FormControl>

@@ -74,6 +74,48 @@ export async function updateBrand({
   return result
 }
 
+export async function updateCase({
+  id,
+  m_title,
+  m_keywords,
+  m_description,
+  m_url,
+  updated_at,
+  cid,
+  title,
+  description,
+  lang,
+  img,
+  content,
+}: Pick<NewsTableData, | 'id' | 'm_title' | 'm_keywords' | 'm_description' | 'm_url' | 'updated_at' | 'cid' | 'title' | 'description' | 'lang' | 'img' | 'content'>): Promise<ApiPutResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/case`, {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      updated_at,
+      cid,
+      title,
+      description,
+      img,
+      content
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('case')
+
+  return result
+}
+
 export async function updateCategoryCases({
   id,
   title,
@@ -315,6 +357,49 @@ export async function addNews({
   return result
 }
 
+export async function addCase({
+  m_title,
+  m_keywords,
+  m_description,
+  m_url,
+  updated_at,
+  created_at,
+  cid,
+  title,
+  description,
+  img,
+  content,
+  lang,
+}: Pick<NewsTableData, 'm_title' | 'm_keywords' | 'm_description' | 'm_url' | 'updated_at' | 'created_at' | 'cid' | 'title' | 'description' | 'lang' | 'img' | 'content'>): Promise<ApiPostResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/case`, {
+    method: "POST",
+    body: JSON.stringify({
+      m_title,
+      m_keywords,
+      m_description,
+      m_url,
+      updated_at,
+      created_at,
+      cid,
+      title,
+      description,
+      img,
+      content,
+      lang,
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('case')
+
+  return result
+}
+
 export async function addBrand({
   m_title,
   m_keywords,
@@ -394,6 +479,20 @@ export async function deleteNews({ id }: { id: number }) {
   console.log('result', result);
 
   revalidateTag('news')
+
+  return result
+}
+
+export async function deleteCases({ id }: { id: number }) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/case`, {
+    method: "DELETE",
+    body: JSON.stringify({ id })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('case')
 
   return result
 }

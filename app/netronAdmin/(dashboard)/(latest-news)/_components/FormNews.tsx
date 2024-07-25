@@ -163,7 +163,7 @@ export default function FormAddNews(props: Props) {
           created_at: toTimestampString(new Date()),
         })
 
-        await mutate(`news?adminLang=${props.lang}&page=${props.page}`)
+        await mutate(`/news?adminLang=${props.lang}&page=${props.page}`)
       }
 
       handleModifyApiResponse(result)
