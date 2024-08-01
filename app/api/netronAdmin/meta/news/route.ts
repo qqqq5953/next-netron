@@ -21,6 +21,7 @@ export async function GET(
       statusCode: 200,
       data: {
         id: rows[0].id,
+        type: rows[0].type,
         m_title: rows[0].m_title,
         m_keywords: rows[0].m_keywords,
         m_description: rows[0].m_description,
@@ -43,23 +44,25 @@ export async function PUT(
     SET m_title = ?,
     m_keywords = ?,
     m_description = ?
-    WHERE id = ?;
+    WHERE id = ? AND type = ?;
   `;
 
   try {
     const {
       id,
-      metaTitle,
-      metaKeyword,
-      metaDescription
+      type,
+      m_title,
+      m_keywords,
+      m_description
     } = await request.json();
 
     const [updated] = await withDbConnection(async (db: PoolConnection) => {
       return db.execute<ResultSetHeader>(updateQuery, [
-        metaTitle,
-        metaKeyword,
-        metaDescription,
+        m_title,
+        m_keywords,
+        m_description,
         id,
+        type
       ]);
     });
 
@@ -94,5 +97,4 @@ export async function PUT(
       errorMsg: 'Failed to update about info'
     }, { status: 500 });
   }
-
 }
