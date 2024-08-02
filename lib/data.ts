@@ -50,6 +50,13 @@ export async function fetchBrands(lang: Language, page: string): Promise<ApiGetR
   return result
 }
 
+export function swrFetchBrands(lang: Language, page: string) {
+  return http.get<ApiGetResponse<{ rows: BrandTableData[], total: number }>>
+    (`brands?adminLang=${lang}&page=${page}`, {
+      revalidateOnFocus: false,
+    });
+}
+
 export async function fetchCases(lang: Language, page: string, id: string): Promise<ApiGetResponse<{ rows: NewsTableData[], total: number }>> {
   page = isInvalidPageNumber(page) ? "1" : page
   lang = lang ?? "tw"

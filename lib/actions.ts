@@ -469,6 +469,20 @@ export async function deleteCategoryNews({ id }: { id: number }) {
   return result
 }
 
+export async function deleteBrand({ id }: { id: number }) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/brands`, {
+    method: "DELETE",
+    body: JSON.stringify({ id })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('brands')
+
+  return result
+}
+
 export async function deleteNews({ id }: { id: number }) {
   const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/news`, {
     method: "DELETE",

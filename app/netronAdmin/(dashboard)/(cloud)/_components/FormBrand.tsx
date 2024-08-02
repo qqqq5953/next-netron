@@ -17,11 +17,12 @@ import FormMetaSection, { metaSchema } from '@/app/netronAdmin/_components/FormM
 import FormCustomLink, { customLinkSchema } from '@/app/netronAdmin/_components/FormCustomLinkField'
 import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormTitleField'
 import CustomEditorField, { contentSchema } from '@/app/netronAdmin/_components/CustomEditorField'
-import { BrandTableData, Language } from '@/lib/definitions'
+import { ApiGetResponse, BrandTableData, Language } from '@/lib/definitions'
 import FormCoverImageField, { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField'
 import { addBrand, updateBrand } from '@/lib/actions'
 import { handleModifyApiResponse, toTimestampString } from '@/lib/utils'
 import { toast } from 'sonner'
+import { KeyedMutator, mutate } from 'swr'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -31,10 +32,24 @@ const formSchema = z.object({
   ...coverImageSchema
 })
 
+// type Props = {
+//   type: "edit" | "add"
+//   lang?: Language
+//   brand?: BrandTableData
+// }
+
 type Props = {
-  type: "edit" | "add"
+  type: "edit"
   lang?: Language
-  brand?: BrandTableData
+  brand: BrandTableData
+  mutate: KeyedMutator<ApiGetResponse<{
+    rows: BrandTableData[];
+    total: number;
+  }>>
+} | {
+  type: "add"
+  lang?: Language,
+  page: string
 }
 
 export default function FormAddBrand(props: Props) {
@@ -43,13 +58,13 @@ export default function FormAddBrand(props: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      metaTitle: props.brand?.m_title ?? "",
-      metaKeyword: props.brand?.m_keywords ?? "",
-      metaDescription: props.brand?.m_description ?? "",
-      customizedLink: props.brand?.m_url ?? "",
-      title: props.brand?.title ?? "",
-      content: props.brand?.content ?? "",
-      coverImage: props.brand?.img ?? "",
+      metaTitle: props.type === 'edit' ? (props.brand.m_title ?? "") : "",
+      metaKeyword: props.type === 'edit' ? (props.brand.m_keywords ?? "") : "",
+      metaDescription: props.type === 'edit' ? (props.brand.m_description ?? "") : "",
+      customizedLink: props.type === 'edit' ? (props.brand.m_url ?? "") : "",
+      title: props.type === 'edit' ? (props.brand.title ?? "") : "",
+      content: props.type === 'edit' ? (props.brand.content ?? "") : "",
+      coverImage: props.type === 'edit' ? (props.brand.img ?? "") : "",
     },
   })
 
@@ -68,7 +83,7 @@ export default function FormAddBrand(props: Props) {
 
     try {
       let result
-      if (props.brand?.id) {
+      if (props.type === 'edit') {
         result = await updateBrand({
           id: props.brand.id,
           m_title: metaTitle,
@@ -80,6 +95,8 @@ export default function FormAddBrand(props: Props) {
           img: coverImage,
           updated_at: toTimestampString(new Date())
         })
+
+        await props.mutate()
       } else {
         result = await addBrand({
           m_title: metaTitle,
@@ -94,13 +111,14 @@ export default function FormAddBrand(props: Props) {
           edit_at: null,
           lang: props.lang ?? 'tw',
         })
+
+        await mutate(`/news?adminLang=${props.lang}&page=${props.page}`)
       }
       handleModifyApiResponse(result)
     } catch (error) {
       console.log('error', error);
       toast.error("Oops! Something went wrong.")
     }
-
 
     setOpen(false)
   }

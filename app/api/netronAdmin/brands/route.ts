@@ -244,3 +244,36 @@ export async function POST(
   }
 
 }
+
+export async function DELETE(
+  request: NextRequest,
+) {
+  const deleteQuery = `DELETE FROM brands WHERE id = ?;`;
+
+  try {
+    const { id } = await request.json();
+
+    const [deleted] = await withDbConnection(async (db: PoolConnection) => {
+      return db.execute<ResultSetHeader>(deleteQuery, [id]);
+    });
+
+    if (deleted.affectedRows > 0) {
+      return NextResponse.json({
+        statusCode: 200,
+        msg: "Delete successful",
+        data: null
+      })
+    } else {
+      return NextResponse.json({
+        statusCode: 404,
+        errorMsg: "Resource not found"
+      }, { status: 404 });
+    }
+  } catch (error) {
+    console.log('error', error);
+    return NextResponse.json({
+      statusCode: 500,
+      errorMsg: 'Failed to update successful case'
+    }, { status: 500 });
+  }
+}
