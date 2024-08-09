@@ -85,8 +85,10 @@ async function fetchAll(lang: Language) {
   return result
 }
 
-export default async function ProductPage({ searchParams }: Props) {
-  const [productsRes, brandsRes, newsRes] = await fetchAll(searchParams.adminLang)
+export default async function ProductPage({ searchParams: {
+  adminLang
+} }: Props) {
+  const [productsRes, brandsRes, newsRes] = await fetchAll(adminLang)
 
   const allBrands = isSuccessResponse(brandsRes) ?
     brandsRes.data.rows :
@@ -112,6 +114,7 @@ export default async function ProductPage({ searchParams }: Props) {
       <section>
         {isSuccessResponse(productsRes) ?
           <TableProduct
+            lang={adminLang}
             initialData={productsRes.data}
             allBrands={allBrands}
             allNews={allNews}

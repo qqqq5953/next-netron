@@ -1,7 +1,7 @@
 'use server'
 
 import { revalidateTag } from "next/cache";
-import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, CategoryTableData, MetaForm } from "./definitions";
+import { NewsTableData, ApiPostResponse, ApiPutResponse, BrandTableData, CategoryTableData, MetaForm, ProducTableData } from "./definitions";
 
 export async function updateAbout({
   id,
@@ -262,6 +262,52 @@ export async function updateNews({
   return result
 }
 
+export async function updateProduct({
+  id,
+  title,
+  lang,
+  brandList,
+  newsList,
+  m_url,
+  m_title,
+  m_description,
+  m_keywords,
+  updated_at,
+  productItems,
+  deleteItemIds
+}:
+  Omit<ProducTableData, | "sort" | "created_at"> &
+  { deleteItemIds: number[] }
+): Promise<ApiPutResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/product`, {
+    method: "PUT",
+    body: JSON.stringify({
+      id,
+      title,
+      lang,
+      brandList,
+      newsList,
+      m_url,
+      m_title,
+      m_description,
+      m_keywords,
+      updated_at,
+      productItems,
+      deleteItemIds
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('news')
+
+  return result
+}
+
 export async function addCategoryCases({
   title,
   lang,
@@ -441,6 +487,47 @@ export async function addBrand({
   return result
 }
 
+export async function addProduct({
+  title,
+  lang,
+  brandList,
+  newsList,
+  m_url,
+  m_title,
+  m_description,
+  m_keywords,
+  created_at,
+  updated_at,
+  productItems
+}: Omit<ProducTableData, "id" | "sort">): Promise<ApiPutResponse<{
+  affectedRows: number,
+  changedRows: number
+} | null>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/product`, {
+    method: "POST",
+    body: JSON.stringify({
+      title,
+      lang,
+      brandList,
+      newsList,
+      m_url,
+      m_title,
+      m_description,
+      m_keywords,
+      created_at,
+      updated_at,
+      productItems
+    })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('product')
+
+  return result
+}
+
 export async function deleteCategoryCases({ id }: { id: number }) {
   const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/category/case`, {
     method: "DELETE",
@@ -493,6 +580,20 @@ export async function deleteNews({ id }: { id: number }) {
   console.log('result', result);
 
   revalidateTag('news')
+
+  return result
+}
+
+export async function deleteProduct({ id }: { id: number }) {
+  const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/product`, {
+    method: "DELETE",
+    body: JSON.stringify({ id })
+  });
+
+  const result = await res.json();
+  console.log('result', result);
+
+  revalidateTag('product')
 
   return result
 }

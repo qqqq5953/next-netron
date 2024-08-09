@@ -1,3 +1,4 @@
+import { ProductItems } from "@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProductSection";
 import { IconType } from "react-icons"
 
 // export type ApiResponseBase = {
@@ -93,7 +94,7 @@ export type ProducTableData = {
   m_keywords: string | null,
   m_description: string | null,
   m_url: string | null,
-  productItems: any[]
+  productItems: ProductItems[]
 }
 
 export type SolutionData = {

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { z } from "zod"
@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form } from "@/components/ui/form"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Sheet,
   SheetContent,
@@ -21,7 +20,11 @@ import FormTitleField, { titleSchema } from '@/app/netronAdmin/_components/FormT
 import FormProductSection, { productsSchema } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormProductSection'
 import FormBrandSection, { brandItemsSchema } from '@/app/netronAdmin/(dashboard)/(cloud)/_components/FormBrandSection'
 import FormNewsSection, { newsItemsSchema } from './FormNewsSection'
-import { ProducTableData } from '@/lib/definitions'
+import { ApiGetResponse, Language, ProducTableData } from '@/lib/definitions'
+import { KeyedMutator, mutate } from 'swr'
+import { handleModifyApiResponse, toTimestampString } from '@/lib/utils'
+import { addProduct, updateProduct } from '@/lib/actions'
+import { toast } from 'sonner'
 
 const formSchema = z.object({
   ...metaSchema,
@@ -33,39 +36,132 @@ const formSchema = z.object({
 });
 
 type Props = {
-  type: "add" | "edit"
-  product?: ProducTableData
-  allBrands: { id: number, title: string }[],
-  allNews: { id: number, title: string }[],
+  type: "edit"
+  lang?: Language
+  product: ProducTableData
+  allBrands: { id: number, title: string }[]
+  allNews: { id: number, title: string }[]
+  mutate: KeyedMutator<ApiGetResponse<ProducTableData[]>>
+} | {
+  type: "add"
+  lang?: Language,
+  allBrands: { id: number, title: string }[]
+  allNews: { id: number, title: string }[]
 }
 
-export default function FormAddProduct(props: Props) {
+export default function FormProduct(props: Props) {
   const [open, setOpen] = useState(false)
-  const defaultForm = {
-    metaTitle: props.product?.m_title ?? "",
-    metaKeyword: props.product?.m_keywords ?? "",
-    metaDescription: props.product?.m_description ?? "",
-    customizedLink: props.product?.m_url ?? "",
-    title: props.product?.title ?? "",
-    productItems: props.product?.productItems.map(item => {
-      return {
-        title: item.title,
-        description: item.description,
-        link: item.url,
-        coverImage: item.img
-      }
-    }) ?? [],
-    brandIds: props.product?.brandList,
-    newsIds: props.product?.newsList,
-  }
+  const oldProductItemsRef = useRef<ProducTableData['productItems']>([])
+
+  useEffect(() => {
+    if (props.type === 'edit' && open) {
+      oldProductItemsRef.current = props.product.productItems
+    }
+  }, [props.type, open])
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultForm,
+    defaultValues: {
+      metaTitle: props.type === 'edit' ? (props.product.m_title ?? "") : "",
+      metaKeyword: props.type === 'edit' ? (props.product.m_keywords ?? "") : "",
+      metaDescription: props.type === 'edit' ? (props.product.m_description ?? "") : "",
+      customizedLink: props.type === 'edit' ? (props.product.m_url ?? "") : "",
+      title: props.type === 'edit' ? (props.product.title ?? "") : "",
+      productItems: props.type === 'edit' ? (props.product.productItems.map(item => {
+        return {
+          title: item.title,
+          description: item.description,
+          url: item.url,
+          coverImage: item.coverImage ?? "test.png",
+          pid: item.pid,
+          id: item.id
+        }
+      }) ?? []) : [],
+      brandIds: props.type === 'edit' ? (props.product.brandList ?? []) : [],
+      newsIds: props.type === 'edit' ? (props.product.newsList ?? []) : [],
+    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('onSubmit', values);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const {
+      metaTitle,
+      metaKeyword,
+      metaDescription,
+      customizedLink,
+      title,
+      productItems,
+      brandIds,
+      newsIds
+    } = data
+
+    console.log('productItems', productItems);
+    const oldIds = oldProductItemsRef.current.map(item => item.id)
+    console.log('oldIds', oldIds);
+    const newIds = productItems.map(item => item.id)
+    console.log('newIds', newIds);
+    const difference = oldIds.filter(id => !newIds.includes(id));
+    console.log('difference', difference);
+
+    const newItems = productItems.map(item => {
+      return {
+        ...item,
+        coverImage: item.coverImage || "test.png"
+      }
+    })
+
+    console.log('newItems', newItems);
+
+    try {
+      let result
+
+      if (props.type === 'edit') {
+        const updated = {
+          id: props.product.id,
+          title: title,
+          lang: props.lang ?? 'tw',
+          brandList: brandIds,
+          newsList: newsIds,
+          m_title: metaTitle,
+          m_keywords: metaKeyword || null,
+          m_description: metaDescription || null,
+          m_url: customizedLink || null,
+          updated_at: toTimestampString(new Date()),
+          productItems: newItems,
+          deleteItemIds: difference // 先儲存
+        }
+
+        console.log('updated', updated);
+
+        result = await updateProduct(updated)
+
+        await props.mutate()
+      } else {
+        result = await addProduct({
+          title: title,
+          lang: props.lang ?? 'tw',
+          brandList: brandIds,
+          newsList: newsIds,
+          m_title: metaTitle,
+          m_keywords: metaKeyword || null,
+          m_description: metaDescription || null,
+          m_url: customizedLink || null,
+          updated_at: toTimestampString(new Date()),
+          created_at: toTimestampString(new Date()),
+          productItems: productItems.map(item => {
+            return {
+              ...item,
+              coverImage: item.coverImage || "test.png"
+            }
+          })
+        })
+
+        await mutate(`/product?adminLang=${props.lang ?? "tw"}`)
+      }
+
+      handleModifyApiResponse(result)
+    } catch (error) {
+      toast.error("Oops! Something went wrong.")
+    }
     setOpen(false)
   }
 
@@ -104,7 +200,7 @@ export default function FormAddProduct(props: Props) {
             <div>
               <h3 className='pb-4 text-2xl text-neutral-700 font-semibold'>產品</h3>
               <FormTitleField form={form} />
-              <FormProductSection form={form} />
+              <FormProductSection form={form} id={props.type === 'edit' ? props.product.id : -1} />
             </div>
 
             <div>

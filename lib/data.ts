@@ -169,6 +169,13 @@ export async function fetchProducts(lang: Language): Promise<ApiGetResponse<Prod
   return result
 }
 
+export function swrFetchProducts(lang: Language | undefined) {
+  return http.get<ApiGetResponse<ProducTableData[]>>
+    (`product?adminLang=${lang ?? "tw"}`, {
+      revalidateOnFocus: false,
+    });
+}
+
 export async function fetchSolutions(lang: Language): Promise<ApiGetResponse<SolutionData[]>> {
   const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/solutions?adminLang=${lang}`);
   const result = await res.json();

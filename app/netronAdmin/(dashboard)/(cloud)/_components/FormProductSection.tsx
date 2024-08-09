@@ -1,8 +1,16 @@
-'use client'
-
 import { ChangeEvent, useRef, useState } from 'react';
 import { ControllerRenderProps, UseFormReturn, useFieldArray } from 'react-hook-form';
+import { IoIosAdd } from "react-icons/io";
+import { LuImagePlus } from "react-icons/lu";
+import { z } from 'zod';
 
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import {
   FormControl,
   FormField,
@@ -10,23 +18,11 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
 import DialogAlert from '@/components/DialogAlert';
 import { Button } from '@/app/netronAdmin/_components/Button';
 import { coverImageSchema } from '@/app/netronAdmin/_components/FormCoverImageField';
-
-import { z } from 'zod';
-import { IoIosAdd } from "react-icons/io";
-import { LuImagePlus } from "react-icons/lu";
 
 const productSchema = z.object({
   title: z.string().min(1, {
@@ -35,7 +31,9 @@ const productSchema = z.object({
   description: z.string().min(1, {
     message: "必填欄位",
   }),
-  link: z.string().optional(),
+  url: z.string().optional(),
+  pid: z.number(),
+  id: z.number(),
   ...coverImageSchema
 });
 
@@ -60,6 +58,7 @@ type Props = {
     metaKeyword: string | null;
     metaDescription: string | null;
   }, any, undefined>
+  id: number
 };
 
 export default function FormProductSection(props: Props) {
@@ -68,23 +67,13 @@ export default function FormProductSection(props: Props) {
     name: "productItems",
   });
 
-  const [products, setProducts] = useState(props.form.getValues('productItems'))
-
-  const [previews, setPreviews] = useState<string[]>(fieldArray.fields.map(field => {
-    if (typeof field.coverImage === 'object') {
-      return URL.createObjectURL(field.coverImage)
-    } else {
-      return field.coverImage
-    }
-  }))
-
   const [titles, setTitles] = useState<string[]>(fieldArray.fields.map(field => field.title));
-  const [open, setOpen] = useState(false)
-  const deletedItemIndex = useRef(-1)
+
+  const [open, setOpen] = useState(false);
+  const deletedItemIndex = useRef(-1);
 
   function handleAddItem() {
-    // fieldArray.append({ title: "", description: "", link: "", coverImage: "" })
-    setProducts(prev => [...prev, { title: "", description: "", link: "", coverImage: "" }])
+    fieldArray.append({ title: "", description: "", url: "", coverImage: "", pid: props.id, id: -1 });
     setTitles(prev => [...prev, `項目${prev.length + 1}`])
   }
 
@@ -93,58 +82,46 @@ export default function FormProductSection(props: Props) {
     index: number,
     event: ChangeEvent<HTMLInputElement>
   ) {
-    field.onChange(event.target.value)
+    field.onChange(event.target.value);
 
     const newTitles = [...titles];
     newTitles[index] = event.target.value;
+    console.log('newTitles', newTitles);
+
     setTitles(newTitles);
-  };
+  }
 
   function handleImageChange(
     field: ControllerRenderProps<any, `productItems.${number}.coverImage`>,
-    index: number,
     event: ChangeEvent<HTMLInputElement>
   ) {
-    if (event.target.files?.length === 0) return
-
-    field.onChange(event.target.files![0])
-
-    const newPreviews = [...previews];
-    newPreviews[index] = URL.createObjectURL(event.target.files![0])
-    setPreviews(newPreviews);
+    if (event.target.files?.length === 0) return;
+    field.onChange(event.target.files![0]);
   }
 
   function handleRemoveItem() {
-    // fieldArray.remove(deletedItemIndex.current)
+    const indexToRemove = deletedItemIndex.current;
+    fieldArray.remove(indexToRemove);
 
-    setProducts(products.filter((_, index) => index !== deletedItemIndex.current));
-    setTitles(titles.filter((_, index) => index !== deletedItemIndex.current));
-    setPreviews(previews.filter((_, index) => index !== deletedItemIndex.current));
-
-    setOpen(false)
+    setTitles(prev => prev.filter((_, index) => index !== indexToRemove));
+    setOpen(false);
   }
 
   return (
     <>
       <div className='flex items-center gap-4'>
-        <Button
-          size="sm"
-          variant="secondary"
-          className='my-4 text-sky-500 hover:text-sky-500/90'
-          onClick={handleAddItem}
-        >
+        <Button size="sm" variant="secondary" className='my-4 text-sky-500 hover:text-sky-500/90' onClick={handleAddItem}>
           <IoIosAdd size={20} /> 新增產品項目
         </Button>
       </div>
       <div className='grid grid-cols-3 gap-4'>
-        {products.map((fieldItem, index) => (
-          <Card key={fieldItem.title + index} className='shadow-lg'>
+        {fieldArray.fields.map((fieldItem, index) => (
+          <Card key={fieldItem.id} className='shadow-lg'>
             <CardHeader>
-              <CardTitle className='truncate py-1'>{titles[index] || ''}</CardTitle>
+              <CardTitle className='truncate py-1'>{titles[index]}</CardTitle>
             </CardHeader>
 
             <CardContent className="flex flex-col gap-4">
-              {/* 產品名稱 */}
               <FormField
                 control={props.form.control}
                 name={`productItems.${index}.title`}
@@ -155,7 +132,7 @@ export default function FormProductSection(props: Props) {
                       <Input
                         {...field}
                         className='primary-input-focus'
-                        placeholder="Enter link here"
+                        placeholder="Enter title here"
                         onChange={(e) => handleTitleChange(field, index, e)}
                       />
                     </FormControl>
@@ -164,7 +141,6 @@ export default function FormProductSection(props: Props) {
                 )}
               />
 
-              {/* 產品敘述 */}
               <FormField
                 control={props.form.control}
                 name={`productItems.${index}.description`}
@@ -172,57 +148,43 @@ export default function FormProductSection(props: Props) {
                   <FormItem>
                     <FormLabel className="font-normal text-base text-neutral-800">產品敘述</FormLabel>
                     <FormControl>
-                      <Textarea
-                        {...field}
-                        rows={5}
-                        className='primary-input-focus'
-                        placeholder="Enter link here"
-                      />
+                      <Textarea {...field} rows={5} className='primary-input-focus' placeholder="Enter description here" />
                     </FormControl>
                     <FormMessage className='mt-1.5' />
                   </FormItem>
                 )}
               />
 
-              {/* 連結 */}
               <FormField
                 control={props.form.control}
-                name={`productItems.${index}.link`}
+                name={`productItems.${index}.url`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal text-base text-neutral-800">連結</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        value={field.value ?? ""}
-                        className='primary-input-focus'
-                        placeholder="Enter link here"
-                      />
+                      <Input {...field} value={field.value ?? ""} className='primary-input-focus' placeholder="Enter url here" />
                     </FormControl>
                     <FormMessage className='mt-1.5' />
                   </FormItem>
                 )}
               />
 
-              {/* 圖片 */}
               <FormField
                 control={props.form.control}
                 name={`productItems.${index}.coverImage`}
                 render={({ field }) => (
                   <FormItem className='flex flex-col gap-2'>
                     <div className='text-neutral-800'>圖片</div>
-                    {previews.length !== 0 && previews[index] && <div className='grid place-items-center'>
-                      <img
-                        src={previews[index]}
-                        alt="preview"
-                        className="object-top object-cover rounded-lg aspect-square"
-                      />
-                    </div>
-                    }
-                    <Button size="sm"
-                      variant="secondary"
-                      className='w-full text-sky-500 hover:text-sky-500/90' asChild
-                    >
+                    {field.value && typeof field.value === 'object' && (
+                      <div className='grid place-items-center'>
+                        <img
+                          src={URL.createObjectURL(field.value)}
+                          alt="preview"
+                          className="object-top object-cover rounded-lg aspect-square"
+                        />
+                      </div>
+                    )}
+                    <Button size="sm" variant="secondary" className='w-full text-sky-500 hover:text-sky-500/90' asChild>
                       <FormLabel className='cursor-pointer gap-2'>
                         <LuImagePlus /> 新增圖片
                       </FormLabel>
@@ -231,7 +193,7 @@ export default function FormProductSection(props: Props) {
                       <Input
                         type="file"
                         accept='.jpg,.jpeg,.png,image/jpg,image/jpeg,image/png'
-                        onChange={(e) => handleImageChange(field, index, e)}
+                        onChange={(e) => handleImageChange(field, e)}
                         className='hidden'
                       />
                     </FormControl>
@@ -239,8 +201,6 @@ export default function FormProductSection(props: Props) {
                   </FormItem>
                 )}
               />
-
-
             </CardContent>
 
             <CardFooter>
@@ -248,15 +208,13 @@ export default function FormProductSection(props: Props) {
                 variant="secondary"
                 className='w-full text-rose-500 hover:text-rose-500/90'
                 onClick={() => {
-                  deletedItemIndex.current = index
+                  deletedItemIndex.current = index;
+                  const { title, description, url, coverImage } = props.form.getValues("productItems")[deletedItemIndex.current];
 
-                  const { title, description, link, coverImage } = props.form.getValues("productItems")[deletedItemIndex.current]
-
-                  if ([title, description, link, coverImage].some(field => !!field)) {
-                    setOpen(true)
+                  if ([title, description, url, coverImage].some(field => !!field)) {
+                    setOpen(true);
                   } else {
-                    fieldArray.remove(deletedItemIndex.current)
-                    setTitles(titles.filter((_, index) => index !== deletedItemIndex.current));
+                    fieldArray.remove(deletedItemIndex.current);
                   }
                 }}
               >
@@ -267,17 +225,12 @@ export default function FormProductSection(props: Props) {
         ))}
 
         <DialogAlert
-          title={<div className='leading-8'>
-            <span>產品項目</span>
-            <span className="rounded bg-neutral-100 px-1.5 py-0.5 ml-1">{titles[deletedItemIndex.current]}</span>
-          </div>}
+          title={<div className='leading-8'><span>產品項目</span><span className="rounded bg-neutral-100 px-1.5 py-0.5 ml-1">{fieldArray.fields[deletedItemIndex.current]?.title}</span></div>}
           open={open}
           onConfirm={handleRemoveItem}
           onClose={() => setOpen(false)}
         />
       </div>
-
     </>
   );
-
 }
