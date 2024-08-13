@@ -13,7 +13,7 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "4rem",
       screens: {
         "2xl": "1400px",
       },
@@ -112,9 +112,31 @@ const config = {
         "bounce-netron": "bounce-netron 3.4s infinite alternate",
         "scale-netron-shadow": "scale-netron-shadow 3.4s infinite alternate"
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            h1: {
+              fontSize: '2.25rem', // Example for h1 size
+              fontWeight: '700',
+            },
+            h2: {
+              fontSize: '1.875rem',
+              fontWeight: '700',
+            },
+            h3: {
+              fontSize: '1.5rem',
+              fontWeight: '700',
+            },
+            // Add styles for h4 to h6 as needed
+          },
+        },
+      },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('@tailwindcss/typography'),
+  ],
 } satisfies Config
 
 export default config

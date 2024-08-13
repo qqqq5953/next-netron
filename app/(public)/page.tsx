@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
+import { Language } from "@/lib/definitions";
 import Image from "next/image";
 import { PiArrowRightLight } from "react-icons/pi";
 // import AOS from 'aos';
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="flex flex-col pt-20">
+    <main className="flex-col pt-20 container ">
       <section className="flex flex-col items-center gap-4 w-full px-4 py-8">
         <div>
           <Image

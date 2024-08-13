@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <>
       <TopNav />
-      {children}
+      <div className="container prose min-w-full">{children}</div>
       <Footer />
       <BottomNav />
     </>

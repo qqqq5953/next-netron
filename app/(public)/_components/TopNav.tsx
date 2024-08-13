@@ -1,22 +1,23 @@
-'use client'
+import { FaGlobe } from "react-icons/fa";
+import { FiMenu } from "react-icons/fi";
 
 import Image from "next/image";
+import Link from "next/link";
+
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import MenuList from "./MenuList";
-import { FaGlobe } from "react-icons/fa";
-import { FiMenu } from "react-icons/fi";
-import Link from "next/link";
+import NavList from "./NavList";
 
 export default function TopNav() {
   const menuNavs = [
     { name: "關於我們", path: "/about" },
     {
       name: "最新消息", path: "", children: [
-        { name: "所有資訊", path: "/newsList" },
+        // { name: "所有資訊", path: "/newsList" },
         { name: "雲端新聞", path: "/newsList/5" },
         { name: "雲端活動", path: "/newsList/2" },
         { name: "雲端技能學習", path: "/newsList/9" },
@@ -31,7 +32,7 @@ export default function TopNav() {
     { name: "成功案例", path: "/caseList" },
     { name: "聯絡我們", path: "/contact" },
     {
-      name: " ", path: "", icon: FaGlobe, children: [
+      name: "", path: "", icon: FaGlobe, children: [
         { name: "繁體中文", path: "/tw" },
         { name: "简体中文", path: "/ch" },
         { name: "English", path: "/en" },
@@ -41,20 +42,21 @@ export default function TopNav() {
   ]
 
   return (
-    <nav className="fixed z-10 w-full p-4 bg-white/80 backdrop-blur-md">
-      <div className="flex justify-between">
+    <nav className="fixed inset-x-0 z-10 w-full py-4 bg-white/80 backdrop-blur-md">
+      <div className="flex items-center container">
         <Link href="/">
-          <Image
-            src="/home/logo.svg"
-            alt="Netron Logo"
-            className="dark:invert"
-            width={160}
-            height={44}
-            priority
-          />
+          <div className="relative w-40 h-11 xl:w-60 xl:h-16">
+            <Image
+              src="/home/logo.svg"
+              alt="Netron Logo"
+              fill
+              priority
+            />
+          </div>
         </Link>
+        <NavList menuList={menuNavs} />
         <Sheet>
-          <SheetTrigger className="border rounded-lg p-2 size-10 grid place-items-center">
+          <SheetTrigger className="border rounded-lg p-2 size-10 grid place-items-center ml-auto lg:hidden ">
             <FiMenu />
           </SheetTrigger>
           <SheetContent>

@@ -1,4 +1,4 @@
-import useHttp from "@/hooks/useHttp";
+import useAuthHttp from "@/hooks/useAuthHttp";
 import {
   ApiGetResponse,
   AboutForm,
@@ -12,7 +12,7 @@ import {
 } from "./definitions";
 import { isInvalidPageNumber } from "./utils";
 
-const http = useHttp();
+const http = useAuthHttp();
 
 export async function fetchAbout(lang: Language): Promise<ApiGetResponse<AboutForm>> {
   const res = await fetch(`${process.env.BASE_URL}/api/netronAdmin/about?adminLang=${lang}`, {
