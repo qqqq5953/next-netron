@@ -7,14 +7,16 @@ import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
 
 type Props = {
-  searchParams: {
+  params: {
     lang: Language
   }
 }
 
 export default async function AboutPage(props: Props) {
-  const result = await fetchAbout(props.searchParams.lang ?? "tw")
-  console.log('result', result);
+  console.log('props.params.lang', props.params.lang);
+
+  const result = await fetchAbout(props.params.lang ?? "tw")
+  // console.log('result', result);
 
   return (
     <>

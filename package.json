@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^7.0.0",
+    "@formatjs/intl-localematcher": "^0.5.4",
     "@hookform/resolvers": "^3.4.2",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -30,6 +31,7 @@
     "framer-motion": "^11.2.10",
     "lucide-react": "^0.379.0",
     "mysql2": "^3.10.0",
+    "negotiator": "^0.6.3",
     "next": "14.2.3",
     "next-themes": "^0.3.0",
     "react": "^18",
@@ -44,6 +46,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/negotiator": "^0.6.3",
     "@types/node": "^20.14.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",

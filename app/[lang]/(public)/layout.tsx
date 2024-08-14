@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-import TopNav from "@/app/(public)/_components/TopNav";
-import Footer from "@/app/(public)/_components/Footer";
-import BottomNav from "@/app/(public)/_components/BottomNav";
+// import Footer from "@/app/(public)/_components/Footer";
+// import BottomNav from "@/app/(public)/_components/BottomNav";
+import TopNav from "./_components/TopNav";
+import Footer from "./_components/Footer";
+import BottomNav from "./_components/BottomNav";
 
 export const metadata: Metadata = {
   title: "Netron",

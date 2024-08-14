@@ -17,6 +17,9 @@ export async function GET(
       return [rows];
     });
 
+    // console.log('rows', rows);
+
+
     return NextResponse.json({
       statusCode: 200,
       data: {
