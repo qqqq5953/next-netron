@@ -13,15 +13,12 @@ type Props = {
 }
 
 export default async function AboutPage(props: Props) {
-  console.log('props.params.lang', props.params.lang);
-
   const result = await fetchAbout(props.params.lang ?? "tw")
-  // console.log('result', result);
 
   return (
     <>
-      <main className="pt-20">
-        <h2 className="text-3xl font-semibold pt-8">關於我們</h2>
+      <main>
+        <h2 className="text-3xl font-semibold">關於我們</h2>
         {isSuccessResponse(result) && (
           <div dangerouslySetInnerHTML={{
             __html: result.data.content

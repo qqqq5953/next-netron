@@ -10,7 +10,7 @@ import {
   // PaginationEllipsis,
 } from "@/components/ui/pagination"
 import { isInvalidPageNumber } from "@/lib/utils";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 
 type Props = {
   perPage: number
@@ -20,8 +20,10 @@ type Props = {
 export default function Paginations(props: Props) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
+  const params = useParams<{ lang: string }>()
+  const paramLang = params.lang
 
-  const lang = searchParams.get("adminLang") ?? "tw"
+  const lang = searchParams.get("adminLang") ?? paramLang ?? "tw"
   const page = searchParams.get("page") ?? "1"
   const currentPage = isInvalidPageNumber(page) ? 1 : Number(page)
   const pages = Math.ceil(props.total / props.perPage)
@@ -37,7 +39,9 @@ export default function Paginations(props: Props) {
             <PaginationPrevious
               href={{
                 pathname,
-                query: {
+                query: paramLang ? {
+                  page: isFirstPage ? currentPage : currentPage - 1
+                } : {
                   adminLang: lang,
                   page: isFirstPage ? currentPage : currentPage - 1
                 },
@@ -51,7 +55,12 @@ export default function Paginations(props: Props) {
               <PaginationLink
                 href={{
                   pathname,
-                  query: { adminLang: lang, page: pageNumber + 1 },
+                  query: paramLang ? {
+                    page: pageNumber + 1
+                  } : {
+                    adminLang: lang,
+                    page: pageNumber + 1
+                  },
                 }}
                 className={currentPage === (pageNumber + 1) ?
                   'bg-sky-50 text-sky-500 hover:text-sky-500' :
@@ -70,7 +79,9 @@ export default function Paginations(props: Props) {
             <PaginationNext
               href={{
                 pathname,
-                query: {
+                query: paramLang ? {
+                  page: isLastPage ? currentPage : currentPage + 1
+                } : {
                   adminLang: lang,
                   page: isLastPage ? currentPage : currentPage + 1
                 },

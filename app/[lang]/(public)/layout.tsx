@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <>
       <TopNav />
-      <div className="container prose min-w-full">{children}</div>
+      <div className="container prose min-w-full py-20">{children}</div>
       <Footer />
       <BottomNav />
     </>
