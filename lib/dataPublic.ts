@@ -39,3 +39,23 @@ export async function fetchCaseList(lang: Language, page: string): Promise<ApiGe
   const result = await res.json();
   return result
 }
+
+export async function fetchNews(
+  id: string,
+  lang: Language,
+  page: string
+): Promise<ApiGetResponse<{ rows: NewsTableData[], total: number }>> {
+  page = isInvalidPageNumber(page) ? "1" : page
+
+  const url = id ?
+    `${process.env.BASE_URL}/api/newsList/${id}?lang=${lang}&page=${page}` :
+    `${process.env.BASE_URL}/api/newsList?lang=${lang}&page=${page}`
+
+  const res = await fetch(url, {
+    next: {
+      tags: ['news-public']
+    }
+  });
+  const result = await res.json();
+  return result
+}
