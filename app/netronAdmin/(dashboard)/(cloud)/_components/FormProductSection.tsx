@@ -73,7 +73,7 @@ export default function FormProductSection(props: Props) {
   const deletedItemIndex = useRef(-1);
 
   function handleAddItem() {
-    fieldArray.append({ title: "", description: "", url: "", coverImage: "", pid: props.id, id: -1 });
+    fieldArray.append({ title: "", description: "", url: "", img: "", pid: props.id, id: -1 });
     setTitles(prev => [...prev, `項目${prev.length + 1}`])
   }
 
@@ -92,7 +92,7 @@ export default function FormProductSection(props: Props) {
   }
 
   function handleImageChange(
-    field: ControllerRenderProps<any, `productItems.${number}.coverImage`>,
+    field: ControllerRenderProps<any, `productItems.${number}.img`>,
     event: ChangeEvent<HTMLInputElement>
   ) {
     if (event.target.files?.length === 0) return;
@@ -116,7 +116,7 @@ export default function FormProductSection(props: Props) {
       </div>
       <div className='grid grid-cols-3 gap-4'>
         {fieldArray.fields.map((fieldItem, index) => (
-          <Card key={fieldItem.id} className='shadow-lg'>
+          <Card key={fieldItem.id} className='flex flex-col shadow-lg'>
             <CardHeader>
               <CardTitle className='truncate py-1'>{titles[index]}</CardTitle>
             </CardHeader>
@@ -171,47 +171,61 @@ export default function FormProductSection(props: Props) {
 
               <FormField
                 control={props.form.control}
-                name={`productItems.${index}.coverImage`}
+                name={`productItems.${index}.img`}
                 render={({ field }) => (
                   <FormItem className='flex flex-col gap-2'>
-                    <div className='text-neutral-800'>圖片</div>
-                    {field.value && typeof field.value === 'object' && (
-                      <div className='grid place-items-center'>
-                        <img
-                          src={URL.createObjectURL(field.value)}
-                          alt="preview"
-                          className="object-top object-cover rounded-lg aspect-square"
-                        />
+                    <div className='flex items-center justify-between'>
+                      <div className='text-neutral-800'>圖片</div>
+                      <div>
+                        <Button size="sm" variant="ghost" className='w-fit text-sky-500 hover:text-sky-500/90' asChild>
+                          <FormLabel className='cursor-pointer gap-2'>
+                            <LuImagePlus /> 新增
+                          </FormLabel>
+                        </Button>
+                        <Button size="sm" variant="ghost" className='w-fit text-red-500 hover:text-red-500/90'
+
+                          onClick={() => {
+                            URL.revokeObjectURL(field.value)
+                          }}>
+                          delete
+                        </Button>
+                        <FormControl>
+                          <Input
+                            type="file"
+                            accept='.jpg,.jpeg,.png,image/jpg,image/jpeg,image/png'
+                            onChange={(e) => handleImageChange(field, e)}
+                            className='hidden'
+                          />
+                        </FormControl>
                       </div>
-                    )}
-                    <Button size="sm" variant="secondary" className='w-full text-sky-500 hover:text-sky-500/90' asChild>
-                      <FormLabel className='cursor-pointer gap-2'>
-                        <LuImagePlus /> 新增圖片
-                      </FormLabel>
-                    </Button>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        accept='.jpg,.jpeg,.png,image/jpg,image/jpeg,image/png'
-                        onChange={(e) => handleImageChange(field, e)}
-                        className='hidden'
-                      />
-                    </FormControl>
+                    </div>
+                    <div className='grid place-items-center'>
+                      {typeof field.value === 'object' && <img
+                        src={URL.createObjectURL(field.value)}
+                        alt="preview"
+                        className="object-top object-cover rounded-lg aspect-square"
+                      />}
+                      {typeof field.value === 'string' && <img
+                        src={field.value}
+                        alt="preview"
+                        className="object-top object-cover rounded-lg aspect-square"
+                      />}
+                    </div>
                     <FormMessage className='mt-1.5' />
                   </FormItem>
                 )}
               />
             </CardContent>
 
-            <CardFooter>
+            <CardFooter className='border mt-auto'>
               <Button
                 variant="secondary"
                 className='w-full text-rose-500 hover:text-rose-500/90'
                 onClick={() => {
                   deletedItemIndex.current = index;
-                  const { title, description, url, coverImage } = props.form.getValues("productItems")[deletedItemIndex.current];
+                  const { title, description, url, img } = props.form.getValues("productItems")[deletedItemIndex.current];
 
-                  if ([title, description, url, coverImage].some(field => !!field)) {
+                  if ([title, description, url, img].some(field => !!field)) {
                     setOpen(true);
                   } else {
                     fieldArray.remove(deletedItemIndex.current);

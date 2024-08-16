@@ -64,7 +64,7 @@ export default function FormAddBrand(props: Props) {
       customizedLink: props.type === 'edit' ? (props.brand.m_url ?? "") : "",
       title: props.type === 'edit' ? (props.brand.title ?? "") : "",
       content: props.type === 'edit' ? (props.brand.content ?? "") : "",
-      coverImage: props.type === 'edit' ? (props.brand.img ?? "") : "",
+      img: props.type === 'edit' ? (props.brand.img ?? "") : "",
     },
   })
 
@@ -78,7 +78,7 @@ export default function FormAddBrand(props: Props) {
       customizedLink,
       title,
       content,
-      coverImage
+      img
     } = data
 
     try {
@@ -92,7 +92,7 @@ export default function FormAddBrand(props: Props) {
           m_url: customizedLink,
           title,
           content,
-          img: coverImage,
+          img: img,
           updated_at: toTimestampString(new Date())
         })
 
@@ -105,7 +105,7 @@ export default function FormAddBrand(props: Props) {
           m_url: customizedLink,
           title,
           content,
-          img: coverImage || "test.png",
+          img: img || "test.png",
           updated_at: toTimestampString(new Date()),
           created_at: toTimestampString(new Date()),
           edit_at: null,

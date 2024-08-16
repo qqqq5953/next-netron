@@ -60,7 +60,7 @@ export default function FormCase(props: Props) {
       category: props.type === 'edit' ? props.case.cid.toString() : "",
       title: props.type === 'edit' ? (props.case.title ?? "") : "",
       caseDescription: props.type === 'edit' ? (props.case.description ?? "") : "",
-      coverImage: props.type === 'edit' ? (props.case.img ?? undefined) : undefined,
+      img: props.type === 'edit' ? (props.case.img ?? undefined) : undefined,
       content: props.type === 'edit' ? (props.case.content ?? "") : "",
     },
   })
@@ -77,11 +77,11 @@ export default function FormCase(props: Props) {
       category,
       title,
       caseDescription,
-      coverImage,
+      img,
       content,
     } = data
 
-    console.log('coverImage', coverImage);
+    console.log('img', img);
 
     try {
       let result
@@ -98,7 +98,7 @@ export default function FormCase(props: Props) {
           title: title,
           description: caseDescription,
           lang: props.lang ?? "tw",
-          img: coverImage || "test.png", // 無法傳 File 到 server action
+          img: img || "test.png", // 無法傳 File 到 server action
           content: content
         })
 
@@ -115,7 +115,7 @@ export default function FormCase(props: Props) {
           title: title,
           description: caseDescription,
           lang: props.lang ?? "tw",
-          img: coverImage || "test.png", // 無法傳 File 到 server action
+          img: img || "test.png", // 無法傳 File 到 server action
           content: content,
         })
 
@@ -173,7 +173,7 @@ export default function FormCase(props: Props) {
                 variant="ghost"
                 onClick={() => {
                   form.reset()
-                  form.setValue("coverImage", "")
+                  form.setValue("img", "")
                 }}
               >重置</Button>
               <Button type="submit">儲存</Button>

@@ -53,6 +53,9 @@ export default function FormProduct(props: Props) {
   const [open, setOpen] = useState(false)
   const oldProductItemsRef = useRef<ProducTableData['productItems']>([])
 
+  console.log('oldProductItemsRef', oldProductItemsRef.current);
+
+
   useEffect(() => {
     if (props.type === 'edit' && open) {
       oldProductItemsRef.current = props.product.productItems
@@ -72,7 +75,7 @@ export default function FormProduct(props: Props) {
           title: item.title,
           description: item.description,
           url: item.url,
-          coverImage: item.coverImage ?? "test.png",
+          img: item.img ?? "test.png",
           pid: item.pid,
           id: item.id
         }
@@ -105,7 +108,7 @@ export default function FormProduct(props: Props) {
     const newItems = productItems.map(item => {
       return {
         ...item,
-        coverImage: item.coverImage || "test.png"
+        img: item.img || "test.png"
       }
     })
 
@@ -150,7 +153,7 @@ export default function FormProduct(props: Props) {
           productItems: productItems.map(item => {
             return {
               ...item,
-              coverImage: item.coverImage || "test.png"
+              img: item.img || "test.png"
             }
           })
         })

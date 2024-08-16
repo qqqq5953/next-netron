@@ -75,7 +75,7 @@ export default function FormAddNews(props: Props) {
         undefined,
       category: props.type === 'edit' ? props.news.cid.toString() : "",
       title: props.type === 'edit' ? (props.news.title ?? "") : "",
-      coverImage: props.type === 'edit' ? (props.news.img ?? undefined) : undefined,
+      img: props.type === 'edit' ? (props.news.img ?? undefined) : undefined,
       content: props.type === 'edit' ? (props.news.content ?? "") : "",
     },
   })
@@ -99,11 +99,11 @@ export default function FormAddNews(props: Props) {
       articleDate,
       category,
       title,
-      coverImage,
+      img,
       content,
     } = data
 
-    console.log('coverImage', coverImage);
+    console.log('img', img);
     console.log('toYYYYMMDD(articleDate)', toYYYYMMDD(articleDate));
 
     try {
@@ -129,7 +129,7 @@ export default function FormAddNews(props: Props) {
           updated_at: toYYYYMMDD(articleDate),
           cid: +category,
           title: title,
-          img: coverImage || "test.png", // 無法傳 File 到 server action
+          img: img || "test.png", // 無法傳 File 到 server action
           content: content
         })
 
@@ -153,7 +153,7 @@ export default function FormAddNews(props: Props) {
           updated_at: toYYYYMMDD(articleDate),
           cid: +category,
           title: title,
-          img: coverImage || "test.png", // (coverImage) 無法傳 File 到 server action
+          img: img || "test.png", // (img) 無法傳 File 到 server action
           content: content,
           lang: props.lang ?? 'tw',
           post_date: null,

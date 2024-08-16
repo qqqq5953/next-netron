@@ -11,7 +11,7 @@ import { Button } from '@/app/netronAdmin/_components/Button'
 import { MAX_FILE_SIZE, checkFileType } from '@/lib/utils'
 
 export const coverImageSchema = {
-  coverImage: z.any().optional()
+  img: z.any().optional()
     // .refine((file: File) => file instanceof File || !!file, "請上傳圖片")
     .refine((file: File) => {
       if (!file) return true
@@ -28,15 +28,15 @@ type Props = {
 }
 
 export default function FormCoverImageField(props: Props) {
-  const coverImage: string = props.form.getValues('coverImage')
+  const img: string = props.form.getValues('img')
 
-  // const blobString = coverImage ? URL.createObjectURL(coverImage) : ""
+  // const blobString = img ? URL.createObjectURL(img) : ""
 
-  const [preview, setPreview] = useState(`${process.env.NEXT_PUBLIC_BASE_URL}/${coverImage}`);
+  const [preview, setPreview] = useState(`${process.env.NEXT_PUBLIC_BASE_URL}/${img}`);
   console.log('preview', preview);
 
   function handleImageChange(
-    field: ControllerRenderProps<any, "coverImage">,
+    field: ControllerRenderProps<any, "img">,
     event: ChangeEvent<HTMLInputElement>
   ) {
     if (event.target.files?.length !== 0) {
@@ -50,7 +50,7 @@ export default function FormCoverImageField(props: Props) {
     <>
       <FormField
         control={props.form.control}
-        name="coverImage"
+        name="img"
         render={({ field }) => {
           return <FormItem>
             <div className='text-neutral-800'>封面照</div>
@@ -74,7 +74,7 @@ export default function FormCoverImageField(props: Props) {
           </FormItem>
         }}
       />
-      {preview && coverImage && <img src={preview} alt="preview" className="object-cover rounded-lg size-40" />}
+      {preview && img && <img src={preview} alt="preview" className="object-cover rounded-lg size-40" />}
     </>
   )
 }

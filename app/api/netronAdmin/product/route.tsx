@@ -158,7 +158,7 @@ export async function PUT(
             await db.execute<ResultSetHeader>(updateProductItemQuery, [
               item.title,
               item.description,
-              item.coverImage,
+              item.img,
               updated_at,
               item.url,
               item.id,
@@ -168,7 +168,7 @@ export async function PUT(
             await db.execute<ResultSetHeader>(createProductItemQuery, [
               item.title,
               item.description,
-              item.coverImage,
+              item.img,
               updated_at,
               updated_at, // created_at
               id, // pid
@@ -277,7 +277,7 @@ export async function POST(
           return db.execute<ResultSetHeader>(createProductItemQuery, [
             item.title,
             item.description,
-            item.coverImage,
+            item.img,
             created_at,
             updated_at,
             pid,
