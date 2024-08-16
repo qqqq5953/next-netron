@@ -25,8 +25,8 @@ export default function TopNav() {
     },
     {
       name: "雲產品服務", path: "", children: [
-        { name: "Cloud 雲端服務", path: "/services/4" },
-        { name: "Brand 雲端品牌", path: "/services/3" },
+        { name: "Cloud 雲端服務", path: "/services/4?services" },
+        { name: "Brand 雲端品牌", path: "/services/3?brands" },
       ]
     },
     { name: "成功案例", path: "/caseList" },

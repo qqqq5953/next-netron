@@ -3,7 +3,7 @@ import { fetchNews } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
 import Image from "next/image";
-import Card from "../../_components/Card";
+import CardNews from "../../_components/CardNews";
 
 type Props = {
   params: {
@@ -23,14 +23,13 @@ const categoryTitles: Record<string, string> = {
 
 export default async function NewsListPage(props: Props) {
   const categoryId = props.params.id
+  const title = categoryTitles[categoryId] ?? "所有消息"
 
   const result = await fetchNews(
     categoryId,
     props.params.lang ?? "tw",
     props.searchParams.page
   )
-
-  const title = categoryTitles[categoryId] ?? "所有消息"
 
   return (
     <>
@@ -40,11 +39,11 @@ export default async function NewsListPage(props: Props) {
           {isSuccessResponse(result) && (
             <>
               {result.data.rows.map(row => {
-                return <Card
+                return <CardNews
                   key={row.id}
                   imgUrl={row.img}
                   title={row.title}
-                  content={row.created_at.split('T')[0]}
+                  date={row.created_at.split('T')[0]}
                 />
               })}
             </>

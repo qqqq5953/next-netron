@@ -7,7 +7,7 @@ import { fetchCaseList } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
 import Image from "next/image";
-import Card from "../_components/Card";
+import Card from "../_components/CardServices";
 
 type Props = {
   params: {

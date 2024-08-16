@@ -5,6 +5,8 @@ import {
   // CategoryTableData,
   Language,
   NewsTableData,
+  ProducTableData,
+  BrandTableData,
   // MetaForm,
   // NewsTableData,
   // ProducTableData,
@@ -56,6 +58,27 @@ export async function fetchNews(
       tags: ['news-public']
     }
   });
+  const result = await res.json();
+  return result
+}
+
+export async function fetchServices(lang: Language, productId: string): Promise<ApiGetResponse<ProducTableData & {
+  brandItems: {
+    title: string,
+    img: string,
+    id: number
+  }[]
+}>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/services/${productId}?lang=${lang}`);
+  const result = await res.json();
+  return result
+}
+
+export async function fetchAllBrands(lang: Language): Promise<ApiGetResponse<{
+  rows: Pick<BrandTableData, "id" | "title">[],
+  total: number
+}>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/brands?lang=${lang}&page=all`);
   const result = await res.json();
   return result
 }

@@ -12,9 +12,10 @@ type Props = {
   imgUrl: string | null
   title: string
   content?: string
+  date?: string
 }
 
-export default function CardComponent(props: Props) {
+export default function CardNews(props: Props) {
   return (
     <Card className="shadow-md">
       <CardHeader>
@@ -29,12 +30,14 @@ export default function CardComponent(props: Props) {
           }
         </div>
       </CardHeader>
-      {props.content && <CardContent>
-        <p>{props.content}</p>
-      </CardContent>}
-      <CardFooter>
+      <CardContent>
+        {props.date && <div className="text-neutral-600">{props.date}</div>}
+        <h3 className="mt-1">{props.title}</h3>
+        {props.content && <p>{props.content}</p>}
+      </CardContent>
+      {/* <CardFooter>
         <CardTitle>{props.title}</CardTitle>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
 
   )
