@@ -5,6 +5,7 @@ import "@/styles/globals.css";
 import TopNav from "./_components/TopNav";
 import Footer from "./_components/Footer";
 import BottomNav from "./_components/BottomNav";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Netron",
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <>
       <TopNav />
-      <div className="container prose min-w-full py-20">{children}</div>
+      <Suspense>
+        <div className="container prose min-w-full py-20">{children}</div>
+      </Suspense>
       <Footer />
       <BottomNav />
     </>
