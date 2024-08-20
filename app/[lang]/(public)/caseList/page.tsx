@@ -6,8 +6,7 @@ import Paginations from "@/components/Paginations";
 import { fetchCaseList } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
-import Image from "next/image";
-import Card from "../_components/CardServices";
+import CardServices from "../_components/CardServices";
 
 type Props = {
   params: {
@@ -32,7 +31,7 @@ export default async function CaseListPage(props: Props) {
           {isSuccessResponse(result) && (
             <>
               {result.data.rows.map(row => {
-                return <Card
+                return <CardServices
                   key={row.id}
                   imgUrl={row.img}
                   title={row.title}

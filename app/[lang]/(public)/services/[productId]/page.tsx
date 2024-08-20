@@ -1,8 +1,6 @@
-import Paginations from "@/components/Paginations";
-import { fetchAllBrands, fetchNews, fetchServices } from "@/lib/dataPublic";
+import { fetchServices } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
-import Image from "next/image";
 import CardServices from "../../_components/CardServices";
 
 type Props = {
@@ -40,6 +38,7 @@ export default async function ServicesPage(props: Props) {
                   key={brand.id}
                   imgUrl={brand.img}
                   title={brand.title}
+                  url={brand.url}
                 />
               })}
             </>
@@ -56,6 +55,7 @@ export default async function ServicesPage(props: Props) {
                   imgUrl={product.img}
                   title={product.title}
                   content={product.description}
+                  url={product.url}
                 />
               })}
             </>

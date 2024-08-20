@@ -1,18 +1,20 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  // CardDescription,
+  // CardTitle,
 } from "@/components/ui/card"
 import Image from "next/image";
+import Link from "next/link";
 
 type Props = {
   imgUrl: string | null
   title: string
   content?: string
-  date?: string
+  date?: string,
+  url?: string | null
 }
 
 export default function CardServices(props: Props) {
@@ -35,9 +37,9 @@ export default function CardServices(props: Props) {
         <h4 className="mt-1 text-xl">{props.title}</h4>
         {props.content && <p>{props.content}</p>}
       </CardContent>
-      {/* <CardFooter>
-        <CardTitle>{props.title}</CardTitle>
-      </CardFooter> */}
+      {props.url && <CardFooter className="justify-end">
+        <Link href={props.url} className="text-sky-600 underline-offset-[6px]">查看更多</Link>
+      </CardFooter>}
     </Card>
 
   )

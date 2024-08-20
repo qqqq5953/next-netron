@@ -66,7 +66,8 @@ export async function fetchServices(lang: Language, productId: string): Promise<
   brandItems: {
     title: string,
     img: string,
-    id: number
+    id: number,
+    url: string | null
   }[]
 }>> {
   const res = await fetch(`${process.env.BASE_URL}/api/services/${productId}?lang=${lang}`);

@@ -31,7 +31,7 @@ const productSchema = z.object({
   description: z.string().min(1, {
     message: "必填欄位",
   }),
-  url: z.string().optional(),
+  url: z.string().nullable(),
   pid: z.number(),
   id: z.number(),
   ...coverImageSchema
