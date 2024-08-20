@@ -62,24 +62,28 @@ export async function fetchNews(
   return result
 }
 
-export async function fetchServices(lang: Language, productId: string): Promise<ApiGetResponse<ProducTableData & {
-  brandItems: {
-    title: string,
-    img: string,
-    id: number,
-    url: string | null
-  }[]
-}>> {
+export async function fetchServices(lang: Language, productId: string): Promise<ApiGetResponse<
+  ProducTableData |
+  BrandTableData & {
+    brandItems: {
+      title: string,
+      img: string,
+      id: number,
+      m_url: string
+    }[]
+  }
+>> {
   const res = await fetch(`${process.env.BASE_URL}/api/services/${productId}?lang=${lang}`);
   const result = await res.json();
   return result
 }
 
-export async function fetchAllBrands(lang: Language): Promise<ApiGetResponse<{
-  rows: Pick<BrandTableData, "id" | "title">[],
-  total: number
-}>> {
-  const res = await fetch(`${process.env.BASE_URL}/api/brands?lang=${lang}&page=all`);
+export async function fetchBrand(lang: Language, m_url: string): Promise<ApiGetResponse<BrandTableData>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/brands?lang=${lang}&m_url=${m_url}`, {
+    next: {
+      tags: ['brands-public']
+    }
+  });
   const result = await res.json();
   return result
 }

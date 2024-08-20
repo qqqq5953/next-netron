@@ -19,7 +19,7 @@ type Props = {
 
 export default function CardServices(props: Props) {
   return (
-    <Card className="shadow-md">
+    <Card className="flex flex-col shadow-md">
       <CardHeader>
         <div className="relative min-h-32">
           {props.imgUrl ? <Image
@@ -37,7 +37,7 @@ export default function CardServices(props: Props) {
         <h4 className="mt-1 text-xl">{props.title}</h4>
         {props.content && <p>{props.content}</p>}
       </CardContent>
-      {props.url && <CardFooter className="justify-end">
+      {props.url && <CardFooter className="justify-end mt-auto">
         <Link href={props.url} className="text-sky-600 underline-offset-[6px]">查看更多</Link>
       </CardFooter>}
     </Card>

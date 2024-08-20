@@ -20,9 +20,9 @@ export default async function AboutPage(props: Props) {
       <main>
         <h2 className="text-3xl font-semibold">關於我們</h2>
         {isSuccessResponse(result) && (
-          <div dangerouslySetInnerHTML={{
+          <article dangerouslySetInnerHTML={{
             __html: result.data.content
-          }}></div>
+          }}></article>
         )}
       </main>
       {/* <main className="flex flex-col gap-4 pt-20">

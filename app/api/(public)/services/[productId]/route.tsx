@@ -65,7 +65,7 @@ async function getBrands(db: PoolConnection, product: RowDataPacket) {
   const placeholders = brandListArray.map(() => '?').join(',');
 
   const brandQuery = `
-    SELECT id, title, img
+    SELECT id, title, img, m_url
     FROM brands
     WHERE id IN (${placeholders});
   `;

@@ -70,210 +70,32 @@ async function getAllBrandsWithIdAndTitle(lang: Language) {
 export async function GET(
   request: NextRequest,
 ) {
-  const page = request.nextUrl.searchParams.get('page')
-  const adminLang = request.nextUrl.searchParams.get('adminLang');
-  const lang = findCurrentLanguage(adminLang)
+  const m_url = request.nextUrl.searchParams.get('m_url')
+  const lang = findCurrentLanguage(request.nextUrl.searchParams.get('lang'))
+
+  const baseQuery = `
+    SELECT * FROM brands 
+    WHERE m_url = ? and lang = ?;
+  `;
 
   try {
-    const [rows, count] = page === 'all' ?
-      await getAllBrandsWithIdAndTitle(lang) :
-      await getPaginatedBrands(lang, page)
+    const [rows] = await withDbConnection(async (db: PoolConnection) => {
+      const [rows] = await db.execute<RowDataPacket[]>(baseQuery, [m_url, lang]);
+      return rows;
+    });
+
+    console.log('rows', rows);
+
 
     return NextResponse.json({
       statusCode: 200,
-      data: {
-        total: count[0].totalBrands,
-        rows
-      }
+      data: rows ?? {}
     });
   } catch (error) {
     console.log('brands error', error);
     return NextResponse.json({
       statusCode: 500,
       errorMsg: 'Failed to fetch brand data'
-    }, { status: 500 });
-  }
-}
-
-export async function PUT(
-  request: NextRequest,
-) {
-  const updateQuery = `
-    UPDATE brands 
-    SET m_title = ?,
-    m_keywords = ?,
-    m_description = ?,
-    m_url = ?,
-    title = ?,
-    content = ?,
-    updated_at = ?,
-    img = ?
-    WHERE id = ?;
-  `;
-
-  try {
-    const {
-      m_title,
-      m_keywords,
-      m_description,
-      m_url,
-      title,
-      content,
-      img,
-      updated_at,
-      id,
-    } = await request.json();
-    const [updated] = await withDbConnection(async (db: PoolConnection) => {
-      return db.execute<ResultSetHeader>(updateQuery, [
-        m_title,
-        m_keywords,
-        m_description,
-        m_url,
-        title,
-        content,
-        updated_at,
-        img,
-        id,
-      ]);
-    });
-
-    const { affectedRows, changedRows } = updated
-
-    if (changedRows === 0) {
-      return NextResponse.json({
-        statusCode: 204,
-        msg: "Update successful but no rows were changed",
-        data: null
-      })
-    } else if (affectedRows === changedRows) {
-      return NextResponse.json({
-        statusCode: 200,
-        msg: "Update successful. All matched rows were modified.",
-        data: null
-      })
-    } else {
-      return NextResponse.json({
-        statusCode: 200,
-        msg: "Update partially successful",
-        data: {
-          affectedRows,
-          changedRows
-        }
-      })
-    }
-  } catch (error) {
-    console.log('error', error);
-    return NextResponse.json({
-      statusCode: 500,
-      errorMsg: 'Failed to update about info'
-    }, { status: 500 });
-  }
-
-}
-
-export async function POST(
-  request: NextRequest,
-) {
-  const createQuery = `
-    INSERT INTO brands (
-      title,
-      img,
-      sort, 
-      content,
-      m_url,
-      lang,
-      edit_at,
-      created_at,
-      updated_at,
-      m_title,
-      m_description,
-      m_keywords
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-  `;
-
-  const maxSortQuery = 'SELECT MAX(sort) AS max_sort_value FROM brands';
-
-  try {
-    const {
-      m_title,
-      m_keywords,
-      m_description,
-      m_url,
-      title,
-      content,
-      img,
-      lang,
-      updated_at,
-      created_at,
-      edit_at,
-    } = await request.json();
-
-    const [created] = await withDbConnection(async (db: PoolConnection) => {
-      const [rows] = await db.execute<RowDataPacket[]>(maxSortQuery);
-      const sort_value = rows[0].max_sort_value + 1
-
-      return await db.execute<ResultSetHeader>(createQuery, [
-        title,
-        img,
-        sort_value, // sort, 
-        content,
-        m_url,
-        lang,
-        edit_at,  //edit_at,
-        created_at,
-        updated_at,
-        m_title,
-        m_description,
-        m_keywords,
-      ]);
-    });
-
-    console.log('created', created);
-
-    return NextResponse.json({
-      statusCode: 200,
-      msg: "Brand created successfully.",
-      data: null
-    })
-  } catch (error) {
-    console.log('error', error);
-    return NextResponse.json({
-      statusCode: 500,
-      errorMsg: 'Failed to update brand info'
-    }, { status: 500 });
-  }
-
-}
-
-export async function DELETE(
-  request: NextRequest,
-) {
-  const deleteQuery = `DELETE FROM brands WHERE id = ?;`;
-
-  try {
-    const { id } = await request.json();
-
-    const [deleted] = await withDbConnection(async (db: PoolConnection) => {
-      return db.execute<ResultSetHeader>(deleteQuery, [id]);
-    });
-
-    if (deleted.affectedRows > 0) {
-      return NextResponse.json({
-        statusCode: 200,
-        msg: "Delete successful",
-        data: null
-      })
-    } else {
-      return NextResponse.json({
-        statusCode: 404,
-        errorMsg: "Resource not found"
-      }, { status: 404 });
-    }
-  } catch (error) {
-    console.log('error', error);
-    return NextResponse.json({
-      statusCode: 500,
-      errorMsg: 'Failed to update successful case'
     }, { status: 500 });
   }
 }
