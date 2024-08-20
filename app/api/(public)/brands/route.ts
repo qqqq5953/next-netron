@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { notFound } from 'next/navigation';
 import { withDbConnection } from "@/lib/mysql";
 import { Language } from "@/lib/definitions";
 import { findCurrentLanguage } from "@/lib/utils";
 import { RowDataPacket } from 'mysql2';
-import { PoolConnection, ResultSetHeader } from "mysql2/promise";
+import { PoolConnection } from "mysql2/promise";
 
 type QueryInfo = {
   baseQuery: string;
@@ -86,10 +87,16 @@ export async function GET(
 
     console.log('rows', rows);
 
+    if (!rows) {
+      return NextResponse.json({
+        statusCode: 404,
+        errorMsg: 'Page not found'
+      }, { status: 404 });
+    }
 
     return NextResponse.json({
       statusCode: 200,
-      data: rows ?? {}
+      data: rows
     });
   } catch (error) {
     console.log('brands error', error);
