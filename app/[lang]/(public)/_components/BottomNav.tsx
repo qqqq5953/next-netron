@@ -15,8 +15,8 @@ export default function BottomNav() {
   ]
 
   return (
-    <nav className='fixed bottom-0 inset-x-0 flex items-center gap-4 w-full px-4 py-2.5 bg-neutral-600 container'>
-      <ul className='flex justify-between text-white w-full'>
+    <nav className='fixed bottom-0 inset-x-0 flex items-center gap-4 w-full px-4 py-2.5 bg-neutral-600 container sm:w-fit sm:left-auto sm:bottom-32'>
+      <ul className='flex justify-between text-white w-full sm:flex-col sm:gap-8'>
         {contactList.map(item => {
           return <li key={item.path}>
             <Link href={item.path}>

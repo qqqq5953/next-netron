@@ -35,7 +35,7 @@ export default async function NewsListPage(props: Props) {
     <>
       <main className="flex flex-col gap-8">
         <h2 className="text-3xl font-semibold">{title}</h2>
-        <div className="grid grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {isSuccessResponse(result) && (
             <>
               {result.data.rows.map(row => {
