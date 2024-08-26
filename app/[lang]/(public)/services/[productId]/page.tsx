@@ -4,6 +4,7 @@ import { isSuccessResponse } from "@/lib/utils";
 import CardServices from "../../_components/CardServices";
 import CardBrand from "../../_components/CardBrand";
 import { useTranslation } from "@/app/i18n";
+import { Metadata } from "next";
 
 type Props = {
   params: {
@@ -12,6 +13,24 @@ type Props = {
   },
   searchParams: {
     page: string
+  }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+): Promise<Metadata> {
+  const { lang, productId } = params
+  const result = await fetchServices(lang ?? "tw", productId)
+
+  return {
+    title: isSuccessResponse(result) ?
+      result.data.m_title : "",
+    description: isSuccessResponse(result) ?
+      result.data.m_description :
+      "",
+    keywords: isSuccessResponse(result) ?
+      result.data.m_keywords :
+      "",
   }
 }
 

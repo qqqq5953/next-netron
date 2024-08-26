@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RowDataPacket } from 'mysql2';
-import { PoolConnection, ResultSetHeader } from "mysql2/promise";
+import { PoolConnection } from "mysql2/promise";
 import { withDbConnection } from "@/lib/mysql";
 import { findCurrentLanguage } from "@/lib/utils";
-import { ProducTableData } from "@/lib/definitions";
 
 export async function GET(
   request: NextRequest,
