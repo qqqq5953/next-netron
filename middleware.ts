@@ -4,10 +4,11 @@ import type { NextRequest } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
-const defaultLocale = 'zh-TW';
-const locales = [defaultLocale, 'zh-CH', 'en-US'];
+export const defaultLocale = 'zh-TW';
 
-const localeMapping: Record<string, string> = {
+export const locales = [defaultLocale, 'zh-CH', 'en-US'];
+
+export const localeMapping: Record<string, string> = {
   [defaultLocale]: 'tw',
   'zh-CH': 'cn',
   'en-US': 'en',

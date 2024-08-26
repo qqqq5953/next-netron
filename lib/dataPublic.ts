@@ -87,3 +87,36 @@ export async function fetchBrand(lang: Language, m_url: string): Promise<ApiGetR
   const result = await res.json();
   return result
 }
+
+export async function fetchNav(lang: Language): Promise<ApiGetResponse<{
+  about: {
+    title: string,
+    m_url: string
+  }[],
+  categories: {
+    title: string,
+    type: string,
+    lang: Language,
+    id: number
+  }[],
+  cases: {
+    title: string,
+    type: string,
+    lang: Language,
+    id: number
+  }[],
+  products: {
+    title: string,
+    lang: Language,
+    m_url: string,
+    id: number,
+  }[]
+}>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/nav?lang=${lang}`, {
+    next: {
+      tags: ['nav-public']
+    }
+  });
+  const result = await res.json();
+  return result
+}

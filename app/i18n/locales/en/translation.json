@@ -1,0 +1,13 @@
+{
+  "navbar-header": {
+    "News": "News",
+    "Products & Services": "Products & Services",
+    "Case Studies": "Case Studies",
+    "Contact Us": "Contact Us",
+    "lang": {
+      "Traditional Chinese": "Traditional Chinese",
+      "Simplified Chinese": "Simplified Chinese",
+      "English": "English"
+    }
+  }
+}

@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import useSWR, { SWRConfiguration } from 'swr';
 
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/netronAdmin/`
+  baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api/`
 });
 
 api.interceptors.request.use((config) => {
