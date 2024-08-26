@@ -78,8 +78,9 @@ async function getPaginatedCases(lang: Language, categoryId: string | null, page
 export async function GET(
   request: NextRequest,
 ) {
+  const { searchParams } = request.nextUrl
+
   try {
-    const { searchParams } = request.nextUrl
     const lang = findCurrentLanguage(searchParams.get('lang'))
     const page = searchParams.get('page')
     const validPageNumber = isInvalidPageNumber(page) ? 1 : parseInt(page!, 10)
