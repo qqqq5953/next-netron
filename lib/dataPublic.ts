@@ -128,3 +128,13 @@ export async function fetchNav(lang: Language): Promise<ApiGetResponse<{
   const result = await res.json();
   return result
 }
+
+export async function fetchContact(lang: Language): Promise<ApiGetResponse<any>> {
+  const res = await fetch(`${process.env.BASE_URL}/api/contact?lang=${lang}`, {
+    next: {
+      tags: ['contact-public']
+    }
+  });
+  const result = await res.json();
+  return result
+}

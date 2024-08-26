@@ -9,5 +9,21 @@
       "Simplified Chinese": "简体中文",
       "English": "英文"
     }
+  },
+  "public": {
+    "contact-page": {
+      "title": "聯絡我們",
+      "form-title": "表單填寫",
+      "company-name": "網創資訊股份有限公司",
+      "contact-info": "聯絡方式",
+      "placeholder": {
+        "firstName": "姓氏",
+        "lastName": "名字",
+        "phone": "聯絡電話",
+        "email": "電子郵件",
+        "subject": "主題",
+        "content": "內容"
+      }
+    }
   }
 }

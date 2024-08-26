@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { z } from "zod"
@@ -10,6 +9,10 @@ import { Button } from '@/app/netronAdmin/_components/Button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+
+type Props = {
+  placeholder: Record<string, string>
+}
 
 const formSchema = z.object({
   fstName: z.string().min(1, {
@@ -33,7 +36,7 @@ const formSchema = z.object({
   }),
 })
 
-export default function FormContact() {
+export default function FormContact(props: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,7 +53,6 @@ export default function FormContact() {
     console.log('data', data);
   }
 
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -60,7 +62,7 @@ export default function FormContact() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="姓氏*" {...field} />
+                <Input placeholder={`${props.placeholder.firstName}*`} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,7 +74,7 @@ export default function FormContact() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="名字*" {...field} />
+                <Input placeholder={`${props.placeholder.lastName}*`} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,7 +86,7 @@ export default function FormContact() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="聯絡電話" {...field} />
+                <Input placeholder={`${props.placeholder.phone}`} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +98,7 @@ export default function FormContact() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="電子郵件*" {...field} />
+                <Input placeholder={`${props.placeholder.email}*`} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -108,7 +110,7 @@ export default function FormContact() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="主題*" {...field} />
+                <Input placeholder={`${props.placeholder.subject}*`} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,7 +122,7 @@ export default function FormContact() {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Textarea placeholder="內容*" {...field} rows={5} />
+                <Textarea placeholder={`${props.placeholder.content}*`} {...field} rows={5} />
               </FormControl>
               <FormMessage />
             </FormItem>

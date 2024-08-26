@@ -9,5 +9,21 @@
       "Simplified Chinese": "简体中文",
       "English": "英文"
     }
+  },
+  "public": {
+    "contact-page": {
+      "title": "联系我们",
+      "form-title": "表单填写",
+      "company-name": "网创资讯股份有限公司",
+      "contact-info": "联系方式",
+      "placeholder": {
+        "firstName": "姓氏",
+        "lastName": "名字",
+        "phone": "联系电话",
+        "email": "电子邮件",
+        "subject": "主题",
+        "content": "内容"
+      }
+    }
   }
 }

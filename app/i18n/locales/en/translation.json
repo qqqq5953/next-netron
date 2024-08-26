@@ -9,5 +9,21 @@
       "Simplified Chinese": "Simplified Chinese",
       "English": "English"
     }
+  },
+  "public": {
+    "contact-page": {
+      "title": "Contact Us",
+      "form-title": "Form",
+      "company-name": "Netron Information Technology CORP.",
+      "contact-info": "Contact Information",
+      "placeholder": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phone": "Phone",
+        "email": "Email",
+        "subject": "Subject",
+        "content": "Content"
+      }
+    }
   }
 }

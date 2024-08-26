@@ -27,9 +27,6 @@ export async function generateMetadata(
     searchParams.page
   )
 
-  console.log('result', result);
-
-
   return {
     title: isSuccessResponse(result) ?
       result.data.metas.m_title : "",
