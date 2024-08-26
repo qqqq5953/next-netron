@@ -12,7 +12,16 @@ type QueryInfo = {
   countParams: any[];
 };
 
+const PER_PAGE = 12;
+const CID_MAPPING: Record<Language, number[]> = {
+  tw: [3, 14],
+  en: [7],
+  cn: [6],
+};
+
 function buildQuery(lang: Language, categoryId: string | null, page: number): QueryInfo {
+  const cids = categoryId ? null : CID_MAPPING[lang];
+
   const queryParams: any[] = [lang];
   const countParams: any[] = [lang];
 
@@ -31,28 +40,14 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
     countQuery += ` AND cid = ?`;
     queryParams.push(categoryId);
     countParams.push(categoryId);
-  } else {
+  } else if (cids) {
     // tab 選全部時
-    if (lang === 'tw') {
-      baseQuery += ` AND cid IN (3, 14)`;
-      countQuery += ` AND cid IN (3, 14)`;
-    } else if (lang === 'en') {
-      baseQuery += ` AND cid IN (7)`;
-      countQuery += ` AND cid IN (7)`;
-    } else {
-      baseQuery += ` AND cid IN (6)`;
-      countQuery += ` AND cid IN (6)`;
-    }
+    baseQuery += ` AND cid IN (${cids.join(", ")})`;
+    countQuery += ` AND cid IN (${cids.join(", ")})`;
   }
 
-  baseQuery += `
-    ORDER BY sort DESC
-    LIMIT 12
-    OFFSET ?
-  `;
-
-  const PER_PAGE = 12
   const offset = (page - 1) * PER_PAGE;
+  baseQuery += ` ORDER BY sort DESC LIMIT ${PER_PAGE} OFFSET ?`;
   queryParams.push(offset);
 
   return {
@@ -63,13 +58,13 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
   };
 };
 
-async function getPaginatedCases(lang: Language, categoryId: string | null, page: string | null) {
+async function getPaginatedCases(lang: Language, categoryId: string | null, page: number) {
   const {
     baseQuery,
     countQuery,
     queryParams,
     countParams
-  } = buildQuery(lang, categoryId, parseInt(page ?? "1", 10));
+  } = buildQuery(lang, categoryId, page);
 
   const [rows, count] = await withDbConnection(async (db: PoolConnection) => {
     const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
@@ -83,16 +78,29 @@ async function getPaginatedCases(lang: Language, categoryId: string | null, page
 export async function GET(
   request: NextRequest,
 ) {
-  const page = request.nextUrl.searchParams.get('page')
+  const page = parseInt(request.nextUrl.searchParams.get('page') || "1", 10);
   const lang = findCurrentLanguage(request.nextUrl.searchParams.get('lang'))
 
   try {
-    const [rows, count] = await getPaginatedCases(lang, "3", page)
+    const categoriesQuery = `
+      SELECT id FROM categories 
+      WHERE lang = ? AND type = "case";
+    `;
+
+    const [categories] = await withDbConnection(async (db: PoolConnection) => {
+      const [rows] = await db.execute<RowDataPacket[]>(categoriesQuery, [lang]);
+
+      return [rows];
+    });
+
+    const categoryId = categories.length ? categories[0].id : null;
+
+    const [rows, [count]] = await getPaginatedCases(lang, categoryId, page)
 
     return NextResponse.json({
       statusCode: 200,
       data: {
-        total: count[0].totalNews,
+        total: count.totalNews,
         rows
       }
     });

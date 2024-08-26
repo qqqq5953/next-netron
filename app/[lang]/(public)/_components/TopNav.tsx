@@ -67,7 +67,7 @@ export default async function TopNav(props: Props) {
           },
           {
             name: t("navbar-header.lang.Simplified Chinese"),
-            path: "/ch"
+            path: "/cn"
           },
           {
             name: t("navbar-header.lang.English"),
@@ -82,37 +82,7 @@ export default async function TopNav(props: Props) {
     ] :
     []
 
-  // console.log('menuNavs1', menuNavs1);
-
-  const menuNavs = [
-    { name: "關於我們", path: "/about" },
-    {
-      name: "最新消息", path: "", children: [
-        // { name: "所有資訊", path: "/newsList" },
-        { name: "雲端新聞", path: "/newsList/5" },
-        { name: "雲端活動", path: "/newsList/2" },
-        { name: "雲端技能學習", path: "/newsList/9" },
-      ]
-    },
-    {
-      name: "雲產品服務", path: "", children: [
-        { name: "Cloud 雲端服務", path: "/services/4?services" },
-        { name: "Brand 雲端品牌", path: "/services/3?brands" },
-      ]
-    },
-    { name: "成功案例", path: "/caseList" },
-    { name: "聯絡我們", path: "/contact" },
-    {
-      name: "", path: "", icon: FaGlobe, children: [
-        { name: "繁體中文", path: "/tw" },
-        { name: "简体中文", path: "/ch" },
-        { name: "English", path: "/en" },
-      ]
-    },
-    { name: "登入", path: "/netronAdmin/login" },
-  ]
-
-  // console.log('menuNavs', menuNavs);
+  console.log('menuNavs1', menuNavs1);
 
   return (
     <nav className="fixed inset-x-0 z-10 w-full py-4 bg-white/80 backdrop-blur-md">
@@ -133,7 +103,7 @@ export default async function TopNav(props: Props) {
             <FiMenu />
           </SheetTrigger>
           <SheetContent>
-            <MenuList menuList={menuNavs} />
+            <MenuList menuList={menuNavs1} />
           </SheetContent>
         </Sheet>
       </div>

@@ -1,0 +1,13 @@
+{
+  "navbar-header": {
+    "News": "最新消息",
+    "Products & Services": "云产品服务",
+    "Case Studies": "成功案例",
+    "Contact Us": "联系我们",
+    "lang": {
+      "Traditional Chinese": "繁体中文",
+      "Simplified Chinese": "简体中文",
+      "English": "英文"
+    }
+  }
+}
