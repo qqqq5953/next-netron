@@ -22,7 +22,6 @@ type Props = {
 
 export default async function TopNav(props: Props) {
   const { lang } = props
-  console.log('lang', lang);
 
   const reuslt = await fetchNav(lang)
   // const {about, categories, products} = result.data
@@ -82,7 +81,7 @@ export default async function TopNav(props: Props) {
     ] :
     []
 
-  console.log('menuNavs1', menuNavs1);
+  // console.log('menuNavs1', menuNavs1);
 
   return (
     <nav className="fixed inset-x-0 z-10 w-full py-4 bg-white/80 backdrop-blur-md">

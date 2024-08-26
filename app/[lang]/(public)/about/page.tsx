@@ -5,10 +5,29 @@
 import { fetchAbout } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
+import type { Metadata } from 'next'
 
 type Props = {
   params: {
     lang: Language
+  }
+}
+
+export async function generateMetadata(
+  { params }: Props,
+): Promise<Metadata> {
+  const result = await fetchAbout(params.lang ?? "tw")
+
+  return {
+    title: isSuccessResponse(result) ?
+      result.data.m_title :
+      "提供企業雲端平台運算的雲端服務公司｜Netron 網創資訊 Connect You to The Cloud",
+    description: isSuccessResponse(result) ?
+      result.data.m_description :
+      "Netron網創資訊為資安服務起家的雲端顧問公司，提供全方位一站式雲端顧問服務以及7*24 中英雙語線上專業維運服務，不但在 4 個月內成為 AWS 進階合作夥伴，更取得AWS MSP、MSSP、Migration、Generative AI Competencyn認證資格，代理超過20種國際品牌，服務將近兩千家客戶，為客戶客製量身訂做的解決方案。",
+    keywords: isSuccessResponse(result) ?
+      result.data.m_keywords :
+      "cloud computing, 雲端平台, 雲端服務公司, 雲端服務, 雲端運算, 雲端儲存, cloud雲端, 企業雲端, AI生成式人工智慧",
   }
 }
 
