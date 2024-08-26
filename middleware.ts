@@ -34,6 +34,7 @@ export function middleware(request: NextRequest) {
   // Skip images and other static assets
   const imageRegex = /\.(png|svg|jpg|jpeg|webp)$/i;
   if (imageRegex.test(pathname)) {
+    console.log('Skipping static asset:', pathname);
     return NextResponse.next();
   }
 
@@ -42,11 +43,15 @@ export function middleware(request: NextRequest) {
     pathname.startsWith(`/${locale}`)
   );
 
+  console.log(pathname, 'Is prefixed with valid locale:', isPrefixedWithValidLocale);
+
   if (!isPrefixedWithValidLocale) {
     const locale = getLocale(request);
     const newPathname = pathname === '/' ?
       `/${locale}` :
       `/${locale}${pathname}`;
+
+    console.log('Redirecting to new pathname:', newPathname);
 
     return NextResponse.redirect(new URL(newPathname, request.url));
   }

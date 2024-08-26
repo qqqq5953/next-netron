@@ -22,10 +22,10 @@ export async function GET(
       const [products] = await db.execute<RowDataPacket[]>(productsQuery, [lang, productId]);
 
       const promise = products.map(async (product) => {
-        if (product.id === 3) {
+        if ([3, 7, 28].includes(product.id)) {
           // Brand 雲端品牌
           return await getBrands(db, product)
-        } else if (product.id === 4) {
+        } else if ([4, 6, 27].includes(product.id)) {
           // Cloud 雲端服務
           return await getProducts(db, product)
         } else {

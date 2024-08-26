@@ -22,6 +22,8 @@ type Props = {
 
 export default async function TopNav(props: Props) {
   const { lang } = props
+  console.log('lang', lang);
+
   const reuslt = await fetchNav(lang)
   // const {about, categories, products} = result.data
   // console.log('data', reuslt);
