@@ -58,21 +58,37 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
   };
 };
 
-async function getPaginatedCases(lang: Language, categoryId: string | null, page: number) {
-  const {
-    baseQuery,
-    countQuery,
-    queryParams,
-    countParams
-  } = buildQuery(lang, categoryId, page);
+async function getPaginatedCases(lang: Language, page: number) {
+  const [rows, count, metas] = await withDbConnection(async (db: PoolConnection) => {
+    const metaQuery = `
+      SELECT m_title, m_keywords, m_description FROM metas 
+      WHERE lang = ? AND type = "success";
+    `;
 
-  const [rows, count] = await withDbConnection(async (db: PoolConnection) => {
+    const [metas] = await db.execute<RowDataPacket[]>(metaQuery, [lang]);
+
+    const categoriesQuery = `
+      SELECT id FROM categories 
+      WHERE lang = ? AND type = "case";
+    `;
+
+    const [categories] = await db.execute<RowDataPacket[]>(categoriesQuery, [lang]);
+
+    const categoryId = categories.length ? categories[0].id : null;
+
+    const {
+      baseQuery,
+      countQuery,
+      queryParams,
+      countParams
+    } = buildQuery(lang, categoryId, page);
+
     const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
     const [count] = await db.execute<RowDataPacket[]>(countQuery, countParams);
-    return [rows, count];
+    return [rows, count, metas]
   });
 
-  return [rows, count]
+  return [rows, count, metas]
 }
 
 export async function GET(
@@ -82,29 +98,15 @@ export async function GET(
 
   try {
     const lang = findCurrentLanguage(searchParams.get('lang'))
-    const page = searchParams.get('page')
-    const validPageNumber = isInvalidPageNumber(page) ? 1 : parseInt(page!, 10)
-
-    const categoriesQuery = `
-      SELECT id FROM categories 
-      WHERE lang = ? AND type = "case";
-    `;
-
-    const [categories] = await withDbConnection(async (db: PoolConnection) => {
-      const [rows] = await db.execute<RowDataPacket[]>(categoriesQuery, [lang]);
-
-      return [rows];
-    });
-
-    const categoryId = categories.length ? categories[0].id : null;
-
-    const [rows, [count]] = await getPaginatedCases(lang, categoryId, validPageNumber)
+    const page = parseInt(searchParams.get('page') || "1", 10)
+    const [rows, [count], [metas]] = await getPaginatedCases(lang, page)
 
     return NextResponse.json({
       statusCode: 200,
       data: {
         total: count.totalNews,
-        rows
+        rows,
+        metas
       }
     });
   } catch (error) {

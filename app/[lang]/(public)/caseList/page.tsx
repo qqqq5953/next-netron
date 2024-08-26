@@ -7,6 +7,7 @@ import { fetchCaseList } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
 import CardServices from "../_components/CardServices";
+import { Metadata } from "next";
 
 type Props = {
   params: {
@@ -14,6 +15,30 @@ type Props = {
   },
   searchParams: {
     page: string
+  }
+}
+
+export async function generateMetadata(
+  { params, searchParams }: Props,
+): Promise<Metadata> {
+  const { lang } = params
+  const result = await fetchCaseList(
+    lang ?? "tw",
+    searchParams.page
+  )
+
+  console.log('result', result);
+
+
+  return {
+    title: isSuccessResponse(result) ?
+      result.data.metas.m_title : "",
+    description: isSuccessResponse(result) ?
+      result.data.metas.m_description :
+      "",
+    keywords: isSuccessResponse(result) ?
+      result.data.metas.m_keywords :
+      "",
   }
 }
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { withDbConnection } from "@/lib/mysql";
 import { Language } from "@/lib/definitions";
-import { findCurrentLanguage, isInvalidPageNumber } from "@/lib/utils";
+import { findCurrentLanguage } from "@/lib/utils";
 import { RowDataPacket } from 'mysql2';
 import { PoolConnection, ResultSetHeader } from "mysql2/promise";
 
@@ -81,14 +81,13 @@ export async function GET(
 ) {
   const { searchParams } = request.nextUrl
   const adminLang = searchParams.get('adminLang');
-  const page = searchParams.get('page')
-  const validPageNumber = isInvalidPageNumber(page) ? 1 : parseInt(page!, 10)
+  const page = parseInt(searchParams.get('page') || "1", 10)
 
   const lang = findCurrentLanguage(adminLang)
   const categoryId = params?.id?.[0];
 
   try {
-    const [rows, count] = await getPaginatedCases(lang, categoryId, validPageNumber)
+    const [rows, count] = await getPaginatedCases(lang, categoryId, page)
 
     return NextResponse.json({
       statusCode: 200,

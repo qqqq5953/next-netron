@@ -23,7 +23,15 @@ export async function fetchAbout(lang: Language): Promise<ApiGetResponse<AboutFo
   return result
 }
 
-export async function fetchCaseList(lang: Language, page: string): Promise<ApiGetResponse<{ rows: NewsTableData[], total: number }>> {
+export async function fetchCaseList(lang: Language, page: string): Promise<ApiGetResponse<{
+  rows: NewsTableData[],
+  total: number,
+  metas: {
+    m_title: string,
+    m_description: string,
+    m_keywords: string
+  }
+}>> {
   page = isInvalidPageNumber(page) ? "1" : page
   lang = lang ?? "tw"
 
