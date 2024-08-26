@@ -3,7 +3,6 @@ import { withDbConnection } from "@/lib/mysql";
 import { findCurrentLanguage } from "@/lib/utils";
 import { RowDataPacket } from 'mysql2';
 import { PoolConnection } from "mysql2/promise";
-import { Language } from "@/lib/definitions";
 
 export async function GET(
   request: NextRequest,
@@ -45,9 +44,9 @@ export async function GET(
     });
 
     // console.log('about', about);
-    console.log('categories', categories);
-    console.log('cases', cases);
-    console.log('products', products);
+    // console.log('categories', categories);
+    // console.log('cases', cases);
+    // console.log('products', products);
 
 
     // if (rows.length === 0) {

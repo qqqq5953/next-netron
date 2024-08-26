@@ -23,7 +23,7 @@ export default function NavList(props: Props) {
                   <ChevronDown size={16} />
                 </div>
               </Button>
-              <ul className="absolute top-full hidden group-hover:flex flex-col items-center shadow-lg rounded-md min-w-full w-fit text-nowrap bg-white overflow-hidden py-1.5 border-t-4 border-t-sky-400">
+              <ul className="absolute top-full hidden group-hover:flex flex-col shadow-lg rounded-md min-w-full w-fit text-nowrap bg-white overflow-hidden py-1.5 border-t-4 border-t-sky-400">
                 {item.children.map(child => {
                   return <li key={child.name}>
                     <Link href={child.path} className="block w-full px-4 py-2 hover:text-sky-500 transition-all duration-300">

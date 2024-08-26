@@ -2,7 +2,6 @@ import Paginations from "@/components/Paginations";
 import { fetchNews } from "@/lib/dataPublic";
 import { Language } from "@/lib/definitions";
 import { isSuccessResponse } from "@/lib/utils";
-import Image from "next/image";
 import CardNews from "../../_components/CardNews";
 
 type Props = {
@@ -15,29 +14,22 @@ type Props = {
   }
 }
 
-const categoryTitles: Record<string, string> = {
-  "2": "雲端活動",
-  "5": "雲端新聞",
-  "9": "雲端技能學習"
-}
-
 export default async function NewsListPage(props: Props) {
-  const categoryId = props.params.id
-  const title = categoryTitles[categoryId] ?? "所有消息"
+  const { id: categoryId, lang } = props.params
 
   const result = await fetchNews(
     categoryId,
-    props.params.lang ?? "tw",
+    lang ?? "tw",
     props.searchParams.page
   )
 
   return (
     <>
       <main className="flex flex-col gap-8">
-        <h2 className="text-3xl font-semibold">{title}</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {isSuccessResponse(result) && (
-            <>
+        {isSuccessResponse(result) && (
+          <>
+            <h2 className="text-3xl font-semibold">{result.data.title}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               {result.data.rows.map(row => {
                 return <CardNews
                   key={row.id}
@@ -46,9 +38,10 @@ export default async function NewsListPage(props: Props) {
                   date={row.created_at.split('T')[0]}
                 />
               })}
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
+
         <div className='not-prose'>
           {isSuccessResponse(result) &&
             <Paginations

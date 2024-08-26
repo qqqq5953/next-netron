@@ -6,6 +6,7 @@ import { RowDataPacket } from 'mysql2';
 import { PoolConnection, ResultSetHeader } from "mysql2/promise";
 
 type QueryInfo = {
+  categoriesQuery: string,
   baseQuery: string;
   countQuery: string;
   queryParams: any[];
@@ -15,6 +16,11 @@ type QueryInfo = {
 function buildQuery(lang: Language, categoryId: string | null, page: number): QueryInfo {
   const queryParams: any[] = [lang];
   const countParams: any[] = [lang];
+
+  const categoriesQuery = `
+    SELECT title FROM categories 
+    WHERE id = ?;
+  `;
 
   let baseQuery = `
     SELECT * FROM news 
@@ -47,6 +53,7 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
   queryParams.push(offset);
 
   return {
+    categoriesQuery,
     baseQuery,
     countQuery,
     queryParams,
@@ -56,19 +63,22 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
 
 async function getPaginatedNews(lang: Language, categoryId: string | null, page: string | null) {
   const {
+    categoriesQuery,
     baseQuery,
     countQuery,
     queryParams,
     countParams
   } = buildQuery(lang, categoryId, parseInt(page ?? "1", 10));
 
-  const [rows, count] = await withDbConnection(async (db: PoolConnection) => {
+  const [rows, count, categoryTitle] = await withDbConnection(async (db: PoolConnection) => {
     const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
     const [count] = await db.execute<RowDataPacket[]>(countQuery, countParams);
-    return [rows, count];
+    const [categoryTitle] = await db.execute<RowDataPacket[]>(categoriesQuery, [categoryId]);
+
+    return [rows, count, categoryTitle];
   });
 
-  return [rows, count]
+  return [rows, count, categoryTitle]
 }
 
 export async function GET(
@@ -77,16 +87,16 @@ export async function GET(
 ) {
   const categoryId = params?.id?.[0];
   const page = request.nextUrl.searchParams.get('page')
-  const adminLang = request.nextUrl.searchParams.get('adminLang');
-  const lang = findCurrentLanguage(adminLang)
+  const lang = findCurrentLanguage(request.nextUrl.searchParams.get('lang'))
 
   try {
-    const [rows, count] = await getPaginatedNews(lang, categoryId, page)
+    const [rows, count, categoryTitle] = await getPaginatedNews(lang, categoryId, page)
 
     return NextResponse.json({
       statusCode: 200,
       data: {
         total: count[0].totalNews,
+        title: categoryTitle[0].title,
         rows
       }
     });

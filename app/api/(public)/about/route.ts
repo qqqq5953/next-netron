@@ -7,8 +7,7 @@ import { findCurrentLanguage } from "@/lib/utils";
 export async function GET(
   request: NextRequest,
 ) {
-  const adminLang = request.nextUrl.searchParams.get('lang')
-  const lang = findCurrentLanguage(adminLang)
+  const lang = findCurrentLanguage(request.nextUrl.searchParams.get('lang'))
   const query = 'SELECT * FROM blogs WHERE lang = ?'
 
   try {
@@ -16,9 +15,6 @@ export async function GET(
       const [rows] = await db.execute<RowDataPacket[]>(query, [lang])
       return [rows];
     });
-
-    // console.log('rows', rows);
-
 
     return NextResponse.json({
       statusCode: 200,

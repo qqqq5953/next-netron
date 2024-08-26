@@ -15,15 +15,11 @@ import {
 import { isInvalidPageNumber } from "./utils";
 
 export async function fetchAbout(lang: Language): Promise<ApiGetResponse<AboutForm>> {
-  console.log('fetchAbout', lang);
-  console.log('process.env.BASE_URL', process.env.BASE_URL);
-
   const res = await fetch(`${process.env.BASE_URL}/api/about?lang=${lang}`, {
     next: { tags: ['about-public'] }
   });
 
   const result = await res.json();
-
   return result
 }
 
@@ -46,7 +42,11 @@ export async function fetchNews(
   id: string,
   lang: Language,
   page: string
-): Promise<ApiGetResponse<{ rows: NewsTableData[], total: number }>> {
+): Promise<ApiGetResponse<{
+  rows: NewsTableData[],
+  total: number,
+  title: string
+}>> {
   page = isInvalidPageNumber(page) ? "1" : page
 
   const url = id ?
