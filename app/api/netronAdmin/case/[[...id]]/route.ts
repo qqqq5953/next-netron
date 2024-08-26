@@ -12,7 +12,16 @@ type QueryInfo = {
   countParams: any[];
 };
 
+const PER_PAGE = 12;
+const CID_MAPPING: Record<Language, number[]> = {
+  tw: [3, 14],
+  en: [7],
+  cn: [6],
+};
+
 function buildQuery(lang: Language, categoryId: string | null, page: number): QueryInfo {
+  const cids = categoryId ? null : CID_MAPPING[lang];
+
   const queryParams: any[] = [lang];
   const countParams: any[] = [lang];
 
@@ -31,28 +40,14 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
     countQuery += ` AND cid = ?`;
     queryParams.push(categoryId);
     countParams.push(categoryId);
-  } else {
+  } else if (cids) {
     // tab 選全部時
-    if (lang === 'tw') {
-      baseQuery += ` AND cid IN (3, 14)`;
-      countQuery += ` AND cid IN (3, 14)`;
-    } else if (lang === 'en') {
-      baseQuery += ` AND cid IN (7)`;
-      countQuery += ` AND cid IN (7)`;
-    } else {
-      baseQuery += ` AND cid IN (6)`;
-      countQuery += ` AND cid IN (6)`;
-    }
+    baseQuery += ` AND cid IN (${cids.join(", ")})`;
+    countQuery += ` AND cid IN (${cids.join(", ")})`;
   }
 
-  baseQuery += `
-    ORDER BY sort DESC
-    LIMIT 10 
-    OFFSET ?
-  `;
-
-  const PER_PAGE = 10
   const offset = (page - 1) * PER_PAGE;
+  baseQuery += ` ORDER BY sort DESC LIMIT ${PER_PAGE} OFFSET ?`;
   queryParams.push(offset);
 
   return {
@@ -63,13 +58,13 @@ function buildQuery(lang: Language, categoryId: string | null, page: number): Qu
   };
 };
 
-async function getPaginatedCases(lang: Language, categoryId: string | null, page: string | null) {
+async function getPaginatedCases(lang: Language, categoryId: string | null, page: number) {
   const {
     baseQuery,
     countQuery,
     queryParams,
     countParams
-  } = buildQuery(lang, categoryId, parseInt(page ?? "1", 10));
+  } = buildQuery(lang, categoryId, page);
 
   const [rows, count] = await withDbConnection(async (db: PoolConnection) => {
     const [rows] = await db.execute<RowDataPacket[]>(baseQuery, queryParams);
@@ -84,13 +79,16 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const categoryId = params?.id?.[0];
-  const page = request.nextUrl.searchParams.get('page')
-  const adminLang = request.nextUrl.searchParams.get('adminLang');
+  const { searchParams } = request.nextUrl
+  const adminLang = searchParams.get('adminLang');
+  const page = searchParams.get('page')
+  const validPageNumber = isInvalidPageNumber(page) ? 1 : parseInt(page!, 10)
+
   const lang = findCurrentLanguage(adminLang)
+  const categoryId = params?.id?.[0];
 
   try {
-    const [rows, count] = await getPaginatedCases(lang, categoryId, page)
+    const [rows, count] = await getPaginatedCases(lang, categoryId, validPageNumber)
 
     return NextResponse.json({
       statusCode: 200,
